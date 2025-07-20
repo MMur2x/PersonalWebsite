@@ -13,24 +13,28 @@
     }
   </style>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans">
-<script> AOS.init(); </script>
+
+<body class="bg-gray-100 text-gray-800 font-sans dark:bg-gray-900 dark:text-white">
+
   <!-- NAVIGATION -->
-  <nav class="bg-white shadow fixed top-0 left-0 right-0 z-50">
+  <nav class="bg-white dark:bg-gray-800 shadow fixed top-0 left-0 right-0 z-50">
     <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
       <h1 class="text-xl font-bold">Mayne Murray</h1>
-      <ul class="flex gap-6 text-sm">
-        <li><a href="#about" class="hover:text-blue-500 transition">About</a></li>
-        <li><a href="#projects" class="hover:text-blue-500 transition">Projects</a></li>
-        <li><a href="#leadership" class="hover:text-blue-500 transition">Leadership</a></li>
-        <li><a href="#resume" class="hover:text-blue-500 transition">Resume</a></li>
-        <li><a href="#contact" class="hover:text-blue-500 transition">Contact</a></li>
-      </ul>
+      <div class="flex items-center gap-6 text-sm">
+        <a href="#about" class="hover:text-blue-500 transition">About</a>
+        <a href="#projects" class="hover:text-blue-500 transition">Projects</a>
+        <a href="#leadership" class="hover:text-blue-500 transition">Leadership</a>
+        <a href="#resume" class="hover:text-blue-500 transition">Resume</a>
+        <a href="#contact" class="hover:text-blue-500 transition">Contact</a>
+        <button id="darkToggle" class="px-3 py-1 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition text-sm">
+          Toggle Dark Mode
+        </button>
+      </div>
     </div>
   </nav>
 
   <!-- HERO -->
-  <section class="pt-32 pb-20 text-center bg-gradient-to-br from-blue-50 to-blue-100">
+  <section class="pt-32 pb-20 text-center bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-700" data-aos="fade-up">
     <h2 class="text-4xl font-bold mb-4">Hi, I'm Mayne Murray 👋</h2>
     <p class="text-lg max-w-xl mx-auto mb-6">
       Computer Science student at UMass Lowell, passionate about software development, AI integration, and leadership.
@@ -41,7 +45,7 @@
   </section>
 
   <!-- ABOUT -->
-  <section id="about" class="py-16 px-6 max-w-4xl mx-auto">
+  <section id="about" class="py-16 px-6 max-w-4xl mx-auto" data-aos="fade-right">
     <h2 class="text-3xl font-bold mb-6">About Me</h2>
     <p class="mb-4">
       I’m pursuing a B.S. in Computer Science at the University of Massachusetts Lowell (Class of 2027).
@@ -52,7 +56,7 @@
   </section>
 
   <!-- PROJECTS -->
-  <section id="projects" class="py-16 px-6 bg-white max-w-4xl mx-auto">
+  <section id="projects" class="py-16 px-6 bg-white dark:bg-gray-800 max-w-4xl mx-auto" data-aos="fade-up">
     <h2 class="text-3xl font-bold mb-6">Projects</h2>
 
     <div class="mb-6 transition-opacity duration-500 hover:opacity-90">
@@ -67,7 +71,7 @@
   </section>
 
   <!-- LEADERSHIP -->
-  <section id="leadership" class="py-16 px-6 max-w-4xl mx-auto">
+  <section id="leadership" class="py-16 px-6 max-w-4xl mx-auto" data-aos="fade-left">
     <h2 class="text-3xl font-bold mb-6">Leadership</h2>
 
     <div class="mb-4">
@@ -87,7 +91,7 @@
   </section>
 
   <!-- RESUME -->
-  <section id="resume" class="py-16 px-6 max-w-4xl mx-auto text-center bg-white">
+  <section id="resume" class="py-16 px-6 max-w-4xl mx-auto text-center bg-white dark:bg-gray-800" data-aos="zoom-in">
     <h2 class="text-3xl font-bold mb-6">Resume</h2>
     <p class="mb-4">View or download my resume below:</p>
     <a href="Mayne Murray Resume (2).pdf" download class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition">
@@ -96,15 +100,33 @@
   </section>
 
   <!-- CONTACT -->
-  <section id="contact" class="py-16 px-6 max-w-4xl mx-auto text-center">
+  <section id="contact" class="py-16 px-6 max-w-4xl mx-auto text-center" data-aos="fade-up">
     <h2 class="text-3xl font-bold mb-4">Contact</h2>
     <p class="mb-2">📧 <a href="mailto:maynemurray@gmail.com" class="text-blue-500 hover:underline">maynemurray@gmail.com</a></p>
     <p>🔗 <a href="https://linkedin.com/in/mayne-murray" target="_blank" class="text-blue-500 hover:underline">LinkedIn</a></p>
   </section>
 
   <!-- FOOTER -->
-  <footer class="text-center text-sm py-6 text-gray-500 bg-gray-200">
+  <footer class="text-center text-sm py-6 text-gray-500 bg-gray-200 dark:bg-gray-900 dark:text-gray-400">
     &copy; 2025 Mayne Murray
   </footer>
+
+  <!-- Scripts -->
+  <script>
+    AOS.init();
+
+    const toggle = document.getElementById('darkToggle');
+    const html = document.documentElement;
+
+    if (localStorage.getItem("theme") === "dark") {
+      html.classList.add("dark");
+    }
+
+    toggle.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem("theme", html.classList.contains("dark") ? "dark" : "light");
+    });
+  </script>
+
 </body>
 </html>
