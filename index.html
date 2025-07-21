@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google Font: Poppins -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Font and scroll behavior -->
+<style>
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Poppins', sans-serif;
+  }
+</style>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mayne Murray Portfolio</title>
@@ -22,6 +36,7 @@
       <h1 class="text-xl font-bold text-sky-700 dark:text-sky-400">Mayne Murray</h1>
       <div class="flex items-center gap-6 text-sm">
         <a href="#about" class="hover:text-rose-500 transition">About</a>
+        <a href="#experience" class="hover:text-rose-500 transition">Experience</a>
         <a href="#projects" class="hover:text-rose-500 transition">Projects</a>
         <a href="#leadership" class="hover:text-rose-500 transition">Leadership</a>
         <a href="#resume" class="hover:text-rose-500 transition">Resume</a>
@@ -57,20 +72,56 @@
     <p><strong>Tools:</strong> VS Code, Azure DevOps, PyCharm, Microsoft 365</p>
   </section>
 
+  <!-- EXPERIENCE -->
+<section id="experience" class="py-16 px-6 max-w-4xl mx-auto" data-aos="fade-up">
+  <h2 class="text-3xl font-bold mb-6 text-emerald-600 dark:text-emerald-400">Experience</h2>
+
+  <!-- RSM Intern -->
+  <div class="mb-8">
+    <h3 class="text-xl font-semibold text-violet-600 dark:text-violet-400">Information Technology Intern – RSM US</h3>
+    <p class="text-sm italic text-gray-600 dark:text-gray-400 mb-2">Software Development | C/C# | Visual Studio 2022, Azure DevOps – Minneapolis, MN (Apr 2025 – Present)</p>
+    <ul class="list-disc ml-6 text-sm space-y-1">
+      <li>Collaborated with a cross-functional team to integrate AI tools into client-facing systems, improving data processing efficiency by 35% and reducing response time by 25%.</li>
+      <li>Optimized backend code for internal systems used by 500+ employees, reducing support handling time by 30% and improving scalability.</li>
+      <li>Assisted in launching AI-powered automation for client onboarding, improving speed by 20% and reducing manual errors by 35%.</li>
+    </ul>
+  </div>
+
+  <!-- C++ Tutor -->
+  <div>
+    <h3 class="text-xl font-semibold text-violet-600 dark:text-violet-400">Intro to C++ Tutor – Framingham High School</h3>
+    <p class="text-sm italic text-gray-600 dark:text-gray-400 mb-2">Curriculum Aid | C++ | Replit – Framingham, MA (Jan – Mar 2023)</p>
+    <ul class="list-disc ml-6 text-sm space-y-1">
+      <li>Guided students in one-on-one tutoring, reducing programming errors by 40% and improving problem-solving confidence.</li>
+      <li>Led weekly study sessions to improve peer comprehension of programming fundamentals by 25%.</li>
+    </ul>
+  </div>
+</section>
+
   <!-- PROJECTS -->
-  <section id="projects" class="py-16 px-6 bg-white dark:bg-gray-800 max-w-4xl mx-auto" data-aos="fade-up">
-    <h2 class="text-3xl font-bold mb-6 text-emerald-600 dark:text-emerald-400">Projects</h2>
+<section id="projects" class="py-16 px-6 bg-white dark:bg-gray-800 max-w-4xl mx-auto" data-aos="fade-up">
+  <h2 class="text-3xl font-bold mb-6 text-emerald-600 dark:text-emerald-400">Projects</h2>
 
-    <div class="mb-6 transition-opacity duration-500 hover:opacity-90">
-      <h3 class="text-xl font-semibold text-violet-600 dark:text-violet-400">📱 Crypto Investment App</h3>
-      <p>Built using Python and Dart. Tracks real-time crypto data with APIs, portfolio analytics, and CLI interface.</p>
-    </div>
+  <!-- Crypto App -->
+  <div class="mb-8">
+    <h3 class="text-xl font-semibold text-violet-600 dark:text-violet-400">📱 Crypto Investment Android App</h3>
+    <p class="text-sm italic text-gray-600 dark:text-gray-400 mb-2">Python, Dart | VS Code – July 2025</p>
+    <ul class="list-disc ml-6 text-sm space-y-1">
+      <li>Built a crypto tracking and analytics app using Python and real-time API data, supporting CLI functionality.</li>
+      <li>Developed portfolio management, performance visualization, and risk metrics using pandas, matplotlib, and requests.</li>
+    </ul>
+  </div>
 
-    <div class="transition-opacity duration-500 hover:opacity-90">
-      <h3 class="text-xl font-semibold text-violet-600 dark:text-violet-400">📷 QR Code Generator</h3>
-      <p>Python-based tool for creating custom QR codes from images or links, improving accessibility and usability.</p>
-    </div>
-  </section>
+  <!-- QR Generator -->
+  <div>
+    <h3 class="text-xl font-semibold text-violet-600 dark:text-violet-400">📷 QR Code Generator</h3>
+    <p class="text-sm italic text-gray-600 dark:text-gray-400 mb-2">Python | PyCharm – October 2024</p>
+    <ul class="list-disc ml-6 text-sm space-y-1">
+      <li>Created a tool that converts links and images into custom QR codes using Python libraries.</li>
+      <li>Enhanced accessibility and convenience for users across multiple platforms.</li>
+    </ul>
+  </div>
+</section>
 
   <!-- LEADERSHIP -->
   <section id="leadership" class="py-16 px-6 max-w-4xl mx-auto" data-aos="fade-left">
