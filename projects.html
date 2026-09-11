@@ -1,46 +1,137 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Projects - Mayne Murray</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects &mdash; Mayne Murray</title>
+  <meta name="description" content="Personal software projects by Mayne Murray: a crypto investment analytics app, this portfolio site, and a Python QR code generator." />
+  <meta name="author" content="Mayne Murray" />
+  <meta name="theme-color" content="#0ea5e9" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Projects &mdash; Mayne Murray" />
+  <meta property="og:description" content="Personal software projects by Mayne Murray: a crypto investment analytics app, this portfolio site, and a Python QR code generator." />
+  <meta property="og:image" content="headshot.jpg" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%230ea5e9'/%3E%3Ctext x='50' y='68' font-family='Poppins,Arial,sans-serif' font-size='48' font-weight='700' fill='white' text-anchor='middle'%3EMM%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <script src="assets/site.js" defer></script>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans">
-  <!-- Navbar -->
-  <nav class="bg-white shadow p-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold">Mayne Murray</h1>
-    <ul class="flex gap-6 text-sm">
-      <li><a href="index.html" class="hover:text-blue-500">Home</a></li>
-      <li><a href="about.html" class="hover:text-blue-500">About</a></li>
-      <li><a href="projects.html" class="text-blue-600 font-semibold">Projects</a></li>
-      <li><a href="leadership.html" class="hover:text-blue-500">Leadership</a></li>
-      <li><a href="resume.html" class="hover:text-blue-500">Resume</a></li>
-      <li><a href="contact.html" class="hover:text-blue-500">Contact</a></li>
+
+<body>
+<div class="page-veil" aria-hidden="true"></div>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="nav">
+  <div class="nav__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__mark" aria-hidden="true">MM</span>
+      <span class="brand__text">Mayne Murray</span>
+    </a>
+    <ul class="nav__links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="projects.html" class="is-active">Projects</a></li>
+      <li><a href="leadership.html">Leadership</a></li>
+      <li><a href="resume.html">R&eacute;sum&eacute;</a></li>
+      <li><a href="contact.html">Contact</a></li>
     </ul>
-  </nav>
+    <div class="nav__actions">
+      <button class="icon-btn theme-toggle" type="button" aria-label="Toggle colour theme">
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></svg>
+      </button>
+      <button class="icon-btn nav__burger" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="progress" aria-hidden="true"></div>
+</nav>
 
-  <!-- Projects Section -->
-  <section class="p-8 max-w-4xl mx-auto">
-    <h2 class="text-3xl font-bold mb-6">Projects</h2>
-
-    <div class="mb-6">
-      <h3 class="text-xl font-semibold">📱 Crypto Investment Android App</h3>
-      <p class="mt-2 text-gray-700">
-        Built with Python and Dart, this app lets users track their crypto portfolios using real-time API data. Features include performance charts, risk metrics, and CLI integration.
-      </p>
+<main id="main">
+<section class="section" style="padding-top:clamp(7rem,12vw,9rem)">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Projects</span>
+      <h1 style="font-size:clamp(2rem,4.6vw,3rem)">Things I&rsquo;ve built</h1>
+      <p>Personal projects where I get to choose the whole stack &mdash; from Python analytics to hand-rolled front ends.</p>
     </div>
 
-    <div>
-      <h3 class="text-xl font-semibold">📷 QR Code Generator</h3>
-      <p class="mt-2 text-gray-700">
-        A simple but powerful Python tool to convert images and links into custom QR codes, enhancing accessibility and data sharing for businesses and individuals.
-      </p>
-    </div>
-  </section>
+    <div class="grid grid--3">
+      <article class="card card--tilt" data-reveal>
+        <div class="card__icon" aria-hidden="true">&#128241;</div>
+        <span class="card__meta">Summer 2025</span>
+        <h3>Crypto Investment App</h3>
+        <p>A cryptocurrency investment tracking and analytics app built in Python with real-time API data,
+        portfolio management, price monitoring, performance visualization, crypto news, learning tools and
+        risk metrics. Built on a modular architecture so it can expand to mobile with Flutter.</p>
+        <ul class="tags" style="margin-top:1rem">
+          <li class="tag tag--accent">Python</li><li class="tag tag--accent">Dart</li>
+          <li class="tag">Flutter</li><li class="tag">pandas</li><li class="tag">matplotlib</li><li class="tag">requests</li>
+        </ul>
+      </article>
 
-  <footer class="text-center text-sm py-6 text-gray-500">
-    &copy; 2025 Mayne Murray
-  </footer>
+      <article class="card card--tilt" data-reveal>
+        <div class="card__icon" aria-hidden="true">&#127760;</div>
+        <span class="card__meta">Summer 2025</span>
+        <h3>Personal Portfolio Website</h3>
+        <p>This site. A responsive, accessible portfolio built from scratch with a custom CSS design system,
+        dark/light theming, scroll-driven reveal animation and scrollspy navigation &mdash; no UI framework.
+        Version-controlled with Git and deployed on GitHub Pages.</p>
+        <ul class="tags" style="margin-top:1rem">
+          <li class="tag tag--accent">HTML</li><li class="tag tag--accent">CSS</li>
+          <li class="tag tag--accent">JavaScript</li><li class="tag">GitHub Pages</li>
+        </ul>
+        <p style="margin-top:1rem"><a class="btn btn--ghost btn--sm" href="https://github.com/MMurr2x" target="_blank" rel="noopener">View on GitHub &rarr;</a></p>
+      </article>
+
+      <article class="card card--tilt" data-reveal>
+        <div class="card__icon" aria-hidden="true">&#128247;</div>
+        <span class="card__meta">Fall 2024</span>
+        <h3>QR Code Generator</h3>
+        <p>A Python tool that converts links and images into custom QR codes, built to make sharing
+        resources easier across platforms for individuals and small businesses.</p>
+        <ul class="tags" style="margin-top:1rem">
+          <li class="tag tag--accent">Python</li><li class="tag">PyCharm</li>
+        </ul>
+      </article>
+    </div>
+
+    <div style="margin-top:2rem" data-reveal>
+      <a class="btn btn--ghost btn--magnetic" href="https://github.com/MMurr2x" target="_blank" rel="noopener">More on GitHub &rarr;</a>
+    </div>
+
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <p style="margin:0">&copy; <span id="year">2026</span> Mayne Murray &middot; Built from scratch with HTML, CSS &amp; JavaScript</p>
+    <ul class="footer__links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="leadership.html">Leadership</a></li>
+      <li><a href="resume.html">R&eacute;sum&eacute;</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</footer>
+
+<button class="to-top" type="button" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
 </body>
 </html>

@@ -1,288 +1,550 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <!-- Google Font: Poppins -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-
-<!-- Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com"></script>
-
-<!-- Font and scroll behavior -->
-<style>
-  html {
-    scroll-behavior: smooth;
-    font-family: 'Poppins', sans-serif;
-  }
-</style>
-
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mayne Murray Portfolio</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
-  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-  <style>
-    html {
-      scroll-behavior: smooth;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mayne Murray — Computer Science @ UMass Lowell</title>
+  <meta name="description" content="Mayne Murray — Computer Science student at UMass Lowell (Class of 2027). Software Engineer Intern at Fidelity Investments working on Kubernetes, OpenTelemetry and Grafana observability. NSBE Executive Board Senator." />
+  <meta name="author" content="Mayne Murray" />
+  <meta name="theme-color" content="#0ea5e9" />
+
+  <!-- Open Graph / link previews -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Mayne Murray — Computer Science @ UMass Lowell" />
+  <meta property="og:description" content="CS student, Software Engineer Intern, and NSBE Executive Board Senator building backend systems, observability tooling, and AI-assisted software." />
+  <meta property="og:image" content="headshot.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%230ea5e9'/%3E%3Ctext x='50' y='68' font-family='Poppins,Arial,sans-serif' font-size='48' font-weight='700' fill='white' text-anchor='middle'%3EMM%3C/text%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css" />
+
+  <!-- Set theme before first paint so there is no flash of the wrong theme -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+  <script src="assets/site.js" defer></script>
+  <script src="assets/hero3d.js" defer></script>
 </head>
 
-<body class="bg-gray-100 text-gray-800 font-sans dark:bg-gray-900 dark:text-white">
+<body>
+<div class="page-veil" aria-hidden="true"></div>
+<a class="skip-link" href="#main">Skip to content</a>
 
-  <!-- NAVIGATION -->
-  <nav class="bg-white dark:bg-gray-800 shadow fixed top-0 left-0 right-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-      <h1 class="text-xl font-bold text-sky-700 dark:text-sky-400">Mayne Murray</h1>
-      <div class="flex items-center gap-6 text-sm">
-        <a href="#about" class="hover:text-rose-500 transition">About</a>
-        <a href="#experience" class="hover:text-rose-500 transition">Experience</a>
-        <a href="#projects" class="hover:text-rose-500 transition">Projects</a>
-        <a href="#leadership" class="hover:text-rose-500 transition">Leadership</a>
-        <a href="#resume" class="hover:text-rose-500 transition">Resume</a>
-        <a href="#contact" class="hover:text-rose-500 transition">Contact</a>
-        <button id="darkToggle" class="px-3 py-1 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition text-sm">
-          Toggle Dark Mode
-        </button>
+<!-- ======================= NAVIGATION ======================= -->
+<nav class="nav">
+  <div class="nav__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__mark" aria-hidden="true">MM</span>
+      <span class="brand__text">Mayne Murray</span>
+    </a>
+
+    <ul class="nav__links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#leadership">Leadership</a></li>
+      <li><a href="#resume">Resume</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <div class="nav__actions">
+      <button class="icon-btn theme-toggle" type="button" aria-label="Switch to light mode">
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></svg>
+      </button>
+      <button class="icon-btn nav__burger" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="progress" aria-hidden="true"></div>
+</nav>
+
+<main id="main">
+
+<!-- ======================= HERO ======================= -->
+<header class="hero">
+  <div class="hero__aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div class="hero__canvas" id="hero-canvas" aria-hidden="true"></div>
+
+  <div class="wrap hero__inner">
+    <div>
+      <h1>Hi, I'm <span class="grad">Mayne Murray</span></h1>
+
+      <p class="hero__role">
+        I build <span class="typed" data-typed='["backend systems","observability tooling","AI-assisted software","developer workflows"]'></span><span class="caret" aria-hidden="true"></span>
+      </p>
+
+      <p class="hero__lede">
+        Computer Science student at UMass Lowell (c/o 2027).
+      </p>
+
+      <div class="hero__meta">
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Framingham, MA
+        </span>
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg>
+          B.S. Computer Science, UMass Lowell
+        </span>
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          Graduating May 2027
+        </span>
+      </div>
+
+      <div class="hero__cta">
+        <a class="btn btn--primary btn--magnetic" href="#projects">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+          See my work
+        </a>
+        <a class="btn btn--ghost btn--magnetic" href="Mayne%20Murray%20Internship%20Resume.pdf" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>
+          Download résumé
+        </a>
+        <a class="btn btn--ghost btn--magnetic" href="https://www.linkedin.com/in/mayne-murray/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21h-4v-5.6c0-1.34-.03-3.07-1.9-3.07-1.9 0-2.2 1.46-2.2 2.97V21H9z"/></svg>
+          LinkedIn
+        </a>
       </div>
     </div>
-  </nav>
 
-  <!-- HERO -->
-  <section class="pt-40 pb-20 text-center bg-gradient-to-br from-sky-50 to-sky-200 dark:from-gray-800 dark:to-gray-700" data-aos="fade-up">
-    <img src="headshot.jpg" alt="Mayne Murray Headshot"
-      class="w-32 h-32 mx-auto rounded-full shadow-lg border-4 border-white dark:border-gray-700 mb-6 transition-transform hover:scale-105 duration-300" />
-    <h2 class="text-4xl font-bold mb-2 text-sky-700 dark:text-sky-400">Hi, I'm Mayne Murray 👋</h2>
-    <p class="text-lg max-w-xl mx-auto mb-6">
-      CS student at UMass Lowell, passionate about AI, software development, and leadership.
-    </p>
-    <a href="#projects" class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2 rounded transition">
-      See My Projects
-    </a>
-  </section>
-
-  <!-- ABOUT -->
-  <section id="about" class="py-16 px-6 max-w-4xl mx-auto" data-aos="fade-right">
-    <h2 class="text-3xl font-bold mb-6 text-emerald-600 dark:text-emerald-400">About Me</h2>
-    <p class="mb-4">
-      I’m currently pursuing a Bachelor of Science in Computer Science at the University of Massachusetts Lowell, with an expected graduation in 2027. My academic and professional interests are centered around backend development, automation, and systems integration. I enjoy working with tools such as Visual Studio, Azure DevOps, and Python to build scalable, efficient solutions that improve workflows and performance. Through internships and personal projects, I’ve gained hands-on experience with version control, API development, and software deployment pipelines.
-    </p>
-    <p><strong>Languages:</strong> C/C++, Python, HTML, Java, JavaScript, CSS, SQL, React, x86 Assembly, Dart, Flutter </p>
-    <p><strong>Tools:</strong> Azure DevOps, Salesforce, PyCharm, Visual Studio 2022, VS Code, Microsoft 365, Linux, Android Studio </p>
-    <p><strong>Achievements:</strong> Grow with Google Scholar, Juniper Scholars, RSM Excellence Academy Scholar, NSBE Senator, Honors College </p>
-    <p><strong>Relevant Courses:</strong> Discrete Structures, Assembly Language, COMP IV, Computer Architecture</p>
-  </section>
-
-  <!-- EXPERIENCE -->
-<section id="experience" class="py-16 px-6 max-w-4xl mx-auto" data-aos="fade-up">
-  <h2 class="text-3xl font-bold mb-6 text-emerald-600 dark:text-emerald-400">Experience</h2>
-
-  <!-- RSM Intern -->
-  <div class="mb-8">
-    <h3 class="text-xl font-semibold text-violet-600 dark:text-violet-400">Information Technology Intern – RSM US</h3>
-    <p class="text-sm italic text-gray-600 dark:text-gray-400 mb-2">Software Development | C/C# | Visual Studio 2022, Azure DevOps – Minneapolis, MN · Apr 2025 - Present </p>
-    <ul class="list-disc ml-6 text-sm space-y-1">
-      <li>Collaborated with a cross-functional team to integrate AI tools into client-facing systems</li>
-      <li>Optimized backend code for internal systems and improving scalability.</li>
-      <li>Participated in launching AI-powered automation for client onboarding reducing manual errors and improving speed.</li>
-    </ul>
+    <figure class="hero__portrait">
+      <img src="headshot.jpg" alt="Portrait of Mayne Murray" width="280" height="280" />
+      <figcaption class="badge">Currently @ Fidelity</figcaption>
+    </figure>
   </div>
+</header>
 
-  <!-- Juniper -->
-  <div class="mb-8">
-    <h3 class="text-xl font-semibold text-violet-600 dark:text-violet-400">Juniper Scholars Fellow – Juniper Networks</h3>
-    <p class="text-sm italic text-gray-600 dark:text-gray-400 mb-2">Hybrid · Sep 2024 – Present · California, United States</p>
-    <ul class="list-disc ml-6 text-sm space-y-1">
-      <li>Selected for a competitive fellowship program focused on academic and professional development for underrepresented students in tech.</li>
-      <li>Engaged in mentoring sessions with Juniper professionals and participated in workshops on technical and leadership skills.</li>
-      <li>Collaborated with other fellows on peer development and shared career planning strategies.</li>
-    </ul>
-  </div>
-
-  <!-- SEO -->
-  <div class="mb-8">
-    <h3 class="text-xl font-semibold text-violet-600 dark:text-violet-400">Finance, Corporate, Technology (FCT) Participant – SEO (Sponsors for Educational Opportunity)</h3>
-    <p class="text-sm italic text-gray-600 dark:text-gray-400 mb-2">United States · Hybrid · Jul 2024 – Jun 2025</p>
-    <ul class="list-disc ml-6 text-sm space-y-1">
-      <li>Participating in SEO’s Technology Track with industry-specific training on technical skills, business fundamentals, and professional development.</li>
-      <li>Receive one-on-one coaching and instruction to meet career goals and prepare for interviews.</li>
-      <li>Attend webinars, networking events, and industry-led panels to gain insight into corporate technology roles.</li>
-    </ul>
-  </div>
-
-  <!-- UML Database Intern -->
-  <div class="mb-8">
-    <h3 class="text-xl font-semibold text-violet-600 dark:text-violet-400">Database Management Intern – University of Massachusetts Lowell</h3>
-    <p class="text-sm italic text-gray-600 dark:text-gray-400 mb-2">Lowell, MA · Feb 2025 – May 2025</p>
-    <ul class="list-disc ml-6 text-sm space-y-1">
-      <li>Automated recurring data entry and update tasks using Salesforce and Microsoft 365 tools, saving the department an estimated 5 hours per week in manual processing.</li>
-      <li>Collaborated with cross-functional teams to standardize reporting templates, which improved consistency across 4 departments and reduced discrepancies in shared reports by 25%.</li>
-      <li>Created and maintained documentation for database procedures and query optimization techniques, increasing onboarding efficiency for new interns by 30%.</li>
-    </ul>
-  </div>
-
-  <!-- UML Data Entry Clerk -->
-  <div>
-    <h3 class="text-xl font-semibold text-violet-600 dark:text-violet-400">Data Entry Clerk – University of Massachusetts Lowell</h3>
-    <p class="text-sm italic text-gray-600 dark:text-gray-400 mb-2">Lowell, MA · Sep 2024 – Dec 2024</p>
-    <ul class="list-disc ml-6 text-sm space-y-1">
-      <li>Maintained and updated department records, improving accuracy and accessibility of student data.</li>
-      <li>Used Microsoft Excel and internal systems to manage sensitive information with confidentiality and accuracy.</li>
-    </ul>
+<!-- ======================= STATS ======================= -->
+<section class="section" style="padding-top:0" aria-label="At a glance">
+  <div class="wrap">
+    <div class="stats" data-reveal>
+      <div class="stat">
+        <div class="stat__num"><span data-count="3">0</span></div>
+        <div class="stat__label">Internships</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num"><span data-count="2027">0</span></div>
+        <div class="stat__label">Class of</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num"><span data-count="5" data-suffix="+">0</span></div>
+        <div class="stat__label">Fellowships &amp; scholars programs</div>
+      </div>
+    </div>
   </div>
 </section>
 
+<!-- ======================= ABOUT ======================= -->
+<section class="section section--sunken section--tight" id="about">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">About</span>
+      <h2>Backend systems, automation, and the tooling that keeps them observable</h2>
+      <p>
+        I'm pursuing a B.S. in Computer Science at the University of Massachusetts Lowell,
+        graduating May 2027 as part of the Honors College. My interests sit
+        where backend development meets infrastructure — automation, systems integration,
+        and building tools that make complicated systems easier to understand.
+      </p>
+    </div>
+
+  </div>
 </section>
 
-  <!-- PROJECTS -->
-<section id="projects" class="py-16 px-6 bg-white dark:bg-gray-800 max-w-4xl mx-auto" data-aos="fade-up">
-  <h2 class="text-3xl font-bold mb-6 text-emerald-600 dark:text-emerald-400">Projects</h2>
+<!-- ======================= EXPERIENCE ======================= -->
+<section class="section" id="experience">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Experience</span>
+      <h2>Where I've worked</h2>
+      <p>Three internships across financial services, professional services, and higher education.</p>
+    </div>
 
-  <!-- Crypto App -->
-  <div class="mb-8">
-    <h3 class="text-xl font-semibold text-violet-600 dark:text-violet-400">📱 Crypto Investment Android App</h3>
-    <p class="text-sm italic text-gray-600 dark:text-gray-400 mb-2">Python, Dart | VS Code – July 2025</p>
-    <ul class="list-disc ml-6 text-sm space-y-1">
-      <li>Built a cryptocurrency investment tracking and analytics app in Python (VS Code) with real-time API data, portfolio management, price monitoring, performance visualization, crypto news, learning tools, and risk metrics using libraries like requests, pandas, and matplotlib.</li>
-      <li>Designed a modular architecture for scalability and planned future expansion into mobile platforms with Flutter, ensuring seamless frontend-backend integration.</li>
+    <div class="timeline">
+
+      <!-- Fidelity -->
+      <article class="tl-item tl-item--current" data-reveal>
+        <div class="tl-head">
+          <span class="tl-role">Software Engineer Intern</span>
+          <span class="tl-org">Fidelity Investments</span>
+          <span class="tl-date">Summer 2026</span>
+        </div>
+        <p class="tl-sub">Merrimack, NH</p>
+        <ul class="bullets">
+          <li>Developed a full-stack Kubernetes observability experience using React, TypeScript, Grafana Scenes, Prometheus, OpenSearch and Kubernetes APIs, consolidating infrastructure health, configuration and operational insights across 9 Kubernetes resource types.</li>
+          <li>Built 16 telemetry-driven dashboards for pod-level performance analysis, surfacing CPU, memory, storage, network, restart and container health metrics, validated against Datadog.</li>
+          <li>Enhanced developer productivity with 6+ advanced exploration capabilities including semantic search, favorites, hierarchical resource grouping, YAML manifest inspection, Kubernetes event visualization and comparative pod analysis, reducing the time needed to diagnose distributed system issues.</li>
+        </ul>
+        <ul class="tags" style="margin-top:.9rem">
+          <li class="tag tag--brand">Kubernetes</li>
+          <li class="tag tag--brand">React</li>
+          <li class="tag tag--brand">TypeScript</li>
+          <li class="tag tag--brand">Grafana Scenes</li>
+          <li class="tag">OpenTelemetry</li>
+          <li class="tag">Prometheus</li>
+          <li class="tag">Docker</li>
+          <li class="tag">AWS EKS</li>
+        </ul>
+      </article>
+
+      <!-- RSM -->
+      <article class="tl-item" data-reveal>
+        <div class="tl-head">
+          <span class="tl-role">Information Technology Intern</span>
+          <span class="tl-org">RSM US LLP</span>
+          <span class="tl-date">Summer 2025</span>
+        </div>
+        <p class="tl-sub">Minneapolis, MN</p>
+        <ul class="bullets">
+          <li>Collaborated with a cross-functional team to integrate AI tools into client-facing systems, improving data processing efficiency and reducing client response times, and helped implement machine learning models that streamlined repetitive client service tasks.</li>
+          <li>Developed and optimized backend code for internal support systems used by over 500 employees, improving the ticket resolution process and cutting support handling time.</li>
+          <li>Participated in deploying AI-powered automation in client onboarding platforms, increasing onboarding speed and reducing manual input errors by 30%.</li>
+        </ul>
+        <ul class="tags" style="margin-top:.9rem">
+          <li class="tag">C#</li>
+          <li class="tag">Visual Studio 2022</li>
+          <li class="tag">Azure DevOps</li>
+          <li class="tag">AI automation</li>
+        </ul>
+      </article>
+
+      <!-- UML Data Management -->
+      <article class="tl-item" data-reveal>
+        <div class="tl-head">
+          <span class="tl-role">Data Management Intern</span>
+          <span class="tl-org">University of Massachusetts Lowell</span>
+          <span class="tl-date">Spring 2025</span>
+        </div>
+        <p class="tl-sub">Lowell, MA</p>
+        <ul class="bullets">
+          <li>Collaborated with university staff to support database development projects, gaining hands-on experience improving data accessibility across departments.</li>
+          <li>Worked with Salesforce and Microsoft 365 records to reduce redundancies and strengthen reporting accuracy, applying data management best practices learned from mentors.</li>
+          <li>Learned how different teams rely on shared data systems, deepening understanding of how effective database structures support decision-making across the university.</li>
+        </ul>
+        <ul class="tags" style="margin-top:.9rem">
+          <li class="tag">Salesforce</li>
+          <li class="tag">Microsoft 365</li>
+          <li class="tag">SQL</li>
+        </ul>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ======================= PROJECTS ======================= -->
+<section class="section section--sunken" id="projects">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Projects</span>
+      <h2>Things I've built</h2>
+      <p>Personal projects where I get to choose the whole stack.</p>
+    </div>
+
+    <div class="grid grid--3">
+
+      <article class="card card--tilt" data-reveal>
+        <div class="card__icon" aria-hidden="true">📱</div>
+        <span class="card__meta">Summer 2025</span>
+        <h3>Crypto Investment App</h3>
+        <p>
+          A cryptocurrency investment tracking and analytics app built in Python with real-time
+          API data, portfolio management, price monitoring, performance visualization, crypto
+          news, learning tools, and risk metrics. Designed with a modular architecture so it can
+          expand to mobile with Flutter.
+        </p>
+        <ul class="tags" style="margin-top:1rem">
+          <li class="tag tag--accent">Python</li>
+          <li class="tag tag--accent">Dart</li>
+          <li class="tag">Flutter</li>
+          <li class="tag">pandas</li>
+          <li class="tag">matplotlib</li>
+        </ul>
+      </article>
+
+      <article class="card card--tilt" data-reveal>
+        <div class="card__icon" aria-hidden="true">🌐</div>
+        <span class="card__meta">Summer 2025</span>
+        <h3>Personal Portfolio Website</h3>
+        <p>
+          This site. A responsive, accessible portfolio built from scratch with a custom CSS
+          design system, dark/light theming, scroll-driven animation, and a scrollspy navigation.
+          Version-controlled with Git and deployed on GitHub Pages.
+        </p>
+        <ul class="tags" style="margin-top:1rem">
+          <li class="tag tag--accent">HTML</li>
+          <li class="tag tag--accent">CSS</li>
+          <li class="tag tag--accent">JavaScript</li>
+          <li class="tag">GitHub Pages</li>
+        </ul>
+        <p style="margin-top:1rem">
+          <a class="btn btn--ghost btn--sm" href="https://github.com/MMurr2x" target="_blank" rel="noopener">View on GitHub →</a>
+        </p>
+      </article>
+
+      <article class="card card--tilt" data-reveal>
+        <div class="card__icon" aria-hidden="true">📷</div>
+        <span class="card__meta">Fall 2024</span>
+        <h3>QR Code Generator</h3>
+        <p>
+          A Python tool that converts links and images into custom QR codes, built to make
+          sharing resources easier across platforms for both individuals and small businesses.
+        </p>
+        <ul class="tags" style="margin-top:1rem">
+          <li class="tag tag--accent">Python</li>
+          <li class="tag">PyCharm</li>
+        </ul>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ======================= SKILLS ======================= -->
+<section class="section" id="skills">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Toolkit</span>
+      <h2>Languages, Tools, and Coursework</h2>
+    </div>
+
+    <div class="grid grid--2">
+
+      <article class="card card--tilt skill-group" data-reveal>
+        <h4>Languages</h4>
+        <ul class="tags">
+          <li class="tag tag--brand">C</li>
+          <li class="tag tag--brand">C++</li>
+          <li class="tag tag--brand">Python</li>
+          <li class="tag tag--brand">JavaScript</li>
+          <li class="tag tag--brand">TypeScript</li>
+          <li class="tag tag--brand">SQL</li>
+        </ul>
+      </article>
+
+      <article class="card card--tilt skill-group" data-reveal>
+        <h4>Frameworks &amp; libraries</h4>
+        <ul class="tags">
+          <li class="tag tag--accent">React</li>
+          <li class="tag tag--accent">Grafana Scenes</li>
+          <li class="tag tag--accent">Flutter</li>
+          <li class="tag">Pandas</li>
+          <li class="tag">Matplotlib</li>
+        </ul>
+      </article>
+
+      <article class="card card--tilt skill-group" data-reveal>
+        <h4>Cloud &amp; infrastructure</h4>
+        <ul class="tags">
+          <li class="tag tag--accent">Kubernetes</li>
+          <li class="tag tag--accent">Docker</li>
+          <li class="tag tag--accent">AWS EKS</li>
+          <li class="tag tag--accent">OpenTelemetry</li>
+        </ul>
+      </article>
+
+      <article class="card card--tilt skill-group" data-reveal>
+        <h4>Tools</h4>
+        <ul class="tags">
+          <li class="tag">Git</li>
+          <li class="tag">GitHub</li>
+          <li class="tag">Git Bash</li>
+          <li class="tag">Azure DevOps</li>
+          <li class="tag">VS Code</li>
+        </ul>
+      </article>
+
+      <article class="card card--tilt skill-group" data-reveal>
+        <h4>Relevant coursework</h4>
+        <ul class="tags">
+          <li class="tag">Software Engineering I</li>
+          <li class="tag">Operating Systems</li>
+          <li class="tag">Organization of Programming Languages</li>
+        </ul>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ======================= LEADERSHIP ======================= -->
+<section class="section section--sunken" id="leadership">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Leadership &amp; programs</span>
+      <h2>Communities I build with</h2>
+      <p>Selective fellowships, campus leadership, and the organizations where I mentor and get mentored.</p>
+    </div>
+
+    <div class="grid grid--2">
+
+      <article class="card card--tilt" data-reveal>
+        <div class="card__icon" aria-hidden="true">⚙️</div>
+        <span class="card__meta">Oct 2023 — Present</span>
+        <h3>National Society of Black Engineers</h3>
+        <p>
+          I serve as a Senator for the National Society of Black Engineers at UMass Lowell. I lead
+          general body meetings and information sessions with companies including Red Hat, Liberty
+          Mutual, and Teradyne, organize regional and national conference involvement, run study
+          groups, and support peers with resume review and interview prep.
+        </p>
+      </article>
+
+      <article class="card card--tilt" data-reveal>
+        <div class="card__icon" aria-hidden="true">🏆</div>
+        <span class="card__meta">Aug 2025 — Present</span>
+        <h3>MLT Career Prep '27 Fellow</h3>
+        <p>
+          Management Leadership for Tomorrow's Career Prep fellowship: extensive leadership
+          development, career navigation, and personal branding through one-on-one coaching,
+          workshops, and corporate partner events, plus case studies and mock interviews.
+        </p>
+      </article>
+
+      <article class="card card--tilt" data-reveal>
+        <div class="card__icon" aria-hidden="true">🌲</div>
+        <span class="card__meta">Sep 2024 — Present</span>
+        <h3>Juniper Scholars Fellow</h3>
+        <p>
+          A competitive fellowship with Juniper Networks focused on academic and professional
+          development for underrepresented students in tech — mentoring sessions with Juniper
+          engineers and workshops on technical and leadership skills.
+        </p>
+      </article>
+
+      <article class="card card--tilt" data-reveal>
+        <div class="card__icon" aria-hidden="true">📊</div>
+        <span class="card__meta">Jul 2024 — Jun 2025</span>
+        <h3>SEO Career — Technology Track</h3>
+        <p>
+          Sponsors for Educational Opportunity's Finance, Corporate &amp; Technology program:
+          industry-specific training in technical skills and business fundamentals, one-on-one
+          coaching, and industry-led panels on corporate technology roles.
+        </p>
+      </article>
+
+      <article class="card card--tilt" data-reveal>
+        <div class="card__icon" aria-hidden="true">🎓</div>
+        <span class="card__meta">Jul 2025</span>
+        <h3>Grow with Google Scholar</h3>
+        <p>
+          Completed training in data analytics, resume building, interview preparation, and
+          personal branding through curated Google and Coursera pathways, building a project
+          portfolio demonstrating proficiency in digital tools.
+        </p>
+      </article>
+
+      <article class="card card--tilt" data-reveal>
+        <div class="card__icon" aria-hidden="true">💻</div>
+        <span class="card__meta">Campus</span>
+        <h3>Campus communities</h3>
+        <p>
+          Active in the Black Student Union, the Society of Caribbean Ancestry, the Association of
+          Students of African Origin, and the Competitive Programming Club.
+        </p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ======================= RESUME ======================= -->
+<section class="section" id="resume">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Résumé</span>
+      <h2>The one-page version</h2>
+      <p>Read it below or download the PDF.</p>
+    </div>
+
+    <div data-reveal>
+      <iframe class="pdf-frame" src="Mayne%20Murray%20Internship%20Resume.pdf#view=FitH" title="Mayne Murray résumé (PDF)" loading="lazy"></iframe>
+      <p style="margin-top:1.25rem">
+        <a class="btn btn--primary btn--magnetic" href="Mayne%20Murray%20Internship%20Resume.pdf" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>
+          Download PDF
+        </a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= CONTACT ======================= -->
+<section class="section section--sunken" id="contact">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Contact</span>
+      <h2>Let's talk</h2>
+      <p>Recruiting, collaborating, or just comparing notes on observability tooling — I'd like to hear from you.</p>
+    </div>
+
+    <div class="grid grid--2">
+
+      <a class="contact-card" href="mailto:maynemurray@gmail.com" data-reveal>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+        <span>
+          <span class="label">Email</span><br />
+          <span class="value">maynemurray@gmail.com</span>
+        </span>
+        <button class="copy-btn" type="button" data-copy="maynemurray@gmail.com" aria-label="Copy email address">Copy</button>
+      </a>
+
+      <a class="contact-card" href="https://www.linkedin.com/in/mayne-murray/" target="_blank" rel="noopener" data-reveal>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21h-4v-5.6c0-1.34-.03-3.07-1.9-3.07-1.9 0-2.2 1.46-2.2 2.97V21H9z"/></svg>
+        <span>
+          <span class="label">LinkedIn</span><br />
+          <span class="value">Mayne Murray</span>
+        </span>
+      </a>
+
+
+      <a class="contact-card" href="tel:+16177497436" data-reveal>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+        <span>
+          <span class="label">Phone</span><br />
+          <span class="value">(617) 749-7436</span>
+        </span>
+        <button class="copy-btn" type="button" data-copy="(617) 749-7436" aria-label="Copy phone number">Copy</button>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ======================= FOOTER ======================= -->
+<footer class="footer">
+  <div class="footer__inner">
+    <p style="margin:0">© <span id="year">2026</span> Mayne Murray · Built from scratch with HTML, CSS &amp; JavaScript</p>
+    <ul class="footer__links">
+      <li><a href="about.html">About</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="leadership.html">Leadership</a></li>
+      <li><a href="resume.html">Résumé</a></li>
+      <li><a href="contact.html">Contact</a></li>
     </ul>
   </div>
+</footer>
 
-<!-- Personal Portfolio Project -->
-<div class="mb-8">
-  <h3 class="text-xl font-semibold text-violet-600 dark:text-violet-400">🌐 Personal Portfolio Website</h3>
-  <p class="text-sm italic text-gray-600 dark:text-gray-400 mb-2">HTML, CSS, JavaScript | VS Code – July 2025</p>
-  <ul class="list-disc ml-6 text-sm space-y-1">
-    <li>Designed and built a fully responsive, single-page portfolio site using HTML, Tailwind CSS, and JavaScript.</li>
-    <li>Integrated scroll-based animations, dark mode, and AOS to enhance user experience and accessibility.</li>
-    <li>Deployed via GitHub Pages with version control using Git and ongoing development in Visual Studio Code.</li>
-  </ul>
-</div>
+<button class="to-top" type="button" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
 
-  <!-- QR Generator -->
-  <div>
-    <h3 class="text-xl font-semibold text-violet-600 dark:text-violet-400">📷 QR Code Generator</h3>
-    <p class="text-sm italic text-gray-600 dark:text-gray-400 mb-2">Python | PyCharm – October 2024</p>
-    <ul class="list-disc ml-6 text-sm space-y-1">
-      <li>Created a tool that converts links and images into custom QR codes using Python libraries.</li>
-      <li>Enhanced accessibility and convenience for users across multiple platforms.</li>
-    </ul>
-  </div>
-</section>
-
-  <!-- LEADERSHIP -->
-<section id="leadership" class="py-16 px-6 max-w-4xl mx-auto" data-aos="fade-left">
-  <h2 class="text-3xl font-bold mb-6 text-emerald-600 dark:text-emerald-400">Leadership</h2>
-
-  <!-- NSBE -->
-  <div class="mb-6">
-    <h3 class="text-lg font-semibold text-rose-500">⚙️ NSBE Executive Board Senator</h3>
-    <p class="text-sm">
-      I serve as a Senator for the National Society of Black Engineers (NSBE), a nationally recognized organization dedicated to empowering Black engineers in STEM. I advocate for student voices, coordinate professional development initiatives, and promote diversity and inclusion in technical fields.
-    </p>
-  </div>
-
-  <!-- BSU -->
-  <div class="mb-6">
-    <h3 class="text-lg font-semibold text-rose-500">✊🏽 Black Student Union (BSU)</h3>
-    <p class="text-sm">
-      As an active member of the BSU, I contribute to organizing events that celebrate Black history, culture, and identity on campus. I work with fellow leaders to foster a safe, uplifting environment where students can discuss important issues, build community, and empower one another through collective action.
-    </p>
-  </div>
-
-  <!-- SOCA -->
-  <div class="mb-6">
-    <h3 class="text-lg font-semibold text-rose-500">🌴 Society of Caribbean Ancestry (SOCA)</h3>
-    <p class="text-sm">
-      I represent SOCA in cultural showcases and educational events that highlight the Caribbean's diverse heritage. My involvement includes supporting fundraising initiatives and helping plan campus-wide events like Caribbean Week, which brings students together through music, food, and history.
-    </p>
-  </div>
-
-  <!-- ASAO -->
-  <div class="mb-6">
-    <h3 class="text-lg font-semibold text-rose-500">🌍 African Students of African Origin (ASAO)</h3>
-    <p class="text-sm">
-      ASAO offers a vibrant space for students of African descent to connect and uplift one another. I participate in leadership forums and cultural programming to promote African unity and visibility on campus. I also mentor younger students navigating their first year in STEM and college life.
-    </p>
-  </div>
-
-  <!-- Competitive Programming Club -->
-  <div class="mb-6">
-    <h3 class="text-lg font-semibold text-rose-500">💻 Competitive Programming Club</h3>
-    <p class="text-sm">
-      As a dedicated member of the Competitive Programming Club, I participate in weekly coding challenges, algorithmic problem-solving sessions, and mock competitions. I’ve led small team strategy groups to prepare for regional hackathons and helped onboard new members by hosting intro-to-LeetCode sessions and sharing effective coding patterns.
-    </p>
-  </div>
-
-  <!-- Grow with Google -->
-  <div class="mb-6">
-    <h3 class="text-lg font-semibold text-rose-500">📊 Grow with Google Scholar</h3>
-    <p class="text-sm">
-      As a Grow with Google Scholar, I completed training in data analytics, resume development, personal branding, and interview preparation through curated Google and Coursera learning tracks. I created a portfolio of projects using Google Workspace tools, and gained exposure to in-demand career paths in both the tech and business sectors. The program helped refine my ability to present myself professionally and communicate my skills with clarity.
-    </p>
-  </div>
-
-  <!-- MLT -->
-  <div>
-    <h3 class="text-lg font-semibold text-rose-500">🏆 Management Leaders of Tomorrow (MLT)</h3>
-    <p class="text-sm">
-      Through MLT, I underwent extensive leadership training focused on career navigation, branding, and personal growth. I worked with experienced coaches, participated in workshops and mock interviews, and connected with corporate leaders across various industries. The experience provided early exposure to top-tier firms, real-world case studies, and a lifelong network of driven professionals committed to excellence and diversity in business and tech.
-    </p>
-  </div>
-</section>
-
-
-<!-- RESUME -->
-<section id="resume" class="py-16 px-6 max-w-4xl mx-auto text-center bg-white dark:bg-gray-800" data-aos="zoom-in">
-  <h2 class="text-3xl font-bold mb-6 text-emerald-600 dark:text-emerald-400">Resume</h2>
-
-  <!-- Embedded PDF Viewer -->
-  <div class="mb-6">
-    <iframe
-      src="Mayne-Murray-CS-Resume.pdf"
-      width="100%"
-      height="600"
-      class="w-full border shadow-md rounded-md dark:border-gray-700"
-      title="Mayne Murray Resume"
-    >
-      Your browser does not support PDF embedding. You can
-      <a href="Mayne-Murray-CS-Resume.pdf" download>download the resume here</a>.
-    </iframe>
-  </div>
-
-  <!-- Download Button -->
-  <a href="Mayne-Murray-CS-Resume.pdf" download
-     class="bg-violet-600 text-white px-6 py-2 rounded hover:bg-violet-700 transition">
-    Download Resume PDF
-  </a>
-</section>
-
-  <!-- CONTACT -->
-  <section id="contact" class="py-16 px-6 max-w-4xl mx-auto text-center" data-aos="fade-up">
-    <h2 class="text-3xl font-bold mb-4 text-emerald-600 dark:text-emerald-400">Contact</h2>
-    <p class="mb-2">📧 <a href="mailto:maynemurray@gmail.com" class="text-rose-500 hover:underline">maynemurray@gmail.com</a></p>
-    <p>🔗 <a href="https://linkedin.com/in/mayne-murray/" target="_blank" class="text-rose-500 hover:underline">LinkedIn</a></p>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="text-center text-sm py-6 text-gray-500 bg-gray-200 dark:bg-gray-900 dark:text-gray-400">
-    &copy; 2025 Mayne Murray
-  </footer>
-
-  <!-- Scripts -->
-  <script>
-    AOS.init();
-    const toggle = document.getElementById('darkToggle');
-    const html = document.documentElement;
-
-    if (localStorage.getItem("theme") === "dark") {
-      html.classList.add("dark");
-    }
-
-    toggle.addEventListener('click', () => {
-      html.classList.toggle("dark");
-      localStorage.setItem("theme", html.classList.contains("dark") ? "dark" : "light");
-    });
-  </script>
 </body>
 </html>

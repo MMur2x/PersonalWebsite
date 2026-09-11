@@ -1,45 +1,155 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Leadership - Mayne Murray</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leadership &mdash; Mayne Murray</title>
+  <meta name="description" content="NSBE Executive Board Senator, MLT Career Prep Fellow, Juniper Scholar, SEO Career, and Grow with Google Scholar." />
+  <meta name="author" content="Mayne Murray" />
+  <meta name="theme-color" content="#0ea5e9" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Leadership &mdash; Mayne Murray" />
+  <meta property="og:description" content="NSBE Executive Board Senator, MLT Career Prep Fellow, Juniper Scholar, SEO Career, and Grow with Google Scholar." />
+  <meta property="og:image" content="headshot.jpg" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%230ea5e9'/%3E%3Ctext x='50' y='68' font-family='Poppins,Arial,sans-serif' font-size='48' font-weight='700' fill='white' text-anchor='middle'%3EMM%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <script src="assets/site.js" defer></script>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans">
-  <nav class="bg-white shadow p-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold">Mayne Murray</h1>
-    <ul class="flex gap-6 text-sm">
-      <li><a href="index.html" class="hover:text-blue-500">Home</a></li>
-      <li><a href="about.html" class="hover:text-blue-500">About</a></li>
-      <li><a href="projects.html" class="hover:text-blue-500">Projects</a></li>
-      <li><a href="leadership.html" class="text-blue-600 font-semibold">Leadership</a></li>
-      <li><a href="resume.html" class="hover:text-blue-500">Resume</a></li>
-      <li><a href="contact.html" class="hover:text-blue-500">Contact</a></li>
+
+<body>
+<div class="page-veil" aria-hidden="true"></div>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="nav">
+  <div class="nav__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__mark" aria-hidden="true">MM</span>
+      <span class="brand__text">Mayne Murray</span>
+    </a>
+    <ul class="nav__links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="leadership.html" class="is-active">Leadership</a></li>
+      <li><a href="resume.html">R&eacute;sum&eacute;</a></li>
+      <li><a href="contact.html">Contact</a></li>
     </ul>
-  </nav>
+    <div class="nav__actions">
+      <button class="icon-btn theme-toggle" type="button" aria-label="Toggle colour theme">
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></svg>
+      </button>
+      <button class="icon-btn nav__burger" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="progress" aria-hidden="true"></div>
+</nav>
 
-  <section class="p-8 max-w-4xl mx-auto">
-    <h2 class="text-3xl font-bold mb-6">Leadership & Involvement</h2>
-
-    <div class="mb-6">
-      <h3 class="text-xl font-semibold">NSBE Executive Board Senator</h3>
-      <p class="text-gray-700">Actively advancing diversity in STEM through mentorship, leadership training, and advocacy as part of the National Society of Black Engineers.</p>
+<main id="main">
+<section class="section" style="padding-top:clamp(7rem,12vw,9rem)">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Leadership &amp; programs</span>
+      <h1 style="font-size:clamp(2rem,4.6vw,3rem)">Communities I build with</h1>
+      <p>Selective fellowships, campus leadership, and the organizations where I mentor and get mentored.</p>
     </div>
 
-    <div class="mb-6">
-      <h3 class="text-xl font-semibold">Grow with Google Scholar</h3>
-      <p class="text-gray-700">Completed data analytics training, interview preparation, and branding workshops through Google's learning program and Coursera.</p>
+    <div class="grid grid--2">
+      <article class="card card--tilt" data-reveal>
+        <div class="card__icon" aria-hidden="true">&#9881;&#65039;</div>
+        <span class="card__meta">Oct 2023 &mdash; Present</span>
+        <h3>National Society of Black Engineers</h3>
+        <ul class="bullets" style="margin-top:.6rem">
+          <li>Lead general body meetings and information sessions with companies including Red Hat, Liberty Mutual and Teradyne.</li>
+          <li>Organize regional and national conference involvement for chapter members.</li>
+          <li>Run study groups and share resources across the chapter.</li>
+          <li>Support peers with resume review and interview preparation, and connect students to tutoring and internship opportunities.</li>
+        </ul>
+      </article>
+
+      <article class="card card--tilt" data-reveal>
+        <div class="card__icon" aria-hidden="true">&#127942;</div>
+        <span class="card__meta">Aug 2025 &mdash; Present</span>
+        <h3>MLT Career Prep &rsquo;27 Fellow</h3>
+        <p>Management Leadership for Tomorrow&rsquo;s Career Prep fellowship &mdash; leadership development,
+        career navigation and personal branding through one-on-one coaching, workshops and corporate
+        partner events, plus case studies and mock interviews with top-tier firms.</p>
+      </article>
+
+      <article class="card card--tilt" data-reveal>
+        <div class="card__icon" aria-hidden="true">&#127794;</div>
+        <span class="card__meta">Sep 2024 &mdash; Present</span>
+        <h3>Juniper Scholars Fellow</h3>
+        <p>A competitive fellowship with Juniper Networks focused on academic and professional development
+        for underrepresented students in tech, including mentoring sessions with Juniper engineers and
+        workshops on technical and leadership skills.</p>
+      </article>
+
+      <article class="card card--tilt" data-reveal>
+        <div class="card__icon" aria-hidden="true">&#128202;</div>
+        <span class="card__meta">Jul 2024 &mdash; Jun 2025</span>
+        <h3>SEO Career &mdash; Technology Track</h3>
+        <p>Sponsors for Educational Opportunity&rsquo;s Finance, Corporate &amp; Technology program:
+        industry-specific training in technical skills and business fundamentals, one-on-one coaching,
+        and webinars and panels on corporate technology roles.</p>
+      </article>
+
+      <article class="card card--tilt" data-reveal>
+        <div class="card__icon" aria-hidden="true">&#127891;</div>
+        <span class="card__meta">Jul 2025</span>
+        <h3>Grow with Google Scholar</h3>
+        <p>Training in data analytics, resume building, interview preparation and personal branding
+        through curated Google and Coursera pathways, with a project portfolio demonstrating
+        proficiency in digital tools.</p>
+      </article>
+
+      <article class="card card--tilt" data-reveal>
+        <div class="card__icon" aria-hidden="true">&#128187;</div>
+        <span class="card__meta">Campus involvement</span>
+        <h3>Student organizations</h3>
+        <ul class="bullets" style="margin-top:.6rem">
+          <li><strong>Black Student Union</strong> &mdash; events celebrating Black history, culture and identity on campus.</li>
+          <li><strong>Society of Caribbean Ancestry</strong> &mdash; cultural showcases and Caribbean Week programming.</li>
+          <li><strong>Association of Students of African Origin</strong> &mdash; leadership forums and mentoring first-year STEM students.</li>
+          <li><strong>Competitive Programming Club</strong> &mdash; weekly coding challenges and intro-to-LeetCode sessions for new members.</li>
+        </ul>
+      </article>
     </div>
 
-    <div>
-      <h3 class="text-xl font-semibold">Management Leadership for Tomorrow (MLT)</h3>
-      <p class="text-gray-700">Participated in career training, mock interviews, and executive coaching to develop real-world leadership and business skills.</p>
-    </div>
-  </section>
+  </div>
+</section>
+</main>
 
-  <footer class="text-center text-sm py-6 text-gray-500">
-    &copy; 2025 Mayne Murray
-  </footer>
+<footer class="footer">
+  <div class="footer__inner">
+    <p style="margin:0">&copy; <span id="year">2026</span> Mayne Murray &middot; Built from scratch with HTML, CSS &amp; JavaScript</p>
+    <ul class="footer__links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="leadership.html">Leadership</a></li>
+      <li><a href="resume.html">R&eacute;sum&eacute;</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</footer>
+
+<button class="to-top" type="button" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
 </body>
 </html>
