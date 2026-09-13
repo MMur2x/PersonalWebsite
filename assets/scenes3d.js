@@ -685,7 +685,7 @@
       }
     }
 
-    var COUNT = 100;
+    var COUNT = 150;
     var shapes = [];
     for (var i = 0; i < COUNT; i++) {
       var r = 0.18 + Math.random() * 0.30;
@@ -698,16 +698,19 @@
       var mesh = new THREE.LineSegments(
         new THREE.WireframeGeometry(shapeGeometry(i % 7, r)), mat);
       scene.add(mesh);
+      var baseColor = col.clone();
       shapes.push({
         mesh: mesh, mat: mat, r: r,
         pageX: 0, pageY: 0,             // position in DOCUMENT space (px)
         // Every shape gets its own drift, spin and phase — nothing is in step.
-        vx: (Math.random() - 0.5) * 15,
-        vy: (Math.random() - 0.5) * 11,
+        vx: (Math.random() - 0.5) * 26,
+        vy: (Math.random() - 0.5) * 19,
         rx: (Math.random() - 0.5) * 0.5,
         ry: (Math.random() - 0.5) * 0.5,
         rz: (Math.random() - 0.5) * 0.35,
         baseOpacity: mat.opacity,
+        baseColor: baseColor,
+        dim: 0,                         // 0 clear .. 1 fully inside text
         placed: false
       });
     }
@@ -799,21 +802,122 @@
         document.body ? document.body.scrollHeight : 0
       );
 
+      collectText();
+
       shapes.forEach(function (sh) {
         if (sh.placed) return;
         sh.placed = true;
         // spread down the whole document, not just the first screen
-        // spread down the whole document, and across its whole width
-        sh.pageY = 120 + Math.random() * Math.max(400, docH - 240);
-        sh.pageX = 60 + Math.random() * Math.max(120, vw - 120);
+        // spread down the whole document and across its width, avoiding copy
+        freeSpot(sh);
       });
     }
 
+    /* --- text exclusion zones -------------------------------------------
+       Shapes are not allowed to sit cleanly on top of copy. Every text-
+       bearing element's box is collected in DOCUMENT coordinates; a shape
+       that drifts into one washes out in colour and dulls slightly, so the
+       words underneath stay readable.
+
+       The boxes are bucketed by page row so a shape only ever tests the
+       handful of rects near it, not all several hundred.
+       ------------------------------------------------------------------ */
+    // Everything a shape must not sit on: type at any size, plus images and
+    // embeds — the headshot and the résumé viewer included.
+    var BLOCK_SEL = 'h1,h2,h3,h4,h5,h6,p,li,a,button,code,strong,' +
+                    '.tag,.tl-role,.tl-org,.tl-date,.tl-sub,.card__meta,' +
+                    '.eyebrow,.stat__num,.stat__label,.value,.label,.brand__text,' +
+                    'img,iframe,.hero__portrait,.pdf-frame,.card__icon,.brand__mark';
+    var BUCKET = 500;          // page-row height for the spatial index
+    var FADE = 46;             // px of approach over which the wash ramps in
+    var buckets = {};
+    var WASH = new THREE.Color(0x8fa0b8);   // the muted slate they fade toward
+
+    function collectText() {
+      buckets = {};
+      var sy = window.scrollY || window.pageYOffset || 0;
+      var nodes = document.querySelectorAll(BLOCK_SEL);
+      for (var i = 0; i < nodes.length; i++) {
+        var el = nodes[i];
+        var isMedia = /^(IMG|IFRAME)$/.test(el.tagName) ||
+                      el.classList.contains('hero__portrait') ||
+                      el.classList.contains('pdf-frame') ||
+                      el.classList.contains('card__icon') ||
+                      el.classList.contains('brand__mark');
+        if (!isMedia && (!el.textContent || !el.textContent.trim())) continue;
+        var r = el.getBoundingClientRect();
+        if (r.width < 4 || r.height < 4) continue;
+        var box = { x0: r.left, x1: r.right, y0: r.top + sy, y1: r.bottom + sy };
+        var b0 = Math.floor(box.y0 / BUCKET), b1 = Math.floor(box.y1 / BUCKET);
+        for (var b = b0; b <= b1; b++) {
+          (buckets[b] || (buckets[b] = [])).push(box);
+        }
+      }
+    }
+
+    // How deeply a point sits inside the nearest text box: 0 clear, 1 inside.
+    function textFactor(px, pageY, pad) {
+      var b = Math.floor(pageY / BUCKET);
+      var best = 0;
+      for (var k = b - 1; k <= b + 1; k++) {
+        var list = buckets[k];
+        if (!list) continue;
+        for (var i = 0; i < list.length; i++) {
+          var r = list[i];
+          // distance from the point to the rect, 0 when inside
+          var dx = Math.max(r.x0 - px, 0, px - r.x1);
+          var dy = Math.max(r.y0 - pageY, 0, pageY - r.y1);
+          var d = Math.sqrt(dx * dx + dy * dy) - pad;
+          if (d <= 0) return 1;
+          if (d < FADE) {
+            var t = 1 - d / FADE;
+            if (t > best) best = t;
+          }
+        }
+      }
+      return best;
+    }
+
+    /* Push a shape out of any block it has entered. The shortest way out
+       wins, and the velocity reflects off that edge, so shapes visibly flow
+       around paragraphs and images instead of drifting through them. */
+    function avoidBlocks(sh) {
+      var b = Math.floor(sh.pageY / BUCKET);
+      var pad = sh.r * PPU + 6;
+      for (var k = b - 1; k <= b + 1; k++) {
+        var list = buckets[k];
+        if (!list) continue;
+        for (var i = 0; i < list.length; i++) {
+          var r = list[i];
+          var x0 = r.x0 - pad, x1 = r.x1 + pad, y0 = r.y0 - pad, y1 = r.y1 + pad;
+          if (sh.pageX <= x0 || sh.pageX >= x1 || sh.pageY <= y0 || sh.pageY >= y1) continue;
+
+          var dl = sh.pageX - x0, dr = x1 - sh.pageX;
+          var du = sh.pageY - y0, dd = y1 - sh.pageY;
+          var m = Math.min(dl, dr, du, dd);
+          if (m === dl)      { sh.pageX = x0; sh.vx = -Math.abs(sh.vx) - 4; }
+          else if (m === dr) { sh.pageX = x1; sh.vx =  Math.abs(sh.vx) + 4; }
+          else if (m === du) { sh.pageY = y0; sh.vy = -Math.abs(sh.vy) - 4; }
+          else               { sh.pageY = y1; sh.vy =  Math.abs(sh.vy) + 4; }
+        }
+      }
+    }
+
+    // Spawn somewhere legal rather than inside a paragraph.
+    function freeSpot(sh) {
+      for (var attempt = 0; attempt < 40; attempt++) {
+        sh.pageX = 60 + Math.random() * Math.max(120, vw - 120);
+        sh.pageY = 120 + Math.random() * Math.max(400, docH - 240);
+        if (textFactor(sh.pageX, sh.pageY, sh.r * PPU + 10) === 0) return;
+      }
+    }
+
+    var themeMul = 1;
     function applyTheme() {
       var light = document.documentElement.getAttribute('data-theme') === 'light';
+      themeMul = light ? 0.7 : 1;
       shapes.forEach(function (sh) {
         sh.mat.blending = light ? THREE.NormalBlending : THREE.AdditiveBlending;
-        sh.mat.opacity = light ? sh.baseOpacity * 0.7 : sh.baseOpacity;
         sh.mat.needsUpdate = true;
       });
       bubbleMat.blending = light ? THREE.NormalBlending : THREE.AdditiveBlending;
@@ -848,6 +952,8 @@
         sh.pageX += sh.vx * dt;
         sh.pageY += sh.vy * dt;
 
+        avoidBlocks(sh);
+
         var screenY = sh.pageY - scrollY;
         var screenX = sh.pageX;
 
@@ -868,7 +974,7 @@
         // drag back to a lazy drift
         var damp = 1 - Math.min(1, dt * 1.1);
         sh.vx *= damp; sh.vy *= damp;
-        if (Math.abs(sh.vx) < 3) sh.vx += (sh.vx >= 0 ? 1 : -1) * 3 * dt;
+        if (Math.abs(sh.vx) < 6) sh.vx += (sh.vx >= 0 ? 1 : -1) * 6 * dt;
 
         // bounce off the left and right edges of the page
         var pad = sh.r * PPU + 8;
@@ -883,6 +989,16 @@
         var onScreen = screenY > -margin && screenY < vh + margin;
         sh.mesh.visible = onScreen;
         if (!onScreen) continue;
+
+        // Only on-screen shapes pay for the text test.
+        var want = textFactor(screenX, sh.pageY, sh.r * PPU * 0.8);
+        sh.dim += (want - sh.dim) * Math.min(1, dt * 3.4);   // ease, don't snap
+
+        // Colour blurs toward a muted slate; brightness dulls only slightly.
+        // Collision keeps them out; this only softens the frame or two it
+        // takes to push free after a layout shift.
+        sh.mat.color.copy(sh.baseColor).lerp(WASH, sh.dim * 0.88);
+        sh.mat.opacity = sh.baseOpacity * themeMul * (1 - 0.55 * sh.dim);
 
         sh.mesh.position.set(
           (screenX - vw / 2) / PPU,
@@ -911,6 +1027,7 @@
     // The document grows as images and scenes settle; re-measure its height.
     setTimeout(measure, 1200);
     setTimeout(measure, 3500);
+    setTimeout(measure, 8000);
 
     frame();
     requestAnimationFrame(function () {
