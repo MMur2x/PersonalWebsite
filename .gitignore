@@ -1,0 +1,7 @@
+# Cowork scratch output, not part of the site
+Claude outputs/
+
+# OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini

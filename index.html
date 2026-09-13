@@ -34,11 +34,12 @@
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
   <script src="assets/site.js" defer></script>
-  <script src="assets/hero3d.js" defer></script>
+  <script src="assets/scenes3d.js" defer></script>
 </head>
 
 <body>
 <div class="page-veil" aria-hidden="true"></div>
+<div class="scene scene--floaters" data-scene="floaters" aria-hidden="true"></div>
 <a class="skip-link" href="#main">Skip to content</a>
 
 <!-- ======================= NAVIGATION ======================= -->
@@ -77,7 +78,7 @@
 <!-- ======================= HERO ======================= -->
 <header class="hero">
   <div class="hero__aurora" aria-hidden="true"><span></span><span></span><span></span></div>
-  <div class="hero__canvas" id="hero-canvas" aria-hidden="true"></div>
+  <div class="scene hero__canvas" data-scene="network" aria-hidden="true"></div>
 
   <div class="wrap hero__inner">
     <div>
@@ -150,7 +151,8 @@
 </section>
 
 <!-- ======================= ABOUT ======================= -->
-<section class="section section--sunken section--tight" id="about">
+<section class="section section--sunken section--tight section--scene" id="about">
+  <div class="scene scene--knot" data-scene="knot" aria-hidden="true"></div>
   <div class="wrap">
     <div class="section-head" data-reveal>
       <span class="eyebrow">About</span>
@@ -248,7 +250,8 @@
 </section>
 
 <!-- ======================= PROJECTS ======================= -->
-<section class="section section--sunken" id="projects">
+<section class="section section--sunken section--scene" id="projects">
+  <div class="scene scene--lattice" data-scene="lattice" aria-hidden="true"></div>
   <div class="wrap">
     <div class="section-head" data-reveal>
       <span class="eyebrow">Projects</span>
@@ -326,7 +329,7 @@
     <div class="grid grid--2">
 
       <article class="card card--tilt skill-group" data-reveal>
-        <h4>Languages</h4>
+        <h3>Languages</h3>
         <ul class="tags">
           <li class="tag tag--brand">C</li>
           <li class="tag tag--brand">C++</li>
@@ -338,7 +341,7 @@
       </article>
 
       <article class="card card--tilt skill-group" data-reveal>
-        <h4>Frameworks &amp; libraries</h4>
+        <h3>Frameworks &amp; libraries</h3>
         <ul class="tags">
           <li class="tag tag--accent">React</li>
           <li class="tag tag--accent">Grafana Scenes</li>
@@ -349,7 +352,7 @@
       </article>
 
       <article class="card card--tilt skill-group" data-reveal>
-        <h4>Cloud &amp; infrastructure</h4>
+        <h3>Cloud &amp; infrastructure</h3>
         <ul class="tags">
           <li class="tag tag--accent">Kubernetes</li>
           <li class="tag tag--accent">Docker</li>
@@ -359,7 +362,7 @@
       </article>
 
       <article class="card card--tilt skill-group" data-reveal>
-        <h4>Tools</h4>
+        <h3>Tools</h3>
         <ul class="tags">
           <li class="tag">Git</li>
           <li class="tag">GitHub</li>
@@ -370,7 +373,7 @@
       </article>
 
       <article class="card card--tilt skill-group" data-reveal>
-        <h4>Relevant coursework</h4>
+        <h3>Relevant coursework</h3>
         <ul class="tags">
           <li class="tag">Software Engineering I</li>
           <li class="tag">Operating Systems</li>
@@ -485,7 +488,8 @@
 </section>
 
 <!-- ======================= CONTACT ======================= -->
-<section class="section section--sunken" id="contact">
+<section class="section section--sunken section--scene" id="contact">
+  <div class="scene scene--globe" data-scene="globe" aria-hidden="true"></div>
   <div class="wrap">
     <div class="section-head" data-reveal>
       <span class="eyebrow">Contact</span>

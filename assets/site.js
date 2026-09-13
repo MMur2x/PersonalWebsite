@@ -67,7 +67,8 @@
 
     if (top) {
       top.addEventListener('click', function () {
-        window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+        if (reduceMotion) window.scrollTo(0, 0);
+        else smoothScrollTo(0);
       });
     }
   }
@@ -221,6 +222,69 @@
   }
 
   /* ----------------------------------------------------------------------
+     Slow, eased anchor scrolling.
+     The browser's native `scroll-behavior: smooth` has a fixed, fairly brisk
+     duration. This replaces it for in-page links with a longer ease whose
+     length scales with distance, so a jump across the whole page takes
+     noticeably longer than a nudge to the next section.
+     ---------------------------------------------------------------------- */
+  var SCROLL_MIN = 700;   // ms, for a very short hop
+  var SCROLL_MAX = 1900;  // ms, for a full-page jump
+
+  function smoothScrollTo(targetY, done) {
+    var startY = window.scrollY || window.pageYOffset;
+    var delta = targetY - startY;
+    if (Math.abs(delta) < 2) { if (done) done(); return; }
+
+    var dur = Math.min(SCROLL_MAX, Math.max(SCROLL_MIN, Math.abs(delta) * 0.7));
+    var start = performance.now();
+    var cancelled = false;
+    function onUser() { cancelled = true; }
+    // Any real input from the visitor abandons the animation immediately —
+    // never fight someone who has decided to scroll themselves.
+    window.addEventListener('wheel', onUser, { passive: true, once: true });
+    window.addEventListener('touchstart', onUser, { passive: true, once: true });
+    window.addEventListener('keydown', onUser, { once: true });
+
+    function step(now) {
+      if (cancelled) return;
+      var t = Math.min((now - start) / dur, 1);
+      // easeInOutCubic
+      var e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      window.scrollTo(0, startY + delta * e);
+      if (t < 1) requestAnimationFrame(step);
+      else {
+        window.removeEventListener('wheel', onUser);
+        window.removeEventListener('touchstart', onUser);
+        window.removeEventListener('keydown', onUser);
+        if (done) done();
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  function initSlowScroll() {
+    if (reduceMotion) return;
+    // Take over from CSS so the two don't both animate.
+    root.style.scrollBehavior = 'auto';
+
+    var navH = 74;
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href^="#"]');
+      if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+      var id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      var el = document.getElementById(id);
+      if (!el) return;
+      e.preventDefault();
+      var y = el.getBoundingClientRect().top + window.scrollY - navH;
+      smoothScrollTo(y, function () {
+        if (history.replaceState) history.replaceState(null, '', '#' + id);
+      });
+    });
+  }
+
+  /* ----------------------------------------------------------------------
      Magnetic buttons — the button leans toward the cursor while it's near
      ---------------------------------------------------------------------- */
   function initMagnetic() {
@@ -332,6 +396,7 @@
   function boot() {
     initTheme();
     initBurger();
+    initSlowScroll();
     initMagnetic();
     initTilt();
     initPageTransitions();
