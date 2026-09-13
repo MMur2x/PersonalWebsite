@@ -643,19 +643,24 @@
   }
 
   /* ======================================================================
-     SCENE 4 — floaters (fixed overlay)
-     Wireframe solids drifting in the top and bottom bands of the viewport.
-     The cursor carries a bubble; anything that enters it is pushed out, so
-     the geometry gets out of your way as you move toward it.
+     SCENE 4 — floaters (page-anchored ambient geometry)
+     Wireframe solids that belong to the DOCUMENT, not the viewport: each one
+     holds a fixed page position and scrolls away with the content, exactly
+     like an image would. They drift only under their own velocity, never
+     because you scrolled.
 
-     This layer uses an orthographic camera scaled so that one world unit is
-     100 CSS pixels. That makes the screen-to-world mapping exact, which is
-     what lets the repulsion feel anchored to the real cursor position.
+     The canvas itself stays viewport-sized and fixed — a canvas as tall as
+     the whole document would be an enormous framebuffer — and each shape's
+     screen position is derived as (pageY - scrollY) every frame.
+
+     They roam the full width of the page rather than sitting in one lane,
+     so they read as drifting through the document. Opacity is kept low
+     precisely because they will cross text on their way.
      ====================================================================== */
   function buildFloaters(host) {
-    var PPU = 100;                 // pixels per world unit
-    var BUBBLE_R = 1.15;           // ~115px
-    var CLEAR_BAND = 0.70;         // middle 70% of the height stays empty
+    var PPU = 100;              // pixels per world unit
+    var BUBBLE_PX = 6;          // bubble extends 6px from the cursor
+    var REACH_PX = 74;          // how close before a shape reacts
 
     var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'low-power' });
     renderer.setClearColor(0x000000, 0);
@@ -666,9 +671,8 @@
     var camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -100, 100);
     camera.position.z = 10;
 
-    var halfW = 1, halfH = 1;
+    var vw = 1, vh = 1, halfW = 1, halfH = 1, docH = 1;
 
-    /* --- the solids ---------------------------------------------------- */
     function shapeGeometry(kind, r) {
       switch (kind) {
         case 0: return new THREE.IcosahedronGeometry(r, 0);
@@ -681,27 +685,25 @@
       }
     }
 
-    var COUNT = 13;
+    var COUNT = 30;
     var shapes = [];
-    var group = new THREE.Group();
-    scene.add(group);
-
     for (var i = 0; i < COUNT; i++) {
-      var r = 0.20 + Math.random() * 0.34;
+      var r = 0.18 + Math.random() * 0.30;
       var col = Math.random() < 0.6 ? BLUE : (Math.random() < 0.65 ? VIOLET : EMERALD);
       var mat = new THREE.LineBasicMaterial({
         color: col.clone(), transparent: true,
-        opacity: 0.24 + Math.random() * 0.28,
+        opacity: 0.15 + Math.random() * 0.19,
         depthWrite: false, blending: THREE.AdditiveBlending
       });
       var mesh = new THREE.LineSegments(
         new THREE.WireframeGeometry(shapeGeometry(i % 7, r)), mat);
-      group.add(mesh);
+      scene.add(mesh);
       shapes.push({
         mesh: mesh, mat: mat, r: r,
-        top: i % 2 === 0,                       // half live up top, half below
-        vx: (Math.random() - 0.5) * 0.22,
-        vy: (Math.random() - 0.5) * 0.14,
+        pageX: 0, pageY: 0,             // position in DOCUMENT space (px)
+        // Every shape gets its own drift, spin and phase — nothing is in step.
+        vx: (Math.random() - 0.5) * 15,
+        vy: (Math.random() - 0.5) * 11,
         rx: (Math.random() - 0.5) * 0.5,
         ry: (Math.random() - 0.5) * 0.5,
         rz: (Math.random() - 0.5) * 0.35,
@@ -710,64 +712,88 @@
       });
     }
 
-    /* --- the cursor bubble --------------------------------------------- */
-    var bubble = new THREE.Group();
-    var ringGeo = new THREE.RingGeometry(BUBBLE_R * 0.93, BUBBLE_R, 72);
-    var ringMat = new THREE.MeshBasicMaterial({
-      color: 0x38bdf8, transparent: true, opacity: 0,
-      side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending
+    /* --- the bubble -----------------------------------------------------
+       Drawn as a single shader point rather than ring geometry: at a 6px
+       radius a real mesh ring aliases badly, whereas a sprite can be given
+       a soft sub-pixel rim. The look is a soap film — a thin bright edge,
+       a faint iridescent lean toward violet on one side, and almost nothing
+       in the middle.
+       ------------------------------------------------------------------ */
+    var bubbleGeo = new THREE.BufferGeometry();
+    bubbleGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array([0, 0, 5]), 3));
+    var bubbleMat = new THREE.ShaderMaterial({
+      transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+      uniforms: {
+        uSize: { value: BUBBLE_PX * 2.6 * renderer.getPixelRatio() },
+        uStrength: { value: 0.0 }
+      },
+      vertexShader: [
+        'uniform float uSize;',
+        'void main() {',
+        '  gl_PointSize = uSize;',
+        '  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);',
+        '}'
+      ].join('\n'),
+      fragmentShader: [
+        'uniform float uStrength;',
+        'void main() {',
+        '  vec2 uv = gl_PointCoord - vec2(0.5);',
+        '  float d = length(uv) * 2.0;',        // 0 centre .. 1 sprite edge
+        '  if (d > 1.0) discard;',
+        // thin film rim sitting just inside the sprite edge
+        '  float rim = smoothstep(0.72, 0.88, d) * (1.0 - smoothstep(0.88, 1.0, d));',
+        // barely-there interior, brighter at the very edge of the dome
+        '  float fill = pow(d, 3.0) * 0.10;',
+        // faint iridescence: the film leans violet on one side, cyan the other
+        '  vec3 cyan   = vec3(0.42, 0.80, 0.95);',
+        '  vec3 violet = vec3(0.62, 0.48, 0.95);',
+        '  vec3 col = mix(cyan, violet, clamp(uv.y * 2.0 + 0.5, 0.0, 1.0));',
+        '  float a = (rim * 0.55 + fill) * uStrength;',
+        '  gl_FragColor = vec4(col, a);',
+        '}'
+      ].join('\n')
     });
-    bubble.add(new THREE.Mesh(ringGeo, ringMat));
-
-    // a soft interior wash so it reads as a bubble rather than a bare circle
-    var fillGeo = new THREE.CircleGeometry(BUBBLE_R, 64);
-    var fillMat = new THREE.MeshBasicMaterial({
-      color: 0x0ea5e9, transparent: true, opacity: 0,
-      depthWrite: false, blending: THREE.AdditiveBlending
-    });
-    bubble.add(new THREE.Mesh(fillGeo, fillMat));
+    var bubble = new THREE.Points(bubbleGeo, bubbleMat);
     scene.add(bubble);
 
-    var mouse = { x: 0, y: 0, active: false, sx: 0, sy: 0 };
+    var mouse = { sx: -9999, sy: -9999, active: false };
     window.addEventListener('mousemove', function (e) {
       mouse.sx = e.clientX; mouse.sy = e.clientY; mouse.active = true;
     }, { passive: true });
     window.addEventListener('mouseleave', function () { mouse.active = false; });
 
-    function resize() {
-      var w = window.innerWidth, h = window.innerHeight;
-      renderer.setSize(w, h, false);
-      halfW = (w / 2) / PPU; halfH = (h / 2) / PPU;
+    function measure() {
+      vw = window.innerWidth; vh = window.innerHeight;
+      renderer.setSize(vw, vh, false);
+      halfW = (vw / 2) / PPU; halfH = (vh / 2) / PPU;
       camera.left = -halfW; camera.right = halfW;
       camera.top = halfH; camera.bottom = -halfH;
       camera.updateProjectionMatrix();
+      bubbleMat.uniforms.uSize.value = BUBBLE_PX * 2.6 * renderer.getPixelRatio();
 
-      // first placement, and re-seeding if the viewport changes a lot
+      docH = Math.max(
+        document.documentElement.scrollHeight,
+        document.body ? document.body.scrollHeight : 0
+      );
+
       shapes.forEach(function (sh) {
         if (sh.placed) return;
         sh.placed = true;
-        sh.mesh.position.set(
-          (Math.random() - 0.5) * halfW * 2,
-          bandY(sh.top),
-          (Math.random() - 0.5) * 2
-        );
+        // spread down the whole document, not just the first screen
+        // spread down the whole document, and across its whole width
+        sh.pageY = 120 + Math.random() * Math.max(400, docH - 240);
+        sh.pageX = 60 + Math.random() * Math.max(120, vw - 120);
       });
-    }
-    function bandY(top) {
-      var inner = halfH * CLEAR_BAND;
-      var span = halfH - inner;
-      return (top ? 1 : -1) * (inner + Math.random() * span);
     }
 
     function applyTheme() {
       var light = document.documentElement.getAttribute('data-theme') === 'light';
       shapes.forEach(function (sh) {
         sh.mat.blending = light ? THREE.NormalBlending : THREE.AdditiveBlending;
-        sh.mat.opacity = light ? sh.baseOpacity * 0.75 : sh.baseOpacity;
+        sh.mat.opacity = light ? sh.baseOpacity * 0.7 : sh.baseOpacity;
         sh.mat.needsUpdate = true;
       });
-      ringMat.blending = light ? THREE.NormalBlending : THREE.AdditiveBlending;
-      fillMat.blending = light ? THREE.NormalBlending : THREE.AdditiveBlending;
+      bubbleMat.blending = light ? THREE.NormalBlending : THREE.AdditiveBlending;
     }
     applyTheme();
     if (window.MutationObserver) {
@@ -782,81 +808,84 @@
     });
 
     var clock = new THREE.Clock();
-    var bubbleStrength = 0;
+    var strength = 0;
 
     function frame() {
       requestAnimationFrame(frame);
       if (!running) return;
       var dt = Math.min(clock.getDelta(), 0.05);
 
-      var mx = (mouse.sx - window.innerWidth / 2) / PPU;
-      var my = -(mouse.sy - window.innerHeight / 2) / PPU;
-      bubble.position.set(mx, my, 3);
-
-      var nearest = 999;
+      var scrollY = window.scrollY || window.pageYOffset || 0;
+      var nearestPx = 1e9;
 
       for (var i = 0; i < shapes.length; i++) {
-        var sh = shapes[i], pos = sh.mesh.position;
+        var sh = shapes[i];
+
+        // Own drift only. Scrolling never moves a shape in page space.
+        sh.pageX += sh.vx * dt;
+        sh.pageY += sh.vy * dt;
+
+        var screenY = sh.pageY - scrollY;
+        var screenX = sh.pageX;
 
         if (mouse.active) {
-          var dx = pos.x - mx, dy = pos.y - my;
+          var dx = screenX - mouse.sx, dy = screenY - mouse.sy;
           var dist = Math.sqrt(dx * dx + dy * dy);
-          nearest = Math.min(nearest, dist - sh.r);
-          var reach = BUBBLE_R + sh.r;
-          if (dist < reach && dist > 0.0001) {
-            // Push out along the line from the cursor, strongest at the centre.
-            var push = (1 - dist / reach);
-            var f = push * push * 9.5 * dt;
+          nearestPx = Math.min(nearestPx, dist - sh.r * PPU);
+          var reach = REACH_PX + sh.r * PPU;
+          if (dist < reach && dist > 0.001) {
+            var push = 1 - dist / reach;
+            var f = push * push * 620 * dt;         // px/s^2
             sh.vx += (dx / dist) * f;
             sh.vy += (dy / dist) * f;
-            // and spin harder while disturbed
-            sh.mesh.rotation.z += push * dt * 2.2;
+            sh.mesh.rotation.z += push * dt * 2.0;
           }
         }
 
-        pos.x += sh.vx * dt;
-        pos.y += sh.vy * dt;
+        // drag back to a lazy drift
+        var damp = 1 - Math.min(1, dt * 1.1);
+        sh.vx *= damp; sh.vy *= damp;
+        if (Math.abs(sh.vx) < 3) sh.vx += (sh.vx >= 0 ? 1 : -1) * 3 * dt;
+
+        // bounce off the left and right edges of the page
+        var pad = sh.r * PPU + 8;
+        if (sh.pageX < pad)      { sh.pageX = pad;      sh.vx =  Math.abs(sh.vx); }
+        if (sh.pageX > vw - pad) { sh.pageX = vw - pad; sh.vx = -Math.abs(sh.vx); }
+        // and inside the document vertically
+        if (sh.pageY < 80)        { sh.pageY = 80;        sh.vy =  Math.abs(sh.vy); }
+        if (sh.pageY > docH - 80) { sh.pageY = docH - 80; sh.vy = -Math.abs(sh.vy); }
+
+        // cull anything off-screen rather than drawing it
+        var margin = sh.r * PPU + 60;
+        var onScreen = screenY > -margin && screenY < vh + margin;
+        sh.mesh.visible = onScreen;
+        if (!onScreen) continue;
+
+        sh.mesh.position.set(
+          (screenX - vw / 2) / PPU,
+          -(screenY - vh / 2) / PPU,
+          0
+        );
         sh.mesh.rotation.x += sh.rx * dt;
         sh.mesh.rotation.y += sh.ry * dt;
         sh.mesh.rotation.z += sh.rz * dt;
-
-        // drag, so a shove decays back to a lazy drift
-        sh.vx *= (1 - Math.min(1, dt * 1.15));
-        sh.vy *= (1 - Math.min(1, dt * 1.15));
-        var drift = 0.055;
-        if (Math.abs(sh.vx) < drift) sh.vx += (sh.vx >= 0 ? 1 : -1) * drift * dt * 0.6;
-
-        // wrap horizontally
-        var lim = halfW + sh.r + 0.4;
-        if (pos.x > lim) pos.x = -lim;
-        if (pos.x < -lim) pos.x = lim;
-
-        // keep out of the readable middle band, and inside the viewport
-        var inner = halfH * CLEAR_BAND, outer = halfH + sh.r + 0.3;
-        if (sh.top) {
-          if (pos.y < inner) { pos.y = inner; sh.vy = Math.abs(sh.vy) * 0.55 + 0.04; }
-          if (pos.y > outer) { pos.y = outer; sh.vy = -Math.abs(sh.vy) * 0.55; }
-        } else {
-          if (pos.y > -inner) { pos.y = -inner; sh.vy = -Math.abs(sh.vy) * 0.55 - 0.04; }
-          if (pos.y < -outer) { pos.y = -outer; sh.vy = Math.abs(sh.vy) * 0.55; }
-        }
       }
 
-      // The bubble is only drawn while something is close enough to react —
-      // a permanent cursor ornament would be noise.
-      var want = (mouse.active && nearest < BUBBLE_R * 1.9)
-        ? Math.min(1, (BUBBLE_R * 1.9 - nearest) / (BUBBLE_R * 1.2)) : 0;
-      bubbleStrength += (want - bubbleStrength) * Math.min(1, dt * 7);
-      ringMat.opacity = bubbleStrength * 0.5;
-      fillMat.opacity = bubbleStrength * 0.05;
-      var pulse = 1 + Math.sin(clock.elapsedTime * 3.2) * 0.02 * bubbleStrength;
-      bubble.scale.setScalar(pulse);
+      bubble.position.set((mouse.sx - vw / 2) / PPU, -(mouse.sy - vh / 2) / PPU, 5);
+      var want = (mouse.active && nearestPx < REACH_PX * 1.5)
+        ? Math.min(1, (REACH_PX * 1.5 - nearestPx) / (REACH_PX * 1.1)) : 0;
+      strength += (want - strength) * Math.min(1, dt * 8);
+      bubbleMat.uniforms.uStrength.value = strength * 0.72;
 
       renderer.render(scene, camera);
     }
 
-    resize();
-    window.addEventListener('resize', resize, { passive: true });
+    measure();
+    window.addEventListener('resize', measure, { passive: true });
+    // The document grows as images and scenes settle; re-measure its height.
+    setTimeout(measure, 1200);
+    setTimeout(measure, 3500);
+
     frame();
     requestAnimationFrame(function () {
       requestAnimationFrame(function () { host.classList.add('is-ready'); });
