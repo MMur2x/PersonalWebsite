@@ -659,7 +659,7 @@
      ====================================================================== */
   function buildFloaters(host) {
     var PPU = 100;              // pixels per world unit
-    var BUBBLE_PX = 6;          // bubble extends 6px from the cursor
+    var BUBBLE_PX = 8;          // the film sits 8px out from the cursor
     var REACH_PX = 74;          // how close before a shape reacts
 
     var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'low-power' });
@@ -761,7 +761,7 @@
         '',
         // The film edge itself, and a fainter inner wall on the far side.
         '  float rim   = smoothstep(0.78, 0.95, d) * (1.0 - smoothstep(0.95, 1.0, d));',
-        '  float inner = smoothstep(0.52, 0.66, d) * (1.0 - smoothstep(0.66, 0.78, d)) * 0.25;',
+        '  float inner = smoothstep(0.52, 0.66, d) * (1.0 - smoothstep(0.66, 0.78, d)) * 0.30;',
         '',
         // Specular pinpoint, up-left, as if lit from there — plus a much
         // dimmer opposite bounce, which is what sells it as a sphere.
@@ -770,7 +770,7 @@
         '  vec2 s2 = uv - vec2(0.17, -0.20);',
         '  float bounce = exp(-dot(s2, s2) * 120.0) * 0.22;',
         '',
-        '  float a = (fres * 0.16 + rim * 0.50 + inner + spec * 0.55 + bounce) * uStrength;',
+        '  float a = (fres * 0.30 + rim * 0.92 + inner * 1.7 + spec * 0.85 + bounce * 1.5) * uStrength;',
         '  vec3 col = mix(iris, vec3(1.0), clamp(spec * 0.85, 0.0, 1.0));',
         '  gl_FragColor = vec4(col, clamp(a, 0.0, 1.0));',
         '}'
@@ -895,10 +895,12 @@
       }
 
       bubble.position.set((mouse.sx - vw / 2) / PPU, -(mouse.sy - vh / 2) / PPU, 5);
-      var want = (mouse.active && nearestPx < REACH_PX * 1.5)
-        ? Math.min(1, (REACH_PX * 1.5 - nearestPx) / (REACH_PX * 1.1)) : 0;
+      var want = mouse.active ? 0.55 : 0.0;
+      if (mouse.active && nearestPx < REACH_PX * 1.5) {
+        want = Math.min(1, 0.55 + ((REACH_PX * 1.5 - nearestPx) / (REACH_PX * 1.1)) * 0.45);
+      }
       strength += (want - strength) * Math.min(1, dt * 8);
-      bubbleMat.uniforms.uStrength.value = strength * 0.78;
+      bubbleMat.uniforms.uStrength.value = strength;
       bubbleMat.uniforms.uTime.value = clock.elapsedTime;
 
       renderer.render(scene, camera);
