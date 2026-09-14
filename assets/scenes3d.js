@@ -684,7 +684,7 @@
       }
     }
 
-    var COUNT = 150;
+    var COUNT = 145;
     var shapes = [];
     for (var i = 0; i < COUNT; i++) {
       var r = 0.18 + Math.random() * 0.30;
