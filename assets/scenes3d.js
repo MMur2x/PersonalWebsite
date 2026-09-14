@@ -659,7 +659,6 @@
      ====================================================================== */
   function buildFloaters(host) {
     var PPU = 100;              // pixels per world unit
-    var BUBBLE_PX = 8;          // the film sits 8px out from the cursor
     var REACH_PX = 74;          // how close before a shape reacts
 
     var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'low-power' });
@@ -715,73 +714,6 @@
       });
     }
 
-    /* --- the bubble -----------------------------------------------------
-       Drawn as a single shader point rather than ring geometry: at a 6px
-       radius a real mesh ring aliases badly, whereas a sprite can be given
-       a soft sub-pixel rim. The look is a soap film — a thin bright edge,
-       a faint iridescent lean toward violet on one side, and almost nothing
-       in the middle.
-       ------------------------------------------------------------------ */
-    var bubbleGeo = new THREE.BufferGeometry();
-    bubbleGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array([0, 0, 5]), 3));
-    var bubbleMat = new THREE.ShaderMaterial({
-      transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-      uniforms: {
-        uSize: { value: BUBBLE_PX * 2.3 * renderer.getPixelRatio() },
-        uStrength: { value: 0.0 },
-        uTime: { value: 0.0 }
-      },
-      vertexShader: [
-        'uniform float uSize;',
-        'void main() {',
-        '  gl_PointSize = uSize;',
-        '  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);',
-        '}'
-      ].join('\n'),
-      fragmentShader: [
-        'uniform float uStrength;',
-        'uniform float uTime;',
-        'void main() {',
-        '  vec2 uv = gl_PointCoord - vec2(0.5);',
-        '  uv.y = -uv.y;',                      // gl_PointCoord is y-down
-        '  float ang = atan(uv.y, uv.x);',
-        '  float d = length(uv) * 2.0;',        // 0 centre .. 1 sprite edge
-        // A real bubble is never a perfect circle — the film breathes.
-        '  d *= 1.0 + 0.022 * sin(ang * 3.0 + uTime * 1.6)',
-        '         + 0.016 * sin(ang * 2.0 - uTime * 1.1);',
-        '  if (d > 1.0) discard;',
-        '',
-        // Fresnel. A soap film is nearly invisible looking straight through it
-        // and bright at grazing angles, which is why bubbles read as outlines.
-        '  float fres = pow(clamp(d, 0.0, 1.0), 3.5);',
-        '',
-        // Thin-film interference. Path length through the film grows toward the
-        // rim, so the reflected wavelength cycles — these are the colour bands
-        // you actually see sliding around a soap bubble.
-        '  float path = 1.0 / sqrt(max(0.045, 1.0 - d * d));',
-        '  float phase = path * 3.4 + 1.1 + sin(ang + uTime * 0.5) * 0.35;',
-        '  vec3 iris = 0.5 + 0.5 * cos(phase + vec3(0.0, 2.094, 4.188));',
-        '',
-        // The film edge itself, and a fainter inner wall on the far side.
-        '  float rim   = smoothstep(0.78, 0.95, d) * (1.0 - smoothstep(0.95, 1.0, d));',
-        '  float inner = smoothstep(0.52, 0.66, d) * (1.0 - smoothstep(0.66, 0.78, d)) * 0.30;',
-        '',
-        // Specular pinpoint, up-left, as if lit from there — plus a much
-        // dimmer opposite bounce, which is what sells it as a sphere.
-        '  vec2 s1 = uv - vec2(-0.19, 0.19);',
-        '  float spec = exp(-dot(s1, s1) * 210.0);',
-        '  vec2 s2 = uv - vec2(0.17, -0.20);',
-        '  float bounce = exp(-dot(s2, s2) * 120.0) * 0.22;',
-        '',
-        '  float a = (fres * 0.30 + rim * 0.92 + inner * 1.7 + spec * 0.85 + bounce * 1.5) * uStrength;',
-        '  vec3 col = mix(iris, vec3(1.0), clamp(spec * 0.85, 0.0, 1.0));',
-        '  gl_FragColor = vec4(col, clamp(a, 0.0, 1.0));',
-        '}'
-      ].join('\n')
-    });
-    var bubble = new THREE.Points(bubbleGeo, bubbleMat);
-    scene.add(bubble);
-
     var mouse = { sx: -9999, sy: -9999, active: false };
     window.addEventListener('mousemove', function (e) {
       mouse.sx = e.clientX; mouse.sy = e.clientY; mouse.active = true;
@@ -795,7 +727,6 @@
       camera.left = -halfW; camera.right = halfW;
       camera.top = halfH; camera.bottom = -halfH;
       camera.updateProjectionMatrix();
-      bubbleMat.uniforms.uSize.value = BUBBLE_PX * 2.3 * renderer.getPixelRatio();
 
       docH = Math.max(
         document.documentElement.scrollHeight,
@@ -920,7 +851,6 @@
         sh.mat.blending = light ? THREE.NormalBlending : THREE.AdditiveBlending;
         sh.mat.needsUpdate = true;
       });
-      bubbleMat.blending = light ? THREE.NormalBlending : THREE.AdditiveBlending;
     }
     applyTheme();
     if (window.MutationObserver) {
@@ -935,7 +865,6 @@
     });
 
     var clock = new THREE.Clock();
-    var strength = 0;
 
     function frame() {
       requestAnimationFrame(frame);
@@ -1009,15 +938,6 @@
         sh.mesh.rotation.y += sh.ry * dt;
         sh.mesh.rotation.z += sh.rz * dt;
       }
-
-      bubble.position.set((mouse.sx - vw / 2) / PPU, -(mouse.sy - vh / 2) / PPU, 5);
-      var want = mouse.active ? 0.55 : 0.0;
-      if (mouse.active && nearestPx < REACH_PX * 1.5) {
-        want = Math.min(1, 0.55 + ((REACH_PX * 1.5 - nearestPx) / (REACH_PX * 1.1)) * 0.45);
-      }
-      strength += (want - strength) * Math.min(1, dt * 8);
-      bubbleMat.uniforms.uStrength.value = strength;
-      bubbleMat.uniforms.uTime.value = clock.elapsedTime;
 
       renderer.render(scene, camera);
     }
