@@ -4,18 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Projects &mdash; Mayne Murray</title>
-  <meta name="description" content="Personal software projects by Mayne Murray: a crypto investment analytics app, this portfolio site, and a Python QR code generator." />
+  <meta name="description" content="Personal software projects by Mayne Murray: a Homework Tracker Chrome extension, a Flutter crypto investment app, this portfolio site, and a Python QR code generator." />
   <meta name="author" content="Mayne Murray" />
   <meta name="theme-color" content="#0ea5e9" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Projects &mdash; Mayne Murray" />
-  <meta property="og:description" content="Personal software projects by Mayne Murray: a crypto investment analytics app, this portfolio site, and a Python QR code generator." />
+  <meta property="og:description" content="Personal software projects by Mayne Murray: a Homework Tracker Chrome extension, a Flutter crypto investment app, this portfolio site, and a Python QR code generator." />
   <meta property="og:image" content="headshot.jpg" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%230ea5e9'/%3E%3Ctext x='50' y='68' font-family='Poppins,Arial,sans-serif' font-size='48' font-weight='700' fill='white' text-anchor='middle'%3EMM%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/style.css?v=11" />
+  <link rel="stylesheet" href="assets/style.css?v=13" />
   <script>
     (function () {
       try {
@@ -26,8 +26,8 @@
     })();
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
-  <script src="assets/site.js?v=11" defer></script>
-  <script src="assets/scenes3d.js?v=11" defer></script>
+  <script src="assets/site.js?v=13" defer></script>
+  <script src="assets/scenes3d.js?v=13" defer></script>
 </head>
 
 <body>
@@ -68,23 +68,154 @@
     <div class="section-head" data-reveal>
       <span class="eyebrow">Projects</span>
       <h1 style="font-size:clamp(2rem,4.6vw,3rem)">Things I&rsquo;ve built</h1>
-      <p>Personal projects where I get to choose the whole stack &mdash; from Python analytics to hand-rolled front ends.</p>
+      <p>Personal projects where I get to choose the whole stack &mdash; from Chrome extensions and Flutter apps to hand-rolled front ends.</p>
     </div>
 
-    <div class="grid grid--3">
-      <article class="card card--tilt" data-reveal>
-        <div class="card__icon" aria-hidden="true">&#128241;</div>
-        <span class="card__meta">Summer 2025</span>
-        <h3>Crypto Investment App</h3>
-        <p>A cryptocurrency investment tracking and analytics app built in Python with real-time API data,
-        portfolio management, price monitoring, performance visualization, crypto news, learning tools and
-        risk metrics. Built on a modular architecture so it can expand to mobile with Flutter.</p>
-        <ul class="tags" style="margin-top:1rem">
-          <li class="tag tag--accent">Python</li><li class="tag tag--accent">Dart</li>
-          <li class="tag">Flutter</li><li class="tag">pandas</li><li class="tag">matplotlib</li><li class="tag">requests</li>
-        </ul>
+    <div class="feature-stack">
+
+      <article class="card card--feature" data-reveal>
+        <div class="card--feature__text">
+          <div class="card__icon" aria-hidden="true">&#128197;</div>
+          <span class="card__meta">Sep 2026 &ndash; Present</span>
+          <h3>Homework Tracker Extension</h3>
+          <p>
+            A Chrome extension that brings Canvas assignments to life. It syncs automatically the moment
+            you submit work, so there&rsquo;s no manual refresh, and lays every due date, exam and deadline
+            out on an interactive calendar with day-by-day detail views and custom notes.
+          </p>
+          <ul class="bullets">
+            <li>Built on Manifest V3 with a background service worker that detects Canvas activity in real time and syncs on a user-chosen interval.</li>
+            <li>Color-codes each day by urgency and tracks completion across all enrolled classes with a progress ring.</li>
+            <li>Light and dark themes, plus a side-panel mode so it stays open while you work.</li>
+          </ul>
+          <ul class="tags">
+            <li class="tag tag--accent">JavaScript</li>
+            <li class="tag tag--accent">Chrome MV3</li>
+            <li class="tag">Service Workers</li>
+            <li class="tag">Canvas API</li>
+          </ul>
+        </div>
+
+        <div class="carousel carousel--wide" data-carousel role="region" aria-roledescription="carousel" aria-label="Homework Tracker screenshots">
+          <div class="carousel__viewport">
+            <div class="carousel__track">
+            <figure class="carousel__slide" role="group" aria-roledescription="slide" aria-label="1 of 5: Calendar">
+              <div class="carousel__frame">
+                <img src="assets/projects/hw-1-calendar.webp" width="800" height="378" alt="Homework Tracker month calendar with color-coded status dots on each day" loading="lazy" decoding="async" />
+              </div>
+              <figcaption><strong>Calendar</strong> Month grid with per-day status dots: red for overdue, amber for due within three days, green for completed.</figcaption>
+            </figure>
+            <figure class="carousel__slide" role="group" aria-roledescription="slide" aria-label="2 of 5: Alerts &amp; notes">
+              <div class="carousel__frame">
+                <img src="assets/projects/hw-2-alerts-notes.webp" width="800" height="375" alt="Homework Tracker day-detail panel showing assignments, notes and reminders" loading="lazy" decoding="async" />
+              </div>
+              <figcaption><strong>Alerts &amp; notes</strong> Clicking a day opens a detail panel with that date&rsquo;s assignments, custom notes and optional reminders.</figcaption>
+            </figure>
+            <figure class="carousel__slide" role="group" aria-roledescription="slide" aria-label="3 of 5: Announcements">
+              <div class="carousel__frame">
+                <img src="assets/projects/hw-3-announcements.webp" width="800" height="375" alt="Homework Tracker view listing university academic announcements" loading="lazy" decoding="async" />
+              </div>
+              <figcaption><strong>Announcements</strong> Academic announcements for your university, surfaced alongside your deadlines.</figcaption>
+            </figure>
+            <figure class="carousel__slide" role="group" aria-roledescription="slide" aria-label="4 of 5: Sort by class">
+              <div class="carousel__frame">
+                <img src="assets/projects/hw-4-sort-by-class.webp" width="800" height="378" alt="Homework Tracker assignments grouped by class" loading="lazy" decoding="async" />
+              </div>
+              <figcaption><strong>Sort by class</strong> Switch to a per-course view to see each class&rsquo;s assignments and their status on their own.</figcaption>
+            </figure>
+            <figure class="carousel__slide" role="group" aria-roledescription="slide" aria-label="5 of 5: Agenda">
+              <div class="carousel__frame">
+                <img src="assets/projects/hw-5-agenda.webp" width="800" height="380" alt="Homework Tracker agenda list of upcoming assignments" loading="lazy" decoding="async" />
+              </div>
+              <figcaption><strong>Agenda</strong> A chronological agenda of everything due, color-coded by urgency.</figcaption>
+            </figure>
+            </div>
+          </div>
+          <div class="carousel__controls">
+            <button class="carousel__btn" type="button" data-dir="-1" aria-label="Previous photo">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <p class="carousel__count" aria-live="polite"><span data-current>1</span> / 5</p>
+            <button class="carousel__btn" type="button" data-dir="1" aria-label="Next photo">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </div>
       </article>
 
+      <article class="card card--feature" data-reveal>
+        <div class="card--feature__text">
+          <div class="card__icon" aria-hidden="true">&#128241;</div>
+          <span class="card__meta">Jun &ndash; Dec 2025</span>
+          <h3>Cryptocurrency Investment App</h3>
+          <p>
+            A multi-tab mobile app built in Flutter with five working screens &mdash; Dashboard, Invest,
+            News, Learn and Settings.
+          </p>
+          <ul class="bullets">
+            <li>Persistent Settings tab using SharedPreferences, so toggles and dropdown choices survive app restarts.</li>
+            <li>Custom login screen with a frosted-glass UI and animated slide-up transitions.</li>
+            <li>Tracked down and fixed navigation bugs so all five tabs render correctly in the bottom navigation bar.</li>
+          </ul>
+          <ul class="tags">
+            <li class="tag tag--accent">Dart</li>
+            <li class="tag tag--accent">Flutter</li>
+            <li class="tag">Mobile</li>
+            <li class="tag">SharedPreferences</li>
+          </ul>
+          <p class="card__note">Sample screens &mdash; some values shown are placeholders.</p>
+        </div>
+
+        <div class="carousel carousel--phone" data-carousel role="region" aria-roledescription="carousel" aria-label="Crypto app screenshots">
+          <div class="carousel__viewport">
+            <div class="carousel__track">
+            <figure class="carousel__slide" role="group" aria-roledescription="slide" aria-label="1 of 5: Dashboard">
+              <div class="carousel__frame">
+                <img src="assets/projects/crypto-1-dashboard.webp" width="374" height="835" alt="Crypto app dashboard screen showing a portfolio balance and holdings" loading="lazy" decoding="async" />
+              </div>
+              <figcaption><strong>Dashboard</strong> Portfolio with personal and global insights, currency holdings and total balance.</figcaption>
+            </figure>
+            <figure class="carousel__slide" role="group" aria-roledescription="slide" aria-label="2 of 5: Invest">
+              <div class="carousel__frame">
+                <img src="assets/projects/crypto-2-invest.webp" width="376" height="842" alt="Crypto app invest screen with a currency search" loading="lazy" decoding="async" />
+              </div>
+              <figcaption><strong>Invest</strong> Search to find and browse currencies.</figcaption>
+            </figure>
+            <figure class="carousel__slide" role="group" aria-roledescription="slide" aria-label="3 of 5: News">
+              <div class="carousel__frame">
+                <img src="assets/projects/crypto-3-news.webp" width="361" height="831" alt="Crypto app news screen with a list of articles" loading="lazy" decoding="async" />
+              </div>
+              <figcaption><strong>News</strong> A feed that updates with current crypto news.</figcaption>
+            </figure>
+            <figure class="carousel__slide" role="group" aria-roledescription="slide" aria-label="4 of 5: Learn">
+              <div class="carousel__frame">
+                <img src="assets/projects/crypto-4-learn.webp" width="361" height="839" alt="Crypto app learn screen with educational content" loading="lazy" decoding="async" />
+              </div>
+              <figcaption><strong>Learn</strong> Content users can review to learn more about crypto.</figcaption>
+            </figure>
+            <figure class="carousel__slide" role="group" aria-roledescription="slide" aria-label="5 of 5: Settings">
+              <div class="carousel__frame">
+                <img src="assets/projects/crypto-5-settings.webp" width="374" height="833" alt="Crypto app settings screen with toggles and dropdowns" loading="lazy" decoding="async" />
+              </div>
+              <figcaption><strong>Settings</strong> Toggles and dropdowns that persist across restarts via SharedPreferences.</figcaption>
+            </figure>
+            </div>
+          </div>
+          <div class="carousel__controls">
+            <button class="carousel__btn" type="button" data-dir="-1" aria-label="Previous photo">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <p class="carousel__count" aria-live="polite"><span data-current>1</span> / 5</p>
+            <button class="carousel__btn" type="button" data-dir="1" aria-label="Next photo">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="grid grid--2" style="margin-top:1.25rem">
       <article class="card card--tilt" data-reveal>
         <div class="card__icon" aria-hidden="true">&#127760;</div>
         <span class="card__meta">Summer 2025</span>

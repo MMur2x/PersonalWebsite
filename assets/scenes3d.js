@@ -758,7 +758,7 @@
     var BLOCK_SEL = 'h1,h2,h3,h4,h5,h6,p,li,a,button,code,strong,' +
                     '.tag,.tl-role,.tl-org,.tl-date,.tl-sub,.card__meta,' +
                     '.eyebrow,.stat__num,.stat__label,.value,.label,.brand__text,' +
-                    'img,iframe,.hero__portrait,.pdf-frame,.card__icon,.brand__mark';
+                    'img,iframe,.hero__portrait,.pdf-frame,.card__icon,.brand__mark,.carousel';
     var BUCKET = 500;          // page-row height for the spatial index
     var FADE = 46;             // px of approach over which the wash ramps in
     var buckets = {};
@@ -1070,10 +1070,283 @@
     stage.start();
   }
 
+  /* ======================================================================
+     SCENE 5 — prism (hero)
+     Built from the Figma concept "Hero — 3D Concept"
+     (figma.com/design/QD0X4OfLPx36e2JRXuM41c).
+
+     A nested icosahedral frame turning in space: bright cyan edges in front,
+     dim violet edges behind, a glowing node at every vertex, three tilted
+     orbit rings precessing around it, a slow drift of dust, and a receding
+     grid floor that gives the whole thing a ground plane. Depth is carried
+     by brightness rather than by fog, so it reads on both themes.
+     ====================================================================== */
+  function buildPrism(host) {
+    var R = 3.9;
+    var PALE = new THREE.Color(0xb9c5d6);   // far edges, light theme
+    var INK  = new THREE.Color(0x084d75);   // near edges, light theme
+
+    /* --- icosahedron vertices and edges (exact, not sampled) ----------- */
+    var PHI = (1 + Math.sqrt(5)) / 2, INV = 1 / Math.sqrt(1 + PHI * PHI);
+    var raw = [[0,1,PHI],[0,1,-PHI],[0,-1,PHI],[0,-1,-PHI],
+               [1,PHI,0],[1,-PHI,0],[-1,PHI,0],[-1,-PHI,0],
+               [PHI,0,1],[PHI,0,-1],[-PHI,0,1],[-PHI,0,-1]];
+    var base = raw.map(function (p) {
+      return new THREE.Vector3(p[0] * INV, p[1] * INV, p[2] * INV).multiplyScalar(R);
+    });
+    var EDGE_LEN = 2 * INV * R, edges = [];
+    for (var a = 0; a < 12; a++) {
+      for (var b = a + 1; b < 12; b++) {
+        if (Math.abs(base[a].distanceTo(base[b]) - EDGE_LEN) < 0.02) edges.push([a, b]);
+      }
+    }
+
+    var stage = createStage(host, {
+      fov: 55,
+      cameraPos: new THREE.Vector3(0, 0, 15),
+      lineOpacity: 1,
+      /* The cage is anchored to the portrait rather than to a fixed offset:
+         it is measured from the DOM on every resize, so the frame always
+         encloses the headshot instead of drifting across the copy. The
+         portrait itself is opaque and sits above the canvas, so the near
+         edges are masked by it and the cage reads as genuinely surrounding. */
+      onResize: function (st, w, h) {
+        var halfH = Math.tan((st.camera.fov * Math.PI / 180) / 2) * st.camera.position.z;
+        var halfW = halfH * st.camera.aspect;
+        var perPx = (halfH * 2) / Math.max(1, h);
+        var target = document.querySelector('.hero__portrait');
+        var anchorX = halfW * 0.34, anchorY = halfH * 0.03, scale = 1;
+
+        if (target) {
+          var pr = target.getBoundingClientRect(), hr = host.getBoundingClientRect();
+          if (pr.width > 0 && hr.width > 0) {
+            anchorX = ((pr.left + pr.width / 2) - (hr.left + hr.width / 2)) * perPx;
+            anchorY = -((pr.top + pr.height / 2) - (hr.top + hr.height / 2)) * perPx;
+            scale = ((pr.width / 2) * perPx * 1.52) / R;
+          }
+        }
+        scale = Math.max(0.55, Math.min(1.45, scale));
+        world.scale.setScalar(scale);
+        world.position.set(anchorX, anchorY, 0);
+      },
+      update: update
+    });
+
+    var world = new THREE.Group();          // offset + scaled to the right half
+    var core  = new THREE.Group();          // the turning frame
+    var orbits = new THREE.Group();
+    world.add(core); world.add(orbits);
+    stage.scene.add(world);
+
+    /* --- edges, coloured per-vertex by depth every frame ---------------- */
+    var eCount = edges.length;
+    var ePos = new Float32Array(eCount * 2 * 3), eCol = new Float32Array(eCount * 2 * 3);
+    var eGeo = new THREE.BufferGeometry();
+    eGeo.setAttribute('position', new THREE.BufferAttribute(ePos, 3));
+    eGeo.setAttribute('color', new THREE.BufferAttribute(eCol, 3));
+    var eMat = new THREE.LineBasicMaterial({
+      vertexColors: true, transparent: true, opacity: 1,
+      depthWrite: false, blending: THREE.AdditiveBlending
+    });
+    stage.registerLine(eMat);
+    world.add(new THREE.LineSegments(eGeo, eMat));
+
+    /* --- inner frame: a second, smaller icosahedron counter-turning ----- */
+    var inner = new THREE.LineSegments(
+      new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(R * 0.6, 1)),
+      new THREE.LineBasicMaterial({
+        color: VIOLET, transparent: true, opacity: 0.2,
+        depthWrite: false, blending: THREE.AdditiveBlending
+      })
+    );
+    stage.registerLine(inner.material);
+    world.add(inner);
+
+    /* --- a glowing node at each vertex --------------------------------- */
+    var vPos = new Float32Array(12 * 3), vCol = new Float32Array(12 * 3),
+        vSize = new Float32Array(12), vAlpha = new Float32Array(12);
+    for (var v = 0; v < 12; v++) {
+      var c = v % 5 === 0 ? VIOLET : (v % 7 === 3 ? EMERALD : BLUE);
+      vCol[v*3] = c.r; vCol[v*3+1] = c.g; vCol[v*3+2] = c.b;
+    }
+    var vGeo = new THREE.BufferGeometry();
+    vGeo.setAttribute('position', new THREE.BufferAttribute(vPos, 3));
+    vGeo.setAttribute('aColor', new THREE.BufferAttribute(vCol, 3));
+    vGeo.setAttribute('aSize', new THREE.BufferAttribute(vSize, 1));
+    vGeo.setAttribute('aAlpha', new THREE.BufferAttribute(vAlpha, 1));
+    world.add(new THREE.Points(vGeo, stage.pointMat));
+
+    /* --- three tilted orbit rings -------------------------------------- */
+    var RING_SEG = 128, rings = [];
+    [[R * 1.30, 0x0ea5e9, 0.30, -0.34, 0.11],
+     [R * 1.12, 0x8b5cf6, 0.24,  0.62, -0.17],
+     [R * 1.48, 0x10b981, 0.17,  0.14,  0.07]].forEach(function (spec) {
+      var pts = [];
+      for (var s = 0; s <= RING_SEG; s++) {
+        var th = (s / RING_SEG) * Math.PI * 2;
+        pts.push(new THREE.Vector3(Math.cos(th) * spec[0], 0, Math.sin(th) * spec[0]));
+      }
+      var m = new THREE.LineBasicMaterial({
+        color: spec[1], transparent: true, opacity: spec[2],
+        depthWrite: false, blending: THREE.AdditiveBlending
+      });
+      stage.registerLine(m);
+      var line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), m);
+      line.rotation.x = spec[3];
+      line.rotation.z = spec[4];
+      orbits.add(line);
+      rings.push({ line: line, drift: spec[4] * 0.9 + 0.05 });
+    });
+
+    /* --- dust: slow independent drift, confined to the right half ------- */
+    var DUST = 90;
+    var dust = [], dPos = new Float32Array(DUST * 3), dCol = new Float32Array(DUST * 3),
+        dSize = new Float32Array(DUST), dAlpha = new Float32Array(DUST);
+    for (var d = 0; d < DUST; d++) {
+      // biased right of the anchor so dust never drifts over the hero copy
+      var p = new THREE.Vector3(
+        0.8 + (Math.random() - 0.5) * 12,
+        (Math.random() - 0.5) * 12,
+        (Math.random() - 0.5) * 12
+      );
+      dust.push({
+        base: p, amp: 0.3 + Math.random() * 0.8,
+        sp: 0.06 + Math.random() * 0.16, ph: Math.random() * Math.PI * 2
+      });
+      var dc = Math.random() < 0.72 ? BLUE : VIOLET;
+      dCol[d*3] = dc.r; dCol[d*3+1] = dc.g; dCol[d*3+2] = dc.b;
+      dSize[d] = 0.16 + Math.pow(Math.random(), 2.2) * 0.5;
+      dAlpha[d] = 0.16 + Math.random() * 0.4;
+    }
+    var dGeo = new THREE.BufferGeometry();
+    dGeo.setAttribute('position', new THREE.BufferAttribute(dPos, 3));
+    dGeo.setAttribute('aColor', new THREE.BufferAttribute(dCol, 3));
+    dGeo.setAttribute('aSize', new THREE.BufferAttribute(dSize, 1));
+    dGeo.setAttribute('aAlpha', new THREE.BufferAttribute(dAlpha, 1));
+    world.add(new THREE.Points(dGeo, stage.pointMat));
+
+    /* --- receding grid floor ------------------------------------------- */
+    var GW = 9, GD = 18, GX = 10, GZ = 10, gPts = [];
+    for (var gx = 0; gx <= GX; gx++) {
+      var x = -GW / 2 + (gx / GX) * GW;
+      gPts.push(new THREE.Vector3(x, 0, -GD / 2), new THREE.Vector3(x, 0, GD / 2));
+    }
+    for (var gz = 0; gz <= GZ; gz++) {
+      var z = -GD / 2 + (gz / GZ) * GD;
+      gPts.push(new THREE.Vector3(-GW / 2, 0, z), new THREE.Vector3(GW / 2, 0, z));
+    }
+    var gCol = new Float32Array(gPts.length * 3);
+    for (var gi = 0; gi < gPts.length; gi++) {
+      // fade with distance from the viewer so the far edge dissolves
+      var f = Math.max(0, Math.min(1, (gPts[gi].z + GD / 2) / GD));
+      var k = 0.12 + Math.pow(f, 2.1) * 0.85;
+      gCol[gi*3] = BLUE.r * k; gCol[gi*3+1] = BLUE.g * k; gCol[gi*3+2] = BLUE.b * k;
+    }
+    var gGeo = new THREE.BufferGeometry().setFromPoints(gPts);
+    gGeo.setAttribute('color', new THREE.BufferAttribute(gCol, 3));
+    var gMat = new THREE.LineBasicMaterial({
+      vertexColors: true, transparent: true, opacity: 0.3,
+      depthWrite: false, blending: THREE.AdditiveBlending
+    });
+    stage.registerLine(gMat);
+    var floor = new THREE.LineSegments(gGeo, gMat);
+    floor.position.set(2.2, -6.2, -1);
+    world.add(floor);
+
+    /* ------------------------------------------------------------------- */
+    var tmp = new THREE.Color();   // colour scratch — NOT a Vector3
+    var world3 = [];
+    for (var w = 0; w < 12; w++) world3.push(new THREE.Vector3());
+
+    function update(st, dt, time) {
+      core.rotation.y += dt * 0.19;
+      core.rotation.x = Math.sin(time * 0.11) * 0.22 - 0.2;
+      inner.rotation.y -= dt * 0.31;
+      inner.rotation.z += dt * 0.12;
+
+      // vertices, transformed by the core's rotation so depth is real
+      var minZ = 1e9, maxZ = -1e9;
+      for (var i = 0; i < 12; i++) {
+        world3[i].copy(base[i]).applyEuler(core.rotation);
+        if (world3[i].z < minZ) minZ = world3[i].z;
+        if (world3[i].z > maxZ) maxZ = world3[i].z;
+      }
+      var span = Math.max(0.001, maxZ - minZ);
+
+      for (var n = 0; n < 12; n++) {
+        var near = (world3[n].z - minZ) / span;           // 0 back … 1 front
+        var breathe = 1 + Math.sin(time * 0.9 + n * 0.7) * 0.12;
+        vPos[n*3] = world3[n].x; vPos[n*3+1] = world3[n].y; vPos[n*3+2] = world3[n].z;
+        vSize[n]  = (0.46 + near * 0.42) * breathe;
+        vAlpha[n] = (0.62 + near * 0.55) * breathe;
+      }
+      vGeo.attributes.position.needsUpdate = true;
+      vGeo.attributes.aSize.needsUpdate = true;
+      vGeo.attributes.aAlpha.needsUpdate = true;
+
+      // The shared theme handler halves line opacity on light backgrounds,
+      // which is right for the faint rings but washes the cage out. The cage
+      // is the subject, so it keeps its own value.
+      eMat.opacity = st.isLight ? 0.85 : 1;
+
+      // edges: cyan and bright at the front, violet and faint at the back
+      for (var e = 0; e < eCount; e++) {
+        var A = world3[edges[e][0]], B = world3[edges[e][1]], o = e * 6;
+        ePos[o]   = A.x; ePos[o+1] = A.y; ePos[o+2] = A.z;
+        ePos[o+3] = B.x; ePos[o+4] = B.y; ePos[o+5] = B.z;
+        var ka = (A.z - minZ) / span, kb = (B.z - minZ) / span;
+        // Dark theme adds light, so depth = brightness. Light theme subtracts
+        // it, so depth = darkness — inverting the ramp instead of just dimming
+        // it is what keeps the near edges readable on a pale ground.
+        if (st.isLight) {
+          tmp.copy(PALE).lerp(INK, ka);
+          eCol[o] = tmp.r; eCol[o+1] = tmp.g; eCol[o+2] = tmp.b;
+          tmp.copy(PALE).lerp(INK, kb);
+          eCol[o+3] = tmp.r; eCol[o+4] = tmp.g; eCol[o+5] = tmp.b;
+        } else {
+          // A gentler ramp than the concept: the frontmost edges sit behind
+          // the portrait, so pushing all the brightness forward would hide it.
+          // The silhouette has to carry the colour.
+          tmp.copy(VIOLET).lerp(BLUE, ka).multiplyScalar(0.62 + ka * 0.72);
+          eCol[o] = tmp.r; eCol[o+1] = tmp.g; eCol[o+2] = tmp.b;
+          tmp.copy(VIOLET).lerp(BLUE, kb).multiplyScalar(0.62 + kb * 0.72);
+          eCol[o+3] = tmp.r; eCol[o+4] = tmp.g; eCol[o+5] = tmp.b;
+        }
+      }
+      eGeo.attributes.position.needsUpdate = true;
+      eGeo.attributes.color.needsUpdate = true;
+
+      // rings precess at their own rates
+      for (var r = 0; r < rings.length; r++) {
+        rings[r].line.rotation.y += dt * rings[r].drift;
+        rings[r].line.rotation.z += dt * rings[r].drift * 0.22;
+      }
+
+      // dust drifts independently of the frame and of the scroll
+      for (var q = 0; q < DUST; q++) {
+        var du = dust[q], ph = time * du.sp + du.ph;
+        dPos[q*3]   = du.base.x + Math.sin(ph) * du.amp;
+        dPos[q*3+1] = du.base.y + Math.cos(ph * 0.77) * du.amp;
+        dPos[q*3+2] = du.base.z + Math.sin(ph * 0.53) * du.amp * 0.8;
+      }
+      dGeo.attributes.position.needsUpdate = true;
+
+      /* Parallax moves the group, not the camera. Turning the camera would
+         re-project the cage away from the portrait it is anchored to. */
+      easePointer(dt);
+      core.position.x   = -ptr.x * 0.34;
+      core.position.y   =  ptr.y * 0.24;
+      orbits.position.x = -ptr.x * 0.22;
+      orbits.position.y =  ptr.y * 0.15;
+    }
+
+    stage.start();
+  }
+
   /* ---------------------------------------------------------------------- */
   var BUILDERS = {
     network: buildNetwork, lattice: buildLattice, globe: buildGlobe,
-    floaters: buildFloaters, knot: buildKnot
+    floaters: buildFloaters, knot: buildKnot, prism: buildPrism
   };
 
   document.querySelectorAll('[data-scene]').forEach(function (host) {

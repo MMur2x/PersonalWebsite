@@ -706,6 +706,74 @@ html.no-js .page-veil, html:not(.js-ready) .page-veil { opacity: 0; }
 }
 [data-reveal].is-visible { opacity: 1; transform: none; }
 
+/* --------------------------------------------------------------------------
+   Project feature cards + photo carousel
+   One photo at a time; prev/next arrows sit below the photo. No autoplay —
+   a carousel that moves on its own steals attention from the copy above it.
+   -------------------------------------------------------------------------- */
+.feature-stack { display: grid; gap: 1.25rem; }
+
+.card--feature { display: grid; gap: 1.5rem; }
+.card--feature:hover { transform: none; }          /* a large card lifting on hover reads as jitter */
+.card--feature__text { max-width: 72ch; }
+.card--feature .bullets { margin-block: .9rem 1rem; }
+.card__note { font-size: .8rem; color: var(--text-mute); margin-top: .75rem; font-style: italic; }
+
+.carousel { width: 100%; }
+.carousel--phone { max-width: 300px; margin-inline: auto; }
+
+.carousel__viewport {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-sunken);
+}
+.carousel__track {
+  display: flex;
+  transition: transform .45s var(--ease);
+  will-change: transform;
+}
+.carousel__slide { flex: 0 0 100%; margin: 0; min-width: 0; display: flex; flex-direction: column; }
+
+.carousel__frame { display: grid; place-items: center; background: var(--bg-sunken); }
+.carousel--wide  .carousel__frame { aspect-ratio: 800 / 380; }
+.carousel--phone .carousel__frame { aspect-ratio: 9 / 18; padding: .85rem; }
+.carousel__frame img {
+  width: 100%; height: 100%; object-fit: contain; display: block;
+  user-select: none; -webkit-user-drag: none;
+}
+.carousel--phone .carousel__frame img { border-radius: 14px; }
+
+.carousel__slide figcaption {
+  padding: .8rem 1rem .95rem;
+  border-top: 1px solid var(--border);
+  background: var(--bg-elevated);
+  font-size: .9rem; color: var(--text-soft); line-height: 1.5;
+  flex: 1;   /* captions differ in length; keep every slide's caption band the same height */
+}
+.carousel__slide figcaption strong { color: var(--text); margin-right: .35rem; }
+
+.carousel__controls {
+  display: flex; align-items: center; justify-content: center; gap: 1rem;
+  margin-top: .85rem;
+}
+.carousel__btn {
+  width: 44px; height: 44px; border-radius: 50%;   /* 44px: WCAG touch-target size */
+  display: grid; place-items: center; cursor: pointer;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-elevated); color: var(--text);
+  box-shadow: var(--shadow-sm);
+  transition: background-color .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease), opacity .2s var(--ease);
+}
+.carousel__btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.carousel__btn:hover:not(:disabled) { border-color: var(--brand); color: var(--brand); transform: translateY(-1px); }
+.carousel__btn:disabled { opacity: .35; cursor: default; box-shadow: none; }
+.carousel__count {
+  margin: 0; min-width: 4.5ch; text-align: center;
+  font-family: var(--font-mono); font-size: .85rem; color: var(--text-mute);
+}
+
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: .001ms !important; animation-iteration-count: 1 !important;

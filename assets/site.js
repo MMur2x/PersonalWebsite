@@ -392,6 +392,62 @@
     });
   }
 
+  /* ----------------------------------------------------------------------
+     Photo carousels (project cards)
+     One slide visible; arrows below the photo step through, wrapping at
+     either end. Also: arrow keys while focus is inside, and swipe on touch.
+     Off-screen slides are hidden from assistive tech and the tab order.
+     ---------------------------------------------------------------------- */
+  function initCarousels() {
+    document.querySelectorAll('[data-carousel]').forEach(function (root) {
+      var track = root.querySelector('.carousel__track');
+      var slides = Array.prototype.slice.call(root.querySelectorAll('.carousel__slide'));
+      var counter = root.querySelector('[data-current]');
+      var n = slides.length, index = 0;
+      if (!track || n === 0) return;
+
+      function show(i) {
+        index = (i + n) % n;
+        track.style.transform = 'translateX(' + (-100 * index) + '%)';
+        slides.forEach(function (s, k) {
+          var on = k === index;
+          s.setAttribute('aria-hidden', on ? 'false' : 'true');
+          if ('inert' in s) s.inert = !on;
+        });
+        if (counter) counter.textContent = index + 1;
+        // warm the neighbour so the next click never shows a blank frame
+        var next = slides[(index + 1) % n].querySelector('img');
+        if (next && next.loading === 'lazy') next.loading = 'eager';
+      }
+
+      root.querySelectorAll('.carousel__btn').forEach(function (b) {
+        b.addEventListener('click', function () {
+          show(index + parseInt(b.getAttribute('data-dir'), 10));
+        });
+      });
+
+      root.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowLeft')  { e.preventDefault(); show(index - 1); }
+        if (e.key === 'ArrowRight') { e.preventDefault(); show(index + 1); }
+      });
+
+      // Swipe: horizontal drags past 40px change slide; vertical ones scroll the page.
+      var x0 = null, y0 = null;
+      var vp = root.querySelector('.carousel__viewport');
+      vp.addEventListener('touchstart', function (e) {
+        x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
+      }, { passive: true });
+      vp.addEventListener('touchend', function (e) {
+        if (x0 === null) return;
+        var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) show(index + (dx < 0 ? 1 : -1));
+        x0 = y0 = null;
+      }, { passive: true });
+
+      show(0);
+    });
+  }
+
   /* ---------------------------------------------------------------------- */
   function boot() {
     initTheme();
@@ -406,6 +462,7 @@
     initCounters();
     initTyped();
     initCopy();
+    initCarousels();
     document.getElementById('year') &&
       (document.getElementById('year').textContent = new Date().getFullYear());
   }
