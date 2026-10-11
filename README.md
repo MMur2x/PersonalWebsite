@@ -16,11 +16,12 @@ resume.html
 assets/
   css/site.css                every style; color and font tokens are at the top
   js/site.js                  route + ship, islands, devil fruits, screenshot viewer, Haki, effects
-  js/voyage-3d.js             Three.js scenes: the Log Pose and the treasure chest
+  js/ocean.js                 visibility handling for the CSS animated ocean
+  js/voyage-3d.js             Three.js scene: the treasure chest
   js/archive/scenes-3d-v1.js  3D scenes from the previous design (not loaded)
   images/headshot.jpg         wanted-poster photo
   images/projects/            screenshots, one folder per project, numbered in viewer order
-  images/backgrounds/         button backgrounds (Haikei-style SVGs)
+  images/backgrounds/         button backgrounds and cached ocean wave artwork
   docs/mayne-murray-resume.pdf
 ```
 

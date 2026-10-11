@@ -16,11 +16,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+DW+Pica+SC&family=Playfair+Display:wght@700;800;900&display=swap">
-<link rel="stylesheet" href="assets/css/site.css?v=23">
+<link rel="stylesheet" href="assets/css/site.css?v=24">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<canvas class="ocean" id="ocean" aria-hidden="true"></canvas>
+<div class="ocean" id="ocean" aria-hidden="true"></div>
 <svg class="defs" width="0" height="0" aria-hidden="true" focusable="false">
   <filter id="ink" x="-4%" y="-8%" width="108%" height="116%">
     <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="4" result="rough"/>
@@ -647,12 +647,6 @@
   </footer>
 </main>
 
-<!-- Log Pose: travels with you and points the way the Merry is sailing -->
-<figure class="logpose" aria-label="Log Pose showing the ship's heading">
-  <canvas class="logpose__canvas" data-scene="logpose" aria-hidden="true"></canvas>
-  <figcaption class="logpose__read"><span>Heading</span> <b id="lpHeading">S 180°</b></figcaption>
-</figure>
-
 <!-- Haki dock -->
 <div class="dock">
   <div class="dock__in" role="group" aria-label="Haki">
@@ -705,8 +699,8 @@
 </dialog>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
-<script src="assets/js/ocean.js?v=23" defer></script>
-<script src="assets/js/site.js?v=23" defer></script>
-<script src="assets/js/voyage-3d.js?v=23" defer></script>
+<script src="assets/js/ocean.js?v=24" defer></script>
+<script src="assets/js/site.js?v=24" defer></script>
+<script src="assets/js/voyage-3d.js?v=24" defer></script>
 </body>
 </html>

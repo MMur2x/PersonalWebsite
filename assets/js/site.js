@@ -472,17 +472,8 @@
     ship.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + yy.toFixed(1) + 'px,0) rotate(' + tilt.toFixed(1) + 'deg)';
     var off = Math.round(total - L);
     if (off !== lastOff) { done.style.strokeDashoffset = off; lastOff = off; }
-    // the Log Pose follows the ship: compass bearing of the route, flipped when you sail back up
-    var sy = window.pageYOffset; if (sy !== lastScrollY) { goingUp = sy < lastScrollY; lastScrollY = sy; }
-    var bearing = (Math.atan2(dx, -dy) * 180 / Math.PI + 360) % 360;
-    if (goingUp) bearing = (bearing + 180) % 360;
-    window.__mmHeading = bearing;
-    if (lpRead) {
-      var pts = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'], txt = pts[Math.round(bearing / 45) % 8] + ' ' + Math.round(bearing) + '°';
-      if (txt !== lpLast) { lpRead.textContent = txt; lpLast = txt; }
-    }
   }
-  var lastOff = -1, lastScrollY = window.pageYOffset, goingUp = false, lpRead = $('#lpHeading'), lpLast = '';
+  var lastOff = -1;
   var progress = $('#progress'), driftDecor = function () {};
   function frame() {
     raf = null;

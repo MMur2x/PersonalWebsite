@@ -875,15 +875,6 @@ a.jump:hover { text-decoration-color: #b3122e; color: #6e1018; }
 .hakilink { font: inherit; color: var(--text); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--route-done) 70%, transparent); text-underline-offset: 3px; }
 .hakilink:hover b { color: var(--gold); }
 
-/* ---------------------------------------------------------------- 3D Log Pose */
-.logpose { position: absolute; z-index: 2; right: max(24px, calc((100% - 1180px) / 2 - 10px)); bottom: 150px; width: 200px; margin: 0; display: grid; justify-items: center; gap: 6px; }
-.logpose__canvas { width: 200px; height: 220px; display: block; cursor: grab; }
-.logpose__btn { font: inherit; font-weight: 700; font-size: .92rem; color: var(--text); cursor: pointer; text-align: center;
-  background: color-mix(in srgb, var(--sea-3) 55%, transparent); border: 1px solid color-mix(in srgb, var(--gold) 60%, transparent); border-radius: 999px; padding: 8px 16px; line-height: 1.2; }
-.logpose__btn small { display: block; font-weight: 400; font-size: .76rem; color: var(--text-soft); }
-.logpose__btn:hover { border-color: var(--gold); box-shadow: 0 0 16px rgba(232, 169, 62, .35); }
-@media (max-width: 1240px) { .logpose { display: none; } }
-
 /* ---------------------------------------------------------------- bounties */
 .bounties { margin-top: 44px; display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 32px; align-items: start; }
 .bounties__intro h3 { font-size: 1.9rem; color: var(--text); }
@@ -991,10 +982,36 @@ html.haki-obs .bounty b { color: #00566a; text-shadow: 0 0 12px rgba(111, 230, 2
 }
 
 /* =====================================================================
-   v23: real water, real paper, smoother motion, travelling Log Pose
+   Ocean backdrop, real paper and voyage motion
    ===================================================================== */
-/* The sea is a WebGL canvas fixed behind the page (assets/js/ocean.js) */
-.ocean { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; display: block; pointer-events: none; }
+/* The sea uses two cached wave textures fixed behind the page (assets/js/ocean.js) */
+/* Viewport-sized layers: only transforms animate, never paint or scroll position. */
+.ocean {
+  --water-deep: #061725; --water-mid: #0d3348; --water-lit: #21576b;
+  position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden;
+  background: radial-gradient(ellipse at 72% 18%, var(--water-lit), transparent 65%),
+    linear-gradient(155deg, var(--water-mid), var(--water-deep) 80%);
+}
+.ocean::before, .ocean::after {
+  content: ""; position: absolute; inset: -64px;
+  background: url("../images/backgrounds/ocean-waves.svg") repeat;
+  background-size: 720px 480px; opacity: .34;
+  animation: ocean-drift 28s ease-in-out infinite alternate;
+}
+.ocean::after {
+  background-size: 1040px 694px; opacity: .18;
+  animation: ocean-crosscurrent 39s ease-in-out infinite alternate;
+}
+:root[data-theme="light"] .ocean { --water-deep: #125069; --water-mid: #20798c; --water-lit: #56adba; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .ocean { --water-deep: #125069; --water-mid: #20798c; --water-lit: #56adba; }
+}
+@keyframes ocean-drift { from { transform: translate3d(-28px, -20px, 0); } to { transform: translate3d(28px, 20px, 0); } }
+@keyframes ocean-crosscurrent { from { transform: translate3d(24px, -24px, 0); } to { transform: translate3d(-24px, 24px, 0); } }
+html.ocean-paused .ocean::before, html.ocean-paused .ocean::after { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .ocean::before, .ocean::after { animation: none !important; }
+}
 html.has-ocean body { background: var(--sea-3); }
 html.has-ocean .voyage { background: linear-gradient(180deg, transparent 0, rgba(2, 10, 18, .18) 100%); }
 html.has-ocean .voyage::before { content: none; }
@@ -1079,14 +1096,6 @@ html.has-ocean .hero {
 .paper > .tape, .paper > .tack { position: absolute; z-index: 3; }
 .paper.is-found { animation: foundPaper 2s ease-out 1; }
 @keyframes foundPaper { 0%, 100% { filter: drop-shadow(0 1px 1px rgba(40,22,6,.45)) drop-shadow(0 14px 16px rgba(0,0,0,.42)); } 30% { filter: drop-shadow(0 0 10px rgba(255, 196, 80, .95)) drop-shadow(0 14px 16px rgba(0,0,0,.42)); } }
-
-/* ---------------------------------------------------------------- the Log Pose travels with you */
-.logpose { position: fixed; right: 18px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); top: auto; z-index: 44; width: 150px; margin: 0;
-  display: grid; justify-items: center; gap: 2px; pointer-events: none; }
-.logpose__canvas { width: 150px; height: 150px; cursor: default; }
-.logpose__read { pointer-events: none; font-size: .78rem; color: var(--text-soft); background: var(--bar-bg); border: 1px solid var(--bar-line); border-radius: 999px; padding: 3px 10px; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.logpose__read b { color: var(--text); font-weight: 700; }
-@media (max-width: 1000px) { .logpose { display: none; } }
 
 /* ---------------------------------------------------------------- Haki: "Try me" */
 .haki { position: relative; }

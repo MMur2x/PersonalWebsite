@@ -1,5 +1,4 @@
-/* Mayne Murray — 3D pieces for the Grand Line voyage: the Log Pose (hero) and the treasure chest
-   (final island). Three.js r128 from cdnjs. Each scene pauses offscreen, renders one still frame
+/* Mayne Murray — 3D treasure chest for the final island of the Grand Line voyage. Three.js r128 from cdnjs. Each scene pauses offscreen, renders one still frame
    under reduced motion, and quietly does nothing without WebGL. */
 (function () {
   'use strict';
@@ -35,59 +34,6 @@
     }
     return { scene: scene, camera: camera, renderer: renderer, onTick: function (f) { tick = f; loop(); }, kick: loop };
   }
-
-  /* ---------------------------------------------------------- the Log Pose */
-  var lpCanvas = document.querySelector('[data-scene="logpose"]');
-  if (lpCanvas) (function () {
-    var s = stage(lpCanvas, 32); if (!s) return;
-    s.camera.position.set(0, 3.1, 5.4); s.camera.lookAt(0, .85, 0);
-    var g = new THREE.Group(); s.scene.add(g);
-    var wood = new THREE.MeshStandardMaterial({ color: 0x4e2c12, roughness: .7 });
-    var brass = new THREE.MeshStandardMaterial({ color: 0xd9a441, metalness: .85, roughness: .3 });
-    var leather = new THREE.MeshStandardMaterial({ color: 0x5a3415, roughness: .9 });
-    // wrist strap and the cuff the instrument sits on
-    var strap = new THREE.Mesh(new THREE.TorusGeometry(1.25, .2, 16, 64), leather);
-    strap.rotation.x = Math.PI / 2; strap.scale.set(1, 1, .55); strap.position.y = -.35; g.add(strap);
-    var buckle = new THREE.Mesh(new THREE.BoxGeometry(.42, .3, .1), brass); buckle.position.set(0, -.35, 1.25); g.add(buckle);
-    var base = new THREE.Mesh(new THREE.CylinderGeometry(.95, 1.05, .45, 48), wood); base.position.y = -.05; g.add(base);
-    var ring = new THREE.Mesh(new THREE.TorusGeometry(.98, .06, 12, 64), brass); ring.rotation.x = Math.PI / 2; ring.position.y = .18; g.add(ring);
-    for (var i = 0; i < 4; i++) { // brass pillars holding the globe
-      var p = new THREE.Mesh(new THREE.CylinderGeometry(.04, .04, 1.9, 8), brass);
-      p.position.set(Math.cos(i * Math.PI / 2 + .78) * .8, 1.05, Math.sin(i * Math.PI / 2 + .78) * .8); g.add(p);
-    }
-    var cap = new THREE.Mesh(new THREE.CylinderGeometry(.85, .85, .08, 48), brass); cap.position.y = 2; g.add(cap);
-    // the glass globe
-    var glass = new THREE.Mesh(new THREE.SphereGeometry(.78, 48, 32), new THREE.MeshPhongMaterial({ color: 0xcdeefa, transparent: true, opacity: .38, shininess: 160, specular: 0xffffff, depthWrite: false }));
-    glass.position.y = 1.05; g.add(glass);
-    var water = new THREE.Mesh(new THREE.SphereGeometry(.76, 32, 16, 0, Math.PI * 2, Math.PI * .72, Math.PI * .28), new THREE.MeshPhongMaterial({ color: 0x3aa0c8, transparent: true, opacity: .45 }));
-    water.position.y = 1.05; g.add(water);
-    // the floating needle: red point, white tail
-    var needle = new THREE.Group(); needle.position.y = 1.05; g.add(needle);
-    var red = new THREE.Mesh(new THREE.ConeGeometry(.09, .62, 16), new THREE.MeshStandardMaterial({ color: 0xc8323a, roughness: .4 }));
-    red.rotation.z = -Math.PI / 2; red.position.x = .31; needle.add(red);
-    var white = new THREE.Mesh(new THREE.ConeGeometry(.09, .62, 16), new THREE.MeshStandardMaterial({ color: 0xf2ede2, roughness: .4 }));
-    white.rotation.z = Math.PI / 2; white.position.x = -.31; needle.add(white);
-    needle.add(new THREE.Mesh(new THREE.SphereGeometry(.07, 16, 12), brass));
-    g.rotation.x = .08;
-    var shine = new THREE.Mesh(new THREE.SphereGeometry(.12, 16, 12), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: .55 }));
-    shine.scale.set(1, .6, .3); shine.position.set(-.38, 1.45, .62); g.add(shine);
-    var halo = new THREE.Mesh(new THREE.TorusGeometry(.79, .015, 8, 64), new THREE.MeshBasicMaterial({ color: 0xe8f6ff, transparent: true, opacity: .6 }));
-    halo.position.y = 1.05; g.add(halo);
-
-    // The needle follows the Merry: it turns to the ship's compass heading as you sail the page.
-    // Bearing 0 is north (up the page); the needle's red tip starts pointing east (+x).
-    var px = 0, py = 0, cur = Math.PI / 2 - Math.PI;
-    document.addEventListener('pointermove', function (e) { px = e.clientX / window.innerWidth - .5; py = e.clientY / window.innerHeight - .5; }, { passive: true });
-    s.onTick(function (t) {
-      g.rotation.y = Math.sin(t * .35) * .1 + px * .25;
-      g.rotation.x = .1 + py * .12;
-      var want = Math.PI / 2 - (window.__mmHeading || 180) * Math.PI / 180;
-      var diff = Math.atan2(Math.sin(want - cur), Math.cos(want - cur)); // shortest way round
-      cur += diff * .08;
-      needle.rotation.y = cur + Math.sin(t * 2.3) * .03 - g.rotation.y;
-      needle.position.y = 1.05 + Math.sin(t * 2) * .03;
-    });
-  })();
 
   /* ---------------------------------------------------------- the treasure chest */
   var chCanvas = document.querySelector('[data-scene="chest"]');
