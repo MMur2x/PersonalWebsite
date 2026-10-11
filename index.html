@@ -16,10 +16,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+DW+Pica+SC&family=Playfair+Display:wght@700;800;900&display=swap">
-<link rel="stylesheet" href="assets/css/site.css?v=22">
+<link rel="stylesheet" href="assets/css/site.css?v=23">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
+<canvas class="ocean" id="ocean" aria-hidden="true"></canvas>
 <svg class="defs" width="0" height="0" aria-hidden="true" focusable="false">
   <filter id="ink" x="-4%" y="-8%" width="108%" height="116%">
     <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="4" result="rough"/>
@@ -107,18 +108,8 @@
         </div>
       </div>
     </div>
-    <figure class="logpose" aria-label="Log Pose">
-      <canvas class="logpose__canvas" data-scene="logpose" aria-hidden="true"></canvas>
-      <button type="button" class="logpose__btn" id="logposeBtn">Follow the Log Pose<small>Sails to the next island</small></button>
-    </figure>
-    <div class="callports" aria-label="Ports of call">
-      <p class="callports__label">Ports of call</p>
-      <div class="callports__track"><ul class="callports__row">
-        <li>Fidelity Investments</li><li>RSM US LLP</li><li>UMass Lowell</li><li>National Society of Black Engineers</li><li>Management Leadership for Tomorrow</li><li>Juniper Networks</li><li>Sponsors for Educational Opportunity</li><li>Grow with Google</li>
-        <li aria-hidden="true">Fidelity Investments</li><li aria-hidden="true">RSM US LLP</li><li aria-hidden="true">UMass Lowell</li><li aria-hidden="true">National Society of Black Engineers</li><li aria-hidden="true">Management Leadership for Tomorrow</li><li aria-hidden="true">Juniper Networks</li><li aria-hidden="true">Sponsors for Educational Opportunity</li><li aria-hidden="true">Grow with Google</li>
-      </ul></div>
-    </div>
-    <svg class="hero__waves" viewBox="0 0 1440 160" preserveAspectRatio="none" aria-hidden="true"><path d="M0 160 L0 33.3 C90.0 33.3 90.0 13.6 180.0 13.6 C270.0 13.6 270.0 21.6 360.0 21.6 C450.0 21.6 450.0 19.9 540.0 19.9 C630.0 19.9 630.0 36.4 720.0 36.4 C810.0 36.4 810.0 34.5 900.0 34.5 C990.0 34.5 990.0 41.3 1080.0 41.3 C1170.0 41.3 1170.0 15.6 1260.0 15.6 C1350.0 15.6 1350.0 26.3 1440.0 26.3 L1440 160 Z" fill="var(--wave-a)"/><path d="M0 160 L0 51.1 C90.0 51.1 90.0 57.1 180.0 57.1 C270.0 57.1 270.0 66.3 360.0 66.3 C450.0 66.3 450.0 51.0 540.0 51.0 C630.0 51.0 630.0 56.5 720.0 56.5 C810.0 56.5 810.0 70.9 900.0 70.9 C990.0 70.9 990.0 67.6 1080.0 67.6 C1170.0 67.6 1170.0 57.2 1260.0 57.2 C1350.0 57.2 1350.0 69.0 1440.0 69.0 L1440 160 Z" fill="var(--wave-b)"/><path d="M0 160 L0 113.4 C90.0 113.4 90.0 87.7 180.0 87.7 C270.0 87.7 270.0 113.3 360.0 113.3 C450.0 113.3 450.0 109.8 540.0 109.8 C630.0 109.8 630.0 98.4 720.0 98.4 C810.0 98.4 810.0 92.4 900.0 92.4 C990.0 92.4 990.0 118.1 1080.0 118.1 C1170.0 118.1 1170.0 98.2 1260.0 98.2 C1350.0 98.2 1350.0 90.4 1440.0 90.4 L1440 160 Z" fill="var(--wave-c)"/><path d="M0 160 L0 127.9 C90.0 127.9 90.0 151.9 180.0 151.9 C270.0 151.9 270.0 144.1 360.0 144.1 C450.0 144.1 450.0 150.6 540.0 150.6 C630.0 150.6 630.0 148.2 720.0 148.2 C810.0 148.2 810.0 142.0 900.0 142.0 C990.0 142.0 990.0 155.9 1080.0 155.9 C1170.0 155.9 1170.0 136.9 1260.0 136.9 C1350.0 136.9 1350.0 142.5 1440.0 142.5 L1440 160 Z" fill="var(--sea-1)"/></svg>
+    <div class="hero__clouds" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+    <div class="hero__horizon" aria-hidden="true"></div>
   </section>
 
   <div class="voyage" id="voyage">
@@ -656,19 +647,28 @@
   </footer>
 </main>
 
+<!-- Log Pose: travels with you and points the way the Merry is sailing -->
+<figure class="logpose" aria-label="Log Pose showing the ship's heading">
+  <canvas class="logpose__canvas" data-scene="logpose" aria-hidden="true"></canvas>
+  <figcaption class="logpose__read"><span>Heading</span> <b id="lpHeading">S 180°</b></figcaption>
+</figure>
+
 <!-- Haki dock -->
 <div class="dock">
   <div class="dock__in" role="group" aria-label="Haki">
     <span class="dock__title" aria-hidden="true">Haki</span>
     <button class="haki haki--obs" id="hakiObs" type="button" aria-pressed="false" aria-keyshortcuts="O">
+      <span class="haki__try" aria-hidden="true">Try me</span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="2.6" fill="currentColor"/><circle cx="12" cy="12" r="6.5" opacity=".7"/><circle cx="12" cy="12" r="10.2" opacity=".4"/></svg>
       <span>Observation<small>Show the numbers</small></span>
     </button>
     <button class="haki haki--arm" id="hakiArm" type="button" aria-pressed="false" aria-keyshortcuts="A">
+      <span class="haki__try" aria-hidden="true">Try me</span>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3.2v5.7c0 4.6-3.4 8.4-8 9.9-4.6-1.5-8-5.3-8-9.9V5.2z" fill="currentColor"/><path d="M8 9l4 3 4-3" fill="none" stroke="var(--bar-bg)" stroke-width="1.6"/></svg>
       <span>Armament<small>Harden every card</small></span>
     </button>
     <button class="haki haki--conq" id="hakiConq" type="button" aria-pressed="false" aria-haspopup="dialog" aria-keyshortcuts="C">
+      <span class="haki__try" aria-hidden="true">Try me</span>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 1.5L5 13.2h5.6L9 22.5l9.6-12.6h-6z" fill="currentColor"/></svg>
       <span>Conqueror's<small>Show highlights</small></span>
     </button>
@@ -705,7 +705,8 @@
 </dialog>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
-<script src="assets/js/site.js?v=22" defer></script>
-<script src="assets/js/voyage-3d.js?v=22" defer></script>
+<script src="assets/js/ocean.js?v=23" defer></script>
+<script src="assets/js/site.js?v=23" defer></script>
+<script src="assets/js/voyage-3d.js?v=23" defer></script>
 </body>
 </html>

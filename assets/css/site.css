@@ -990,8 +990,126 @@ html.haki-obs .bounty b { color: #00566a; text-shadow: 0 0 12px rgba(111, 230, 2
   .swell--near, .flotsam *, .isle__art svg * { animation: none !important; }
 }
 
+/* =====================================================================
+   v23: real water, real paper, smoother motion, travelling Log Pose
+   ===================================================================== */
+/* The sea is a WebGL canvas fixed behind the page (assets/js/ocean.js) */
+.ocean { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; display: block; pointer-events: none; }
+html.has-ocean body { background: var(--sea-3); }
+html.has-ocean .voyage { background: linear-gradient(180deg, transparent 0, rgba(2, 10, 18, .18) 100%); }
+html.has-ocean .voyage::before { content: none; }
+html.has-ocean .voyage::after { opacity: .045; }
+html.haki-conq .ocean { filter: brightness(.35) saturate(.4); }
+
+/* Hero: a real sky with a hazy horizon; the water below it is the live sea */
+html.has-ocean .hero {
+  background:
+    radial-gradient(1.5px 1.5px at 12% 18%, rgba(255,255,255,.75) 50%, transparent 51%),
+    radial-gradient(1px 1px at 28% 9%, rgba(255,255,255,.6) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 47% 22%, rgba(255,255,255,.7) 50%, transparent 51%),
+    radial-gradient(1px 1px at 63% 12%, rgba(255,255,255,.55) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 81% 25%, rgba(255,255,255,.7) 50%, transparent 51%),
+    radial-gradient(circle at 82% 16%, rgba(235, 242, 255, .9) 0 22px, rgba(200, 220, 255, .18) 23px, transparent 90px),
+    linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 52%, var(--horizon) 72.5%, transparent 74.5%);
+}
+:root[data-theme="light"].has-ocean .hero { background: radial-gradient(circle at 82% 16%, rgba(255, 248, 220, 1) 0 26px, rgba(255, 236, 170, .35) 28px, transparent 120px), linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 52%, var(--horizon) 72.5%, transparent 74.5%); }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]).has-ocean .hero { background: radial-gradient(circle at 82% 16%, rgba(255, 248, 220, 1) 0 26px, rgba(255, 236, 170, .35) 28px, transparent 120px), linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 52%, var(--horizon) 72.5%, transparent 74.5%); } }
+.hero__horizon { position: absolute; left: 0; right: 0; top: calc(74% - 30px); height: 60px; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--horizon) 70%, transparent) 50%, transparent); }
+.hero__horizon::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.35) 30%, rgba(255,255,255,.5) 82%, transparent); }
+.hero__clouds { position: absolute; inset: 0 0 26% 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.hero__clouds span { position: absolute; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,255,255,.22), rgba(255,255,255,0)); filter: blur(6px); animation: cloud 90s linear infinite; }
+.hero__clouds span:nth-child(1) { width: 420px; height: 90px; top: 14%; left: -10%; }
+.hero__clouds span:nth-child(2) { width: 300px; height: 70px; top: 32%; left: 40%; animation-duration: 120s; animation-delay: -40s; opacity: .7; }
+.hero__clouds span:nth-child(3) { width: 520px; height: 110px; top: 50%; left: 10%; animation-duration: 150s; animation-delay: -70s; opacity: .5; }
+.hero__clouds span:nth-child(4) { width: 260px; height: 60px; top: 22%; left: 75%; animation-duration: 100s; animation-delay: -20s; }
+@keyframes cloud { to { transform: translateX(60vw); } }
+:root[data-theme="light"] .hero__clouds span { background: radial-gradient(closest-side, rgba(255,255,255,.85), rgba(255,255,255,0)); }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .hero__clouds span { background: radial-gradient(closest-side, rgba(255,255,255,.85), rgba(255,255,255,0)); } }
+
+/* Smoother: no live blur behind the bars, solid glass instead */
+.topbar, .dock__in, .nav { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+:root { --bar-bg: rgba(5, 18, 30, .94); }
+:root[data-theme="light"] { --bar-bg: rgba(236, 248, 250, .96); }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bar-bg: rgba(236, 248, 250, .96); } }
+.inview { transform: translateY(14px); }
+.inview.is-in { transition: opacity .45s ease, transform .45s cubic-bezier(.2,.8,.2,1); }
+.split.is-in .w { transition-duration: .45s; transition-delay: calc(var(--i) * 30ms); }
+.ship__bob { animation: none; }
+.ship__svg { animation: bob 3.4s ease-in-out infinite; transform-origin: 50% 90%; }
+.isle__art svg .isle__surf { animation: none; }
+.route { will-change: transform; }
+
+/* Floating things that sit under the surface read as shadows in the water */
+.flotsam.is-under { opacity: .38; filter: blur(1.2px) saturate(.5); mix-blend-mode: multiply; }
+.flotsam--gulls { opacity: .8; }
+
+/* ---------------------------------------------------------------- real paper */
+.paper { background: none !important; box-shadow: none !important; transform: none; border-radius: 0;
+  filter: drop-shadow(0 1px 1px rgba(40, 22, 6, .45)) drop-shadow(0 14px 16px rgba(0, 0, 0, .42)); }
+.paper::after { content: none !important; }
+.flag.paper::before { content: none; }
+.vivre__card.paper { clip-path: none; }
+.paper > .sheet { position: absolute; inset: 0; z-index: 0; pointer-events: none; display: block; transform: rotate(var(--lean, 0deg));
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(130% 115% at 50% 45%, transparent 55%, rgba(140, 86, 28, .22) 80%, rgba(96, 54, 14, .5) 100%),
+    radial-gradient(circle at 12% 88%, rgba(130, 70, 20, .25) 0 2px, transparent 3.5px),
+    radial-gradient(circle at 91% 14%, rgba(130, 70, 20, .22) 0 1.6px, transparent 3px),
+    radial-gradient(circle at 76% 92%, rgba(120, 66, 18, .2) 0 2.2px, transparent 3.6px),
+    radial-gradient(circle at 6% 30%, rgba(120, 66, 18, .16) 0 1.4px, transparent 2.8px),
+    var(--tex-stains), var(--tex-fibres), var(--tex-grain),
+    linear-gradient(172deg, #f2e5c4 0%, var(--paper) 45%, var(--paper-2) 100%);
+  background-size: 100% 100%, auto, auto, auto, auto, 100% 100%, 300px 300px, 220px 220px, auto;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat, no-repeat;
+  box-shadow: inset 0 0 26px rgba(130, 78, 22, .3), inset 0 0 3px rgba(90, 50, 14, .5);
+}
+.sheet__crumple { position: absolute; inset: 0; background: url("../images/paper/crumple-1.webp") 0 0 / 640px auto; mix-blend-mode: overlay; opacity: .75; }
+.sheet--c2 .sheet__crumple { background-image: url("../images/paper/crumple-2.webp"); background-position: -120px -60px; }
+.sheet--c3 .sheet__crumple { background-image: url("../images/paper/crumple-3.webp"); background-position: -40px -200px; }
+.sheet__creases { position: absolute; inset: 0; width: 100%; height: 100%; }
+.sheet__stain { position: absolute; width: 96px; height: 90px; margin: -45px 0 0 -48px; border-radius: 50%;
+  background: radial-gradient(closest-side, transparent 78%, rgba(120, 68, 18, .24) 86%, rgba(120, 68, 18, .08) 92%, transparent 100%),
+              radial-gradient(closest-side, rgba(150, 96, 40, .07), transparent); transform: rotate(18deg) scaleX(1.08); }
+.flag .sheet::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 9px; background: var(--band, var(--flag-proj)); opacity: .9; box-shadow: inset 0 -1px 0 rgba(0,0,0,.2); }
+.log.is-hard > .sheet { background: linear-gradient(160deg, var(--arm-2) 0%, var(--arm) 45%, #0b0a0f 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.14), inset 0 0 0 1px var(--arm-edge); }
+.log.is-hard > .sheet .sheet__stain { display: none; }
+.log.is-hard > .sheet .sheet__crumple { opacity: .35; }
+.paper > :not(.sheet):not(.tape):not(.tack) { position: relative; z-index: 1; }
+.paper > .tape, .paper > .tack { position: absolute; z-index: 3; }
+.paper.is-found { animation: foundPaper 2s ease-out 1; }
+@keyframes foundPaper { 0%, 100% { filter: drop-shadow(0 1px 1px rgba(40,22,6,.45)) drop-shadow(0 14px 16px rgba(0,0,0,.42)); } 30% { filter: drop-shadow(0 0 10px rgba(255, 196, 80, .95)) drop-shadow(0 14px 16px rgba(0,0,0,.42)); } }
+
+/* ---------------------------------------------------------------- the Log Pose travels with you */
+.logpose { position: fixed; right: 18px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); top: auto; z-index: 44; width: 150px; margin: 0;
+  display: grid; justify-items: center; gap: 2px; pointer-events: none; }
+.logpose__canvas { width: 150px; height: 150px; cursor: default; }
+.logpose__read { pointer-events: none; font-size: .78rem; color: var(--text-soft); background: var(--bar-bg); border: 1px solid var(--bar-line); border-radius: 999px; padding: 3px 10px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.logpose__read b { color: var(--text); font-weight: 700; }
+@media (max-width: 1000px) { .logpose { display: none; } }
+
+/* ---------------------------------------------------------------- Haki: "Try me" */
+.haki { position: relative; }
+.haki__try { position: absolute; left: 50%; bottom: calc(100% + 12px); transform: translateX(-50%);
+  padding: 4px 10px; border-radius: 999px; background: #e8a93e; color: #2a1a06; font-size: .74rem; font-weight: 700; line-height: 1.1; white-space: nowrap;
+  box-shadow: 0 6px 14px -6px rgba(0,0,0,.6); pointer-events: none; animation: tryBob 1.8s ease-in-out infinite; }
+.haki__try::after { content: ""; position: absolute; left: 50%; top: 100%; margin-left: -5px; border: 5px solid transparent; border-top-color: #e8a93e; }
+.haki--arm .haki__try { animation-delay: -.6s; }
+.haki--conq .haki__try { animation-delay: -1.2s; background: #f05a72; color: #2a0610; }
+.haki--conq .haki__try::after { border-top-color: #f05a72; }
+@keyframes tryBob { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -4px); } }
+html:not(.haki-tried) .haki svg { animation: hakiPulse 2.2s ease-in-out infinite; }
+@keyframes hakiPulse { 0%, 100% { filter: drop-shadow(0 0 0 transparent); } 50% { filter: drop-shadow(0 0 6px currentColor); } }
+html.haki-tried .haki__try { display: none; }
+@media (max-width: 480px) { .haki__try { font-size: .66rem; padding: 3px 7px; bottom: calc(100% + 9px); } }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
   .conq[open] .conq__bolts path { stroke-dashoffset: 0; opacity: .22; }
 }
+@media (prefers-reduced-motion: reduce) { .haki__try, .hero__clouds span, .ship__svg { animation: none !important; } }
 
+/* Day sailing: the live sea is mid-blue, so type sitting on the water stays light */
+:root[data-theme="light"].has-ocean .voyage, :root[data-theme="light"].has-ocean .footer { --text: #f6fcfd; --text-soft: #e2f1f4; --region: #ffe08a; --route: rgba(255, 240, 200, .55); --route-done: #ffd27a; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]).has-ocean .voyage, :root:not([data-theme="dark"]).has-ocean .footer { --text: #f6fcfd; --text-soft: #e2f1f4; --region: #ffe08a; --route: rgba(255, 240, 200, .55); --route-done: #ffd27a; } }
+html.has-ocean .sea__head, html.has-ocean .bounties__intro, html.has-ocean .grove > h3, html.has-ocean .grove > p, html.has-ocean .fruit__name, html.has-ocean .fruit__mi, html.has-ocean .isle__name, html.has-ocean .footer, html.has-ocean .chest__note { text-shadow: 0 1px 2px rgba(0, 20, 35, .55), 0 0 18px rgba(0, 20, 35, .35); }

@@ -75,7 +75,7 @@
   function sailTo(target) {
     var top = target.getBoundingClientRect().top + window.pageYOffset - (parseFloat(getComputedStyle(doc).scrollPaddingTop) || 0);
     if (reduceMotion.matches) { window.scrollTo(0, top); return; }
-    var start = window.pageYOffset, dist = top - start, dur = Math.min(1900, Math.max(700, Math.abs(dist) * .45)), t0 = null;
+    var start = window.pageYOffset, dist = top - start, dur = Math.min(1100, Math.max(450, Math.abs(dist) * .22)), t0 = null;
     cancelSail();
     function step(ts) {
       if (t0 === null) t0 = ts;
@@ -242,13 +242,21 @@
     var gulls = '<g class="isle__gull" fill="none" stroke="var(--text)" stroke-width=".025" stroke-linecap="round" opacity=".7"><path d="M-1.1 -1q.06-.06 .12 0q.06-.06 .12 0"/><path d="M-.8 -1.12q.05-.05 .1 0q.05-.05 .1 0"/><path d="M1 -1.05q.04-.04 .08 0q.04-.04 .08 0"/></g>';
     var fx = -.55 + (r() - .5) * .2, fy = -.1;
     var lm = LANDMARK[landmark] ? LANDMARK[landmark](0.05, 0.12) : '';
-    return '<svg viewBox="-1.5 -1.3 3 2.6" aria-hidden="true">' +
-      '<path class="isle__surf" d="' + smoothClosed(scale(outline, 1.42)) + '" fill="none" stroke="rgba(255,255,255,.35)" stroke-width=".03" stroke-dasharray=".08 .06"/>' +
-      '<path d="' + smoothClosed(scale(outline, 1.32)) + '" fill="var(--shoal)"/>' +
-      '<path d="' + smoothClosed(scale(outline, 1.14)) + '" fill="none" stroke="rgba(255,255,255,.55)" stroke-width=".025"/>' + rocks +
-      '<path d="' + smoothClosed(outline) + '" fill="var(--sand)" stroke="rgba(0,0,0,.18)" stroke-width=".02"/>' + sandDots + shells +
-      '<path d="' + smoothClosed(green) + '" fill="var(--grass)"/>' +
-      '<path d="' + smoothClosed(hill) + '" fill="var(--grass-2)" opacity=".55"/>' + trees + palms + lm + gulls +
+    var id = 'isl' + seed;
+    // shaded like a real atoll from above: turquoise shallows, wet sand, sunlit dunes, darker canopy
+    var defs = '<defs>' +
+      '<radialGradient id="' + id + 'w" cx=".5" cy=".5" r=".5"><stop offset=".55" stop-color="#7fe3d6" stop-opacity=".75"/><stop offset=".8" stop-color="#2fb3c0" stop-opacity=".35"/><stop offset="1" stop-color="#1a7f9a" stop-opacity="0"/></radialGradient>' +
+      '<radialGradient id="' + id + 's" cx=".42" cy=".38" r=".7"><stop offset="0" stop-color="#f6e7bf"/><stop offset=".7" stop-color="#e2c78e"/><stop offset="1" stop-color="#b99a62"/></radialGradient>' +
+      '<radialGradient id="' + id + 'g" cx=".4" cy=".35" r=".75"><stop offset="0" stop-color="#5fae5f"/><stop offset=".6" stop-color="#3d8a4c"/><stop offset="1" stop-color="#26603a"/></radialGradient>' +
+      '<radialGradient id="' + id + 'h" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#4f9a55"/><stop offset="1" stop-color="#1f4f30"/></radialGradient>' +
+      '</defs>';
+    return '<svg viewBox="-1.5 -1.3 3 2.6" aria-hidden="true">' + defs +
+      '<path d="' + smoothClosed(scale(outline, 1.5)) + '" fill="url(#' + id + 'w)"/>' +
+      '<path class="isle__surf" d="' + smoothClosed(scale(outline, 1.16)) + '" fill="none" stroke="rgba(255,255,255,.7)" stroke-width=".035" stroke-dasharray=".05 .04 .14 .05"/>' + rocks +
+      '<path d="' + smoothClosed(scale(outline, 1.05)) + '" fill="#b89a66" opacity=".75"/>' +
+      '<path d="' + smoothClosed(outline) + '" fill="url(#' + id + 's)"/>' + sandDots + shells +
+      '<path d="' + smoothClosed(green) + '" fill="url(#' + id + 'g)"/>' +
+      '<path d="' + smoothClosed(hill) + '" fill="url(#' + id + 'h)" opacity=".8"/>' + trees + palms + lm + gulls +
       '<path d="M' + fx.toFixed(2) + ' ' + fy + 'v-.62" stroke="#3a2412" stroke-width=".035" stroke-linecap="round"/>' +
       '<path class="isle__flag" d="M' + fx.toFixed(2) + ' ' + (fy - .62) + 'l.34 .09-.34 .1z" fill="var(' + flagVar + ')"/>' +
       '</svg>';
@@ -265,8 +273,12 @@
     var r2 = rng(104), ol = blob(r2, 13, 1, .3, 1.1, .85, 0, 0);
     xm.insertAdjacentHTML('afterbegin',
       '<svg viewBox="-1.5 -1.3 3 2.6" aria-hidden="true">' +
-      '<path d="' + smoothClosed(ol.map(function (p) { return [p[0] * 1.3, p[1] * 1.3]; })) + '" fill="var(--shoal)"/>' +
-      '<path d="' + smoothClosed(ol) + '" fill="var(--sand)"/>' +
+      '<defs><radialGradient id="xw" cx=".5" cy=".5" r=".5"><stop offset=".55" stop-color="#7fe3d6" stop-opacity=".75"/><stop offset=".8" stop-color="#2fb3c0" stop-opacity=".35"/><stop offset="1" stop-color="#1a7f9a" stop-opacity="0"/></radialGradient>' +
+      '<radialGradient id="xs" cx=".42" cy=".38" r=".7"><stop offset="0" stop-color="#f6e7bf"/><stop offset=".7" stop-color="#e2c78e"/><stop offset="1" stop-color="#b99a62"/></radialGradient></defs>' +
+      '<path d="' + smoothClosed(ol.map(function (p) { return [p[0] * 1.5, p[1] * 1.5]; })) + '" fill="url(#xw)"/>' +
+      '<path d="' + smoothClosed(ol.map(function (p) { return [p[0] * 1.14, p[1] * 1.14]; })) + '" fill="none" stroke="rgba(255,255,255,.7)" stroke-width=".035" stroke-dasharray=".05 .04 .14 .05"/>' +
+      '<path d="' + smoothClosed(ol.map(function (p) { return [p[0] * 1.05, p[1] * 1.05]; })) + '" fill="#b89a66" opacity=".75"/>' +
+      '<path d="' + smoothClosed(ol) + '" fill="url(#xs)"/>' +
       '<path d="M-.22 -.22L.22 .22M.22 -.22L-.22 .22" stroke="#b3122e" stroke-width=".11" stroke-linecap="round"/>' +
       '</svg>');
   }
@@ -457,19 +469,33 @@
     var side = dx / len;
     if (side < -.18) ship.classList.add('is-left'); else if (side > .18) ship.classList.remove('is-left');
     var tilt = Math.max(-9, Math.min(9, side * 10)) * (ship.classList.contains('is-left') ? -1 : 1);
-    ship.style.transform = 'translate(' + x.toFixed(1) + 'px,' + yy.toFixed(1) + 'px) rotate(' + tilt.toFixed(1) + 'deg)';
-    done.style.strokeDashoffset = (total - L).toFixed(1);
-  }
-  function queueShip() { if (!raf) raf = requestAnimationFrame(placeShip); }
-
-  var progress = $('#progress');
-  function onScroll() {
-    queueShip();
-    if (progress) {
-      var max = doc.scrollHeight - window.innerHeight;
-      progress.style.transform = 'scaleX(' + (max > 0 ? window.pageYOffset / max : 0).toFixed(4) + ')';
+    ship.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + yy.toFixed(1) + 'px,0) rotate(' + tilt.toFixed(1) + 'deg)';
+    var off = Math.round(total - L);
+    if (off !== lastOff) { done.style.strokeDashoffset = off; lastOff = off; }
+    // the Log Pose follows the ship: compass bearing of the route, flipped when you sail back up
+    var sy = window.pageYOffset; if (sy !== lastScrollY) { goingUp = sy < lastScrollY; lastScrollY = sy; }
+    var bearing = (Math.atan2(dx, -dy) * 180 / Math.PI + 360) % 360;
+    if (goingUp) bearing = (bearing + 180) % 360;
+    window.__mmHeading = bearing;
+    if (lpRead) {
+      var pts = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'], txt = pts[Math.round(bearing / 45) % 8] + ' ' + Math.round(bearing) + '°';
+      if (txt !== lpLast) { lpRead.textContent = txt; lpLast = txt; }
     }
   }
+  var lastOff = -1, lastScrollY = window.pageYOffset, goingUp = false, lpRead = $('#lpHeading'), lpLast = '';
+  var progress = $('#progress'), driftDecor = function () {};
+  function frame() {
+    raf = null;
+    var y = window.pageYOffset;
+    placeShip();
+    driftDecor(y);
+    if (progress) {
+      var max = doc.scrollHeight - window.innerHeight;
+      progress.style.transform = 'scaleX(' + (max > 0 ? y / max : 0).toFixed(4) + ')';
+    }
+  }
+  function queueShip() { if (!raf) raf = requestAnimationFrame(frame); }
+  function onScroll() { queueShip(); }
   window.addEventListener('scroll', onScroll, { passive: true });
 
   var rebuildTimer = null;
@@ -537,6 +563,13 @@
 
   /* ------------------------------------------------------------ Haki */
   var obsBtn = $('#hakiObs'), armBtn = $('#hakiArm'), conqBtn = $('#hakiConq'), ripple = $('#ripple');
+  if (store('mm-haki-tried') === '1') doc.classList.add('haki-tried');
+  [obsBtn, armBtn, conqBtn].forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = $('.haki__try', b); if (t) t.remove();
+      if (!$$('.haki__try').length) { doc.classList.add('haki-tried'); store('mm-haki-tried', '1'); }
+    });
+  });
 
   function setObservation(on) {
     doc.classList.toggle('haki-obs', on);
@@ -724,16 +757,6 @@
     f.addEventListener('click', function () { goTo(f.getAttribute('data-target')); });
   });
 
-  // Log Pose: follow it to the next island below you
-  var lpBtn = $('#logposeBtn');
-  if (lpBtn) lpBtn.addEventListener('click', function () {
-    document.dispatchEvent(new CustomEvent('logpose:spin'));
-    var stops = $$('.isle, #about, #skills, #leadership, #resume, #contact');
-    var next = stops.filter(function (s) { return s.getBoundingClientRect().top > 140; })
-      .sort(function (a, b) { return a.getBoundingClientRect().top - b.getBoundingClientRect().top; })[0];
-    if (next) setTimeout(function () { sailTo(next); flash(next); }, reduceMotion.matches ? 0 : 500);
-  });
-
   // The treasure chest on the final island
   var chestBtn = $('#chestBtn'), chestNote = $('#chestNote');
   if (chestBtn) chestBtn.addEventListener('click', function () {
@@ -744,24 +767,69 @@
     document.dispatchEvent(new CustomEvent('chest:toggle', { detail: open }));
   });
 
-  // Paper cards get a strip of tape or a tack, chosen per card so it stays put between visits
+  // Paper: every text panel is a real sheet. The sheet layer carries the texture, crumple, creases
+  // and stained edges, and its outline is cut with a slightly ragged edge, small nicks and the odd
+  // torn corner. The panel itself casts the shadow, so the shadow follows the cut edge.
+  var paperRand = function (k) { var r = rng(9001 + k * 97); return r; };
   $$('.log, .flag, .logpage, .vivre__card, .port, .bounty').forEach(function (el, k) {
-    if (el.classList.contains('port')) { el.classList.add('paper'); el.style.setProperty('--lean', (((k * 53) % 5) - 2) * .1 + 'deg'); return; }
-    var kind = el.classList.contains('bounty') ? 'tack' : (k % 3 === 0 ? 'tack' : 'tape');
-    var s = document.createElement('span');
-    s.className = kind; s.setAttribute('aria-hidden', 'true');
-    if (kind === 'tape') s.style.setProperty('--tilt', ((k * 37 % 9) - 4) + 'deg');
-    el.appendChild(s);
+    var r = paperRand(k);
+    var sheet = document.createElement('span');
+    sheet.className = 'sheet sheet--c' + (1 + k % 3); sheet.setAttribute('aria-hidden', 'true');
+    var stain = r() < .35 ? '<span class="sheet__stain" style="left:' + (15 + r() * 65).toFixed(0) + '%;top:' + (20 + r() * 60).toFixed(0) + '%"></span>' : '';
+    sheet.innerHTML = '<span class="sheet__crumple"></span>' + stain + '<svg class="sheet__creases" preserveAspectRatio="none"></svg>';
+    el.insertBefore(sheet, el.firstChild);
     el.classList.add('paper');
-    el.style.setProperty('--lean', (((k * 53) % 7) - 3) * .12 + 'deg');
+    sheet.style.setProperty('--lean', ((r() - .5) * (el.classList.contains('port') ? .5 : .9)).toFixed(2) + 'deg');
+    if (!el.classList.contains('port')) {
+      var kind = el.classList.contains('bounty') || r() < .35 ? 'tack' : 'tape';
+      var s = document.createElement('span'); s.className = kind; s.setAttribute('aria-hidden', 'true');
+      if (kind === 'tape') s.style.setProperty('--tilt', ((r() - .5) * 9).toFixed(1) + 'deg');
+      el.appendChild(s);
+    }
+    // the cut: built in pixels so nicks stay small on big sheets and small on small ones
+    var seed = 400 + k * 13;
+    function cut() {
+      var w = el.offsetWidth, h = el.offsetHeight; if (!w || !h) return;
+      var rr = rng(seed), pts = [];
+      function edge(x0, y0, x1, y1, nx, ny) {
+        var len = Math.hypot(x1 - x0, y1 - y0), steps = Math.max(2, Math.round(len / 14));
+        var nickAt = rr() < .55 ? .15 + rr() * .7 : -1, nickDone = false;
+        for (var i = 0; i < steps; i++) {
+          var t = i / steps, x = x0 + (x1 - x0) * t, y = y0 + (y1 - y0) * t, j = rr() * 1.8;
+          pts.push([x + nx * j, y + ny * j]);
+          if (!nickDone && nickAt > 0 && t > nickAt) { // a small V-shaped nick into the sheet
+            nickDone = true;
+            var d = 4 + rr() * 7, wdt = 3 + rr() * 4, ux = (x1 - x0) / len, uy = (y1 - y0) / len;
+            pts.push([x + ux * wdt + nx * d, y + uy * wdt + ny * d]);
+            pts.push([x + ux * wdt * 2.2, y + uy * wdt * 2.2]);
+          }
+        }
+      }
+      var tear = rr() < .4 ? 8 + rr() * 12 : 0; // a torn-off corner on some sheets
+      edge(0, 0, w, 0, 0, 1);
+      edge(w, 0, w, h - tear, -1, 0);
+      if (tear) { pts.push([w - tear * .3, h - tear * .55]); pts.push([w - tear * .65, h - tear * .2]); }
+      edge(w - tear, h, 0, h, 0, -1);
+      edge(0, h, 0, 0, 1, 0);
+      sheet.style.clipPath = 'polygon(' + pts.map(function (p) { return p[0].toFixed(1) + 'px ' + p[1].toFixed(1) + 'px'; }).join(',') + ')';
+      // creases: soft folds running edge to edge, a light ridge beside a dark valley
+      var svg = sheet.querySelector('.sheet__creases'), out = '', n = 1 + Math.floor(rr() * 3);
+      svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+      for (var c = 0; c < n; c++) {
+        var horiz = rr() < .5, a = rr(), b = rr(), d2;
+        d2 = horiz ? 'M0 ' + (h * a).toFixed(0) + 'Q' + (w * .5).toFixed(0) + ' ' + (h * (a + b) / 2 + (rr() - .5) * 20).toFixed(0) + ' ' + w + ' ' + (h * b).toFixed(0)
+                   : 'M' + (w * a).toFixed(0) + ' 0Q' + (w * (a + b) / 2 + (rr() - .5) * 20).toFixed(0) + ' ' + (h * .5).toFixed(0) + ' ' + (w * b).toFixed(0) + ' ' + h;
+        out += '<path d="' + d2 + '" stroke="rgba(255,252,240,.55)" stroke-width="1.2" fill="none"/><path d="' + d2 + '" stroke="rgba(92,58,20,.2)" stroke-width="1.6" fill="none" transform="translate(1.4 1.4)"/>';
+      }
+      svg.innerHTML = out;
+    }
+    cut();
+    if ('ResizeObserver' in window) new ResizeObserver(function () { cut(); }).observe(el);
   });
 
   /* ------------------------------------------------------------ the sea moves with you */
   (function sea() {
     if (!voyage) return;
-    var layers = '<div class="swell swell--far" aria-hidden="true"></div><div class="swell swell--near" aria-hidden="true"></div>';
-    voyage.insertAdjacentHTML('afterbegin', layers);
-    var far = $('.swell--far', voyage), near = $('.swell--near', voyage);
     // things floating on the open water, kept in the margins beside the content
     var D = {
       whale: '<svg viewBox="0 0 120 60"><path d="M10 40Q30 20 62 24Q92 28 104 40Q90 46 60 46Q30 46 10 40Z" fill="#2a4a63"/><path d="M104 40Q112 30 118 24Q112 38 116 50Q110 44 104 40Z" fill="#2a4a63"/><circle cx="28" cy="34" r="2" fill="#0b1a26"/><path d="M40 22Q38 10 32 6M40 22Q44 10 50 6" stroke="#cfe8f1" stroke-width="2" fill="none" stroke-linecap="round" class="spout"/><path d="M4 46Q60 56 116 46" stroke="rgba(255,255,255,.5)" stroke-width="2" fill="none"/></svg>',
@@ -773,7 +841,7 @@
       buoy: '<svg viewBox="0 0 40 50"><g class="bob"><path d="M12 36L20 8L28 36Z" fill="#c8323a"/><path d="M14 28H26" stroke="#f4efe6" stroke-width="4"/><circle cx="20" cy="8" r="3" fill="#ffe08a"/><path d="M4 40Q20 46 36 40" stroke="rgba(255,255,255,.55)" stroke-width="2" fill="none"/></g></svg>',
       fish: '<svg viewBox="0 0 60 50"><g class="leap"><path d="M14 30Q26 12 44 22Q32 34 14 30Z" fill="#e8a93e"/><path d="M44 22L54 14L52 28Z" fill="#e8a93e"/><circle cx="22" cy="26" r="1.6" fill="#2a1a06"/></g><path d="M6 42Q30 48 54 42" stroke="rgba(255,255,255,.5)" stroke-width="2" fill="none"/></svg>'
     };
-    var order = ['gulls', 'whale', 'barrel', 'rocks', 'fish', 'bottle', 'serpent', 'buoy', 'gulls', 'barrel', 'whale', 'rocks', 'fish', 'buoy'];
+    var order = ['gulls', 'whale', 'barrel', 'rocks', 'bottle', 'serpent', 'buoy', 'gulls', 'barrel', 'whale', 'rocks', 'buoy'];
     var decor = [];
     function placeDecor() {
       decor.forEach(function (d) { d.el.remove(); }); decor = [];
@@ -786,7 +854,7 @@
         var size = kind === 'whale' || kind === 'serpent' ? Math.min(margin - 10, 150) : Math.min(margin - 20, 70);
         if (size < 40) continue;
         var el = document.createElement('div');
-        el.className = 'flotsam flotsam--' + kind; el.setAttribute('aria-hidden', 'true');
+        el.className = 'flotsam flotsam--' + kind + (kind === 'whale' || kind === 'serpent' ? ' is-under' : ''); el.setAttribute('aria-hidden', 'true');
         el.innerHTML = D[kind];
         el.style.width = size + 'px';
         el.style.left = (left ? (margin - size) * .45 : w - margin + (margin - size) * .55) + 'px';
@@ -795,18 +863,11 @@
         decor.push({ el: el, speed: .04 + (k % 3) * .035 });
       }
     }
-    var ticking = false;
-    function drift() {
-      ticking = false;
-      var y = window.pageYOffset;
-      far.style.transform = 'translate3d(' + (-(y * .06) % 160).toFixed(1) + 'px,' + (y * .18).toFixed(1) + 'px,0)';
-      near.style.transform = 'translate3d(' + ((y * .1) % 220).toFixed(1) + 'px,' + (y * -.08).toFixed(1) + 'px,0)';
-      decor.forEach(function (d) { d.el.style.transform = 'translate3d(0,' + (-(y * d.speed)).toFixed(1) + 'px,0)'; });
-    }
-    if (!reduceMotion.matches) window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(drift); } }, { passive: true });
-    window.addEventListener('load', function () { placeDecor(); drift(); });
+    // driven from the one scroll frame below, so everything moves on the same tick
+    driftDecor = function (y) { if (reduceMotion.matches) return; for (var i = 0; i < decor.length; i++) decor[i].el.style.transform = 'translate3d(0,' + (-(y * decor[i].speed)).toFixed(1) + 'px,0)'; };
+    window.addEventListener('load', function () { placeDecor(); driftDecor(window.pageYOffset); });
     var dt = null; window.addEventListener('resize', function () { clearTimeout(dt); dt = setTimeout(placeDecor, 200); });
-    placeDecor(); drift();
+    placeDecor();
   })();
 
   /* ------------------------------------------------------------ Motion Primitives ports (vanilla) */
@@ -875,8 +936,7 @@
     });
 
     // Spotlight: a soft lantern follows the pointer across cards
-    $$('.log, .spot').forEach(function (el) {
-      el.classList.add('spot');
+    $$('.spot').forEach(function (el) {
       el.addEventListener('pointermove', function (e) {
         var b = el.getBoundingClientRect();
         el.style.setProperty('--mx', (e.clientX - b.left) + 'px');

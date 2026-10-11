@@ -40,7 +40,7 @@
   var lpCanvas = document.querySelector('[data-scene="logpose"]');
   if (lpCanvas) (function () {
     var s = stage(lpCanvas, 32); if (!s) return;
-    s.camera.position.set(0, 1.05, 6.4); s.camera.lookAt(0, .75, 0);
+    s.camera.position.set(0, 3.1, 5.4); s.camera.lookAt(0, .85, 0);
     var g = new THREE.Group(); s.scene.add(g);
     var wood = new THREE.MeshStandardMaterial({ color: 0x4e2c12, roughness: .7 });
     var brass = new THREE.MeshStandardMaterial({ color: 0xd9a441, metalness: .85, roughness: .3 });
@@ -74,17 +74,18 @@
     var halo = new THREE.Mesh(new THREE.TorusGeometry(.79, .015, 8, 64), new THREE.MeshBasicMaterial({ color: 0xe8f6ff, transparent: true, opacity: .6 }));
     halo.position.y = 1.05; g.add(halo);
 
-    var spin = 0, px = 0, py = 0;
-    document.addEventListener('logpose:spin', function () { spin = Math.PI * 4; s.kick(); });
-    lpCanvas.parentElement.addEventListener('pointermove', function (e) {
-      var b = lpCanvas.getBoundingClientRect(); px = (e.clientX - b.left) / b.width - .5; py = (e.clientY - b.top) / b.height - .5;
-    });
+    // The needle follows the Merry: it turns to the ship's compass heading as you sail the page.
+    // Bearing 0 is north (up the page); the needle's red tip starts pointing east (+x).
+    var px = 0, py = 0, cur = Math.PI / 2 - Math.PI;
+    document.addEventListener('pointermove', function (e) { px = e.clientX / window.innerWidth - .5; py = e.clientY / window.innerHeight - .5; }, { passive: true });
     s.onTick(function (t) {
-      g.rotation.y = t * .25 + px * .6;
-      g.rotation.x = .08 + py * .25; halo.lookAt(s.camera.position.x, halo.position.y + 1.05, s.camera.position.z);
-      if (spin > 0) { var d = Math.max(.08, spin * .06); spin -= d; needle.rotation.y += d; }
-      else needle.rotation.y += Math.sin(t * 1.3) * .004;
-      needle.position.y = 1.05 + Math.sin(t * 2) * .04;
+      g.rotation.y = Math.sin(t * .35) * .1 + px * .25;
+      g.rotation.x = .1 + py * .12;
+      var want = Math.PI / 2 - (window.__mmHeading || 180) * Math.PI / 180;
+      var diff = Math.atan2(Math.sin(want - cur), Math.cos(want - cur)); // shortest way round
+      cur += diff * .08;
+      needle.rotation.y = cur + Math.sin(t * 2.3) * .03 - g.rotation.y;
+      needle.position.y = 1.05 + Math.sin(t * 2) * .03;
     });
   })();
 
