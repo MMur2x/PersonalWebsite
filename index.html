@@ -1,680 +1,710 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mayne Murray — Computer Science @ UMass Lowell</title>
-  <meta name="description" content="Mayne Murray — Computer Science student at UMass Lowell (Class of 2027). Software Engineer Intern at Fidelity Investments working on Kubernetes, OpenTelemetry and Grafana observability. NSBE Executive Board Senator." />
-  <meta name="author" content="Mayne Murray" />
-  <meta name="theme-color" content="#0ea5e9" />
-
-  <!-- Open Graph / link previews -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Mayne Murray — Computer Science @ UMass Lowell" />
-  <meta property="og:description" content="CS student, Software Engineer Intern, and NSBE Executive Board Senator building backend systems, observability tooling, and AI-assisted software." />
-  <meta property="og:image" content="headshot.jpg" />
-  <meta name="twitter:card" content="summary_large_image" />
-
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%230ea5e9'/%3E%3Ctext x='50' y='68' font-family='Poppins,Arial,sans-serif' font-size='48' font-weight='700' fill='white' text-anchor='middle'%3EMM%3C/text%3E%3C/svg%3E" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/style.css?v=13" />
-
-  <!-- Set theme before first paint so there is no flash of the wrong theme -->
-  <script>
-    (function () {
-      try {
-        var t = localStorage.getItem('theme');
-        if (!t) t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', t);
-      } catch (e) {}
-    })();
-  </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
-  <script src="assets/site.js?v=13" defer></script>
-  <script src="assets/scenes3d.js?v=13" defer></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mayne Murray — Software Engineer, UMass Lowell CS</title>
+<meta name="description" content="Mayne Murray — Computer Science student at UMass Lowell (Class of 2027). Software Engineer Intern at Fidelity Investments working on Kubernetes, OpenTelemetry and Grafana observability. NSBE Executive Board Senator.">
+<meta name="author" content="Mayne Murray">
+<meta property="og:title" content="Mayne Murray — Computer Science @ UMass Lowell">
+<meta property="og:description" content="CS student, Software Engineer Intern, and NSBE Executive Board Senator building backend systems, observability tooling, and AI-assisted software.">
+<meta property="og:image" content="headshot.jpg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a2639">
+<script>try{var t=localStorage.getItem('mm-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+DW+Pica+SC&family=Playfair+Display:wght@700;800;900&display=swap">
+<link rel="stylesheet" href="assets/style.css?v=20">
 </head>
-
 <body>
-<div class="page-veil" aria-hidden="true"></div>
-<div class="scene scene--floaters" data-scene="floaters" aria-hidden="true"></div>
-<a class="skip-link" href="#main">Skip to content</a>
+<a class="skip" href="#main">Skip to content</a>
+<svg class="defs" width="0" height="0" aria-hidden="true" focusable="false">
+  <filter id="ink" x="-4%" y="-8%" width="108%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="4" result="rough"/>
+    <feDisplacementMap in="SourceGraphic" in2="rough" scale="1.8" xChannelSelector="R" yChannelSelector="G" result="bled"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="2" seed="11" result="speck"/>
+    <feColorMatrix in="speck" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -9 0 0 0 6.9" result="holes"/>
+    <feComposite in="bled" in2="holes" operator="in"/>
+  </filter>
+  <filter id="inkSoft" x="-4%" y="-8%" width="108%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="8" result="rough"/>
+    <feDisplacementMap in="SourceGraphic" in2="rough" scale="0.9" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="stamp" x="-10%" y="-10%" width="120%" height="120%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" seed="17" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -6 0 0 0 4.2" result="m"/>
+    <feComposite in="SourceGraphic" in2="m" operator="in"/>
+  </filter>
+</svg>
 
-<!-- ======================= NAVIGATION ======================= -->
-<nav class="nav">
-  <div class="nav__inner">
-    <a class="brand" href="index.html">
-      <span class="brand__mark" aria-hidden="true">MM</span>
-      <span class="brand__text">Mayne Murray</span>
+<header class="topbar">
+  <div class="topbar__in">
+    <a class="brand" href="#top" aria-label="Mayne Murray, back to the start">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M16 3l3.2 13L16 29l-3.2-13z" fill="currentColor"/><path d="M3 16l13-2.4L29 16l-13 2.4z" fill="currentColor" opacity=".45"/></svg>
+      <span>Mayne Murray</span>
     </a>
-
-    <ul class="nav__links" id="navLinks">
-      <li><a href="#about">About</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#leadership">Leadership</a></li>
-      <li><a href="#resume">Resume</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-
-    <div class="nav__actions">
-      <button class="icon-btn theme-toggle" type="button" aria-label="Switch to light mode">
-        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></svg>
-      </button>
-      <button class="icon-btn nav__burger" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-      </button>
-    </div>
+    <nav class="nav" id="nav" aria-label="Sections">
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#leadership">Leadership</a></li>
+        <li><a href="#resume">Résumé</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <button class="iconbtn theme" id="theme" type="button" aria-label="Switch to day sailing">
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>
+    </button>
+    <button class="iconbtn burger" id="burger" type="button" aria-label="Open the section menu" aria-expanded="false" aria-controls="nav">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
   </div>
-  <div class="progress" aria-hidden="true"></div>
-</nav>
-
-<main id="main">
-
-<!-- ======================= HERO ======================= -->
-<header class="hero">
-  <div class="hero__aurora" aria-hidden="true"><span></span><span></span><span></span></div>
-  <div class="scene hero__canvas" data-scene="prism" aria-hidden="true"></div>
-
-  <div class="wrap hero__inner">
-    <div>
-      <h1>Hi, I'm <span class="grad">Mayne Murray</span></h1>
-
-      <p class="hero__role">
-        I build <span class="typed" data-typed='["backend systems","observability tooling","AI-assisted software","developer workflows"]'></span><span class="caret" aria-hidden="true"></span>
-      </p>
-
-      <p class="hero__lede">
-        Computer Science student at UMass Lowell (c/o 2027).
-      </p>
-
-      <div class="hero__meta">
-        <span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          Framingham, MA
-        </span>
-        <span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg>
-          B.S. Computer Science, UMass Lowell
-        </span>
-        <span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-          Graduating May 2027
-        </span>
-      </div>
-
-      <div class="hero__cta">
-        <a class="btn btn--primary btn--magnetic" href="#projects">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
-          See my work
-        </a>
-        <a class="btn btn--ghost btn--magnetic" href="Mayne%20Murray%20Internship%20Resume.pdf" download>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>
-          Download résumé
-        </a>
-        <a class="btn btn--ghost btn--magnetic" href="https://www.linkedin.com/in/mayne-murray/" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21h-4v-5.6c0-1.34-.03-3.07-1.9-3.07-1.9 0-2.2 1.46-2.2 2.97V21H9z"/></svg>
-          LinkedIn
-        </a>
-      </div>
-    </div>
-
-    <figure class="hero__portrait">
-      <img src="headshot.jpg" alt="Portrait of Mayne Murray" width="280" height="280" />
-      <figcaption class="badge">Prev. SWE Intern @ Fidelity</figcaption>
-    </figure>
-  </div>
+  <div class="progress" id="progress"></div>
 </header>
 
-<!-- ======================= STATS ======================= -->
-<section class="section" style="padding-top:0" aria-label="At a glance">
-  <div class="wrap">
-    <div class="stats" data-reveal>
-      <div class="stat">
-        <div class="stat__num"><span data-count="3">0</span></div>
-        <div class="stat__label">Internships</div>
+<main id="main">
+  <section class="hero" id="top" aria-labelledby="hero-name">
+    <div class="hero__in">
+      <figure class="poster" data-tilt="7" aria-label="Wanted poster for Mayne Murray">
+        <span class="poster__nail" aria-hidden="true"></span>
+        <div class="poster__sheet">
+          <p class="poster__serial" aria-hidden="true">No. 0527-UML</p>
+          <p class="poster__word" aria-hidden="true">Wanted</p>
+          <div class="poster__photo"><img src="headshot.jpg" alt="Portrait of Mayne Murray" width="400" height="400" data-fallback="portrait"></div>
+          <p class="poster__doa" aria-hidden="true">Dead or alive</p>
+          <p class="poster__name">Mayne Murray</p>
+          <p class="poster__for">Prev. SWE at Fidelity Investments</p>
+          <dl class="poster__bounty">
+            <div><dt>Internships</dt><dd><span data-count="3">3</span></dd></div>
+            <div><dt>Class of</dt><dd><span data-count="2027">2027</span></dd></div>
+            <div><dt>Fellowships &amp; scholars programs</dt><dd><span data-count="5" data-suffix="+">5+</span></dd></div>
+          </dl>
+          <p class="poster__fine">Last sighted near Framingham, Massachusetts. Known associates: Fidelity Investments, RSM US LLP, the National Society of Black Engineers. Report all sightings to maynemurray@gmail.com.</p>
+          <span class="poster__stamp" aria-hidden="true"><svg viewBox="0 0 100 100"><defs><path id="stampArc" d="M50 50m-36 0a36 36 0 1 1 72 0a36 36 0 1 1-72 0"/></defs><g filter="url(#stamp)" fill="none" stroke="currentColor"><circle cx="50" cy="50" r="46" stroke-width="3"/><circle cx="50" cy="50" r="27" stroke-width="1.6"/><text font-size="10.5" letter-spacing="2.2" fill="currentColor" stroke="none" font-family="IM Fell DW Pica SC, Georgia, serif"><textPath href="#stampArc">VERIFIED · HONORS COLLEGE · UMASS LOWELL ·</textPath></text><text x="50" y="47" text-anchor="middle" font-size="12" fill="currentColor" stroke="none" font-family="Playfair Display, Georgia, serif" font-weight="900">CLASS</text><text x="50" y="61" text-anchor="middle" font-size="13" fill="currentColor" stroke="none" font-family="Playfair Display, Georgia, serif" font-weight="900">2027</text></g></svg></span>
+        </div>
+      </figure>
+      <div class="hero__copy">
+        <p class="hero__kicker">Software engineer · UMass Lowell Honors College · Class of 2027</p>
+        <h1 id="hero-name" class="split">Mayne Murray</h1>
+        <p class="hero__tag">I build <span class="loop" aria-hidden="true"><span class="loop__word is-on">backend systems</span><span class="loop__word">Kubernetes observability</span><span class="loop__word">AI automation</span><span class="loop__word">Chrome extensions</span><span class="loop__word">Flutter apps</span></span><span class="sr-only">backend systems, Kubernetes observability, AI automation, Chrome extensions and Flutter apps</span><br>and the tooling that keeps them observable.</p>
+        <p class="hero__facts">Computer Science at UMass Lowell, Honors College, graduating May 2027. Previously a software engineer intern at Fidelity Investments. Based in Framingham, MA.</p>
+        <div class="hero__actions">
+          <a class="btn btn--sail magnetic" href="#experience"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v15M5 15l7-12 7 12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M3 18c3 2 6 2 9 0s6-2 9 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Set sail</a>
+          <a class="btn btn--sea magnetic" href="#resume">Read the résumé</a>
+          <a class="btn btn--sea magnetic" href="https://www.linkedin.com/in/mayne-murray/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <p class="hero__haki"><strong>Haki is at the bottom of your screen.</strong> Observation brings out the numbers, Armament opens the technical detail on every card, and Conqueror's shows the highlights in one view.</p>
       </div>
-      <div class="stat">
-        <div class="stat__num"><span data-count="2027">0</span></div>
-        <div class="stat__label">Class of</div>
+    </div>
+    <div class="callports" aria-label="Ports of call">
+      <p class="callports__label">Ports of call</p>
+      <div class="callports__track"><ul class="callports__row">
+        <li>Fidelity Investments</li><li>RSM US LLP</li><li>UMass Lowell</li><li>National Society of Black Engineers</li><li>Management Leadership for Tomorrow</li><li>Juniper Networks</li><li>Sponsors for Educational Opportunity</li><li>Grow with Google</li>
+        <li aria-hidden="true">Fidelity Investments</li><li aria-hidden="true">RSM US LLP</li><li aria-hidden="true">UMass Lowell</li><li aria-hidden="true">National Society of Black Engineers</li><li aria-hidden="true">Management Leadership for Tomorrow</li><li aria-hidden="true">Juniper Networks</li><li aria-hidden="true">Sponsors for Educational Opportunity</li><li aria-hidden="true">Grow with Google</li>
+      </ul></div>
+    </div>
+    <svg class="hero__waves" viewBox="0 0 1440 160" preserveAspectRatio="none" aria-hidden="true"><path d="M0 160 L0 33.3 C90.0 33.3 90.0 13.6 180.0 13.6 C270.0 13.6 270.0 21.6 360.0 21.6 C450.0 21.6 450.0 19.9 540.0 19.9 C630.0 19.9 630.0 36.4 720.0 36.4 C810.0 36.4 810.0 34.5 900.0 34.5 C990.0 34.5 990.0 41.3 1080.0 41.3 C1170.0 41.3 1170.0 15.6 1260.0 15.6 C1350.0 15.6 1350.0 26.3 1440.0 26.3 L1440 160 Z" fill="var(--wave-a)"/><path d="M0 160 L0 51.1 C90.0 51.1 90.0 57.1 180.0 57.1 C270.0 57.1 270.0 66.3 360.0 66.3 C450.0 66.3 450.0 51.0 540.0 51.0 C630.0 51.0 630.0 56.5 720.0 56.5 C810.0 56.5 810.0 70.9 900.0 70.9 C990.0 70.9 990.0 67.6 1080.0 67.6 C1170.0 67.6 1170.0 57.2 1260.0 57.2 C1350.0 57.2 1350.0 69.0 1440.0 69.0 L1440 160 Z" fill="var(--wave-b)"/><path d="M0 160 L0 113.4 C90.0 113.4 90.0 87.7 180.0 87.7 C270.0 87.7 270.0 113.3 360.0 113.3 C450.0 113.3 450.0 109.8 540.0 109.8 C630.0 109.8 630.0 98.4 720.0 98.4 C810.0 98.4 810.0 92.4 900.0 92.4 C990.0 92.4 990.0 118.1 1080.0 118.1 C1170.0 118.1 1170.0 98.2 1260.0 98.2 C1350.0 98.2 1350.0 90.4 1440.0 90.4 L1440 160 Z" fill="var(--wave-c)"/><path d="M0 160 L0 127.9 C90.0 127.9 90.0 151.9 180.0 151.9 C270.0 151.9 270.0 144.1 360.0 144.1 C450.0 144.1 450.0 150.6 540.0 150.6 C630.0 150.6 630.0 148.2 720.0 148.2 C810.0 148.2 810.0 142.0 900.0 142.0 C990.0 142.0 990.0 155.9 1080.0 155.9 C1170.0 155.9 1170.0 136.9 1260.0 136.9 C1350.0 136.9 1350.0 142.5 1440.0 142.5 L1440 160 Z" fill="var(--sea-1)"/></svg>
+  </section>
+
+  <div class="voyage" id="voyage">
+    <svg class="route" id="route" aria-hidden="true"><path class="route__base" id="routeBase"/><path class="route__done" id="routeDone"/></svg>
+    <div class="ship" id="ship" aria-hidden="true">
+      <div class="ship__flip" id="shipFlip">
+      <svg class="ship__svg" viewBox="0 0 232 190">
+        <defs>
+          <linearGradient id="mHull" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#f6e8c3"/><stop offset=".5" stop-color="#e6cd95"/>
+            <stop offset=".64" stop-color="#d5b677"/><stop offset=".645" stop-color="#7c4a22"/><stop offset="1" stop-color="#4a2a12"/>
+          </linearGradient>
+          <linearGradient id="mSail" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#e4dccb"/><stop offset=".45" stop-color="#fbf7ee"/><stop offset="1" stop-color="#d9cfba"/>
+          </linearGradient>
+          <linearGradient id="mWood" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#5a3415"/><stop offset=".5" stop-color="#8b5a2b"/><stop offset="1" stop-color="#5a3415"/>
+          </linearGradient>
+          <radialGradient id="mHead" cx=".38" cy=".35" r=".7"><stop offset="0" stop-color="#ffffff"/><stop offset=".7" stop-color="#efe9dc"/><stop offset="1" stop-color="#c9bfa9"/></radialGradient>
+          <linearGradient id="mHorn" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe08a"/><stop offset="1" stop-color="#c98d19"/></linearGradient>
+        </defs>
+        <g class="ship__bob">
+          <!-- shadow on the water -->
+          <ellipse cx="116" cy="168" rx="86" ry="7" fill="rgba(0,20,35,.35)"/>
+
+          <!-- rear mast + gaff sail -->
+          <rect x="54" y="38" width="4" height="64" fill="url(#mWood)"/>
+          <path d="M57 44 Q38 58 30 92 L57 96 Z" fill="url(#mSail)" stroke="#8b7a5c" stroke-width="1"/>
+          <path d="M50 52 L40 90 M44 60 L35 91" stroke="rgba(120,100,70,.35)" stroke-width=".8"/>
+
+          <!-- bowsprit + jib -->
+          <path d="M184 106 L226 76" stroke="#6b4320" stroke-width="3.4" stroke-linecap="round"/>
+          <path d="M222 80 L124 24 L176 104 Z" fill="url(#mSail)" stroke="#8b7a5c" stroke-width="1"/>
+          <path d="M124 24 L226 76 M124 24 L58 40" stroke="rgba(60,40,20,.55)" stroke-width=".7"/>
+
+          <!-- main mast, yards, crow's nest -->
+          <rect x="118" y="10" width="5" height="104" fill="url(#mWood)"/>
+          <rect x="84" y="29" width="72" height="3.2" rx="1.6" fill="#6b4320"/>
+          <rect x="82" y="88" width="76" height="3.2" rx="1.6" fill="#6b4320"/>
+          <path d="M111 20 h19 l-2 7 h-15 z" fill="#7a4b22" stroke="#4a2a12" stroke-width=".8"/>
+          <!-- masthead flag (blows back) -->
+          <path class="ship__flag" d="M120 8 C112 5 106 11 98 8 L98 19 C106 22 112 16 120 19 Z" fill="#141210"/>
+          <circle cx="109" cy="13.5" r="2.3" fill="#f2ede2"/>
+
+          <!-- main square sail, billowed, with an original emblem -->
+          <path d="M86 32 Q120 24 154 32 Q162 62 158 89 Q120 98 82 89 Q78 62 86 32 Z" fill="url(#mSail)" stroke="#8b7a5c" stroke-width="1.1"/>
+          <path d="M98 33 Q95 60 96 92 M142 33 Q145 60 144 92" stroke="rgba(120,100,70,.28)" stroke-width=".9" fill="none"/>
+          <path d="M86 60 Q120 66 156 60" stroke="rgba(120,100,70,.22)" stroke-width=".9" fill="none"/>
+          <g transform="translate(120 61)">
+            <path d="M-17 -11 L17 11 M17 -11 L-17 11" stroke="#1b1712" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="-17" cy="-11" r="2.6" fill="#1b1712"/><circle cx="17" cy="-11" r="2.6" fill="#1b1712"/>
+            <circle cx="-17" cy="11" r="2.6" fill="#1b1712"/><circle cx="17" cy="11" r="2.6" fill="#1b1712"/>
+            <path d="M-10 1 a10 10 0 1 1 20 0 c0 4-2 6-4 7 v3 h-12 v-3 c-2-1-4-3-4-7z" fill="#1b1712"/>
+            <circle cx="-4" cy="0" r="2.8" fill="#f6f1e6"/><circle cx="4" cy="0" r="2.8" fill="#f6f1e6"/>
+            <path d="M-1 5 l1 -2 1 2z" fill="#f6f1e6"/>
+            <path d="M-3 9 v2 M0 9 v2 M3 9 v2" stroke="#f6f1e6" stroke-width=".9"/>
+            <!-- mortarboard -->
+            <path d="M-14 -11 L0 -17 L14 -11 L0 -5 Z" fill="#1b1712" stroke="#f6f1e6" stroke-width=".6"/>
+            <path d="M10 -9.5 v7" stroke="#e8a93e" stroke-width="1.2"/><circle cx="10" cy="-2" r="1.4" fill="#e8a93e"/>
+          </g>
+
+          <!-- stern cabin -->
+          <path d="M24 86 Q22 80 30 78 L62 80 L62 104 L28 104 Z" fill="#e9d6a4" stroke="#6b4320" stroke-width="1.2"/>
+          <path d="M22 80 Q42 72 64 79" stroke="#7a4b22" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <rect x="34" y="86" width="8" height="8" rx="1" fill="#5c3a1c"/><rect x="47" y="86" width="8" height="8" rx="1" fill="#5c3a1c"/>
+          <path d="M35 90 h6 M38 87 v6 M48 90 h6 M51 87 v6" stroke="#f3d38a" stroke-width=".8"/>
+          <!-- stern scroll -->
+          <path d="M24 104 q-8 -4 -5 -12 q4 -5 8 0 q2 4 -2 5" fill="none" stroke="#7a4b22" stroke-width="2.4" stroke-linecap="round"/>
+
+          <!-- tangerine grove on deck -->
+          <g class="ship__grove">
+            <rect x="69" y="101" width="12" height="6" rx="1" fill="#7a4b22"/>
+            <circle cx="75" cy="95" r="7.5" fill="#2f7d3e"/><circle cx="70" cy="98" r="5" fill="#3b9450"/><circle cx="80" cy="98" r="5" fill="#276b35"/>
+            <circle cx="72" cy="93" r="1.6" fill="#ff9d1c"/><circle cx="78" cy="96" r="1.6" fill="#ff9d1c"/><circle cx="74" cy="99" r="1.4" fill="#ffb347"/><circle cx="80" cy="92" r="1.3" fill="#ff9d1c"/>
+            <rect x="85" y="102" width="10" height="5" rx="1" fill="#7a4b22"/>
+            <circle cx="90" cy="97" r="6" fill="#2f7d3e"/><circle cx="87" cy="96" r="1.4" fill="#ff9d1c"/><circle cx="92" cy="99" r="1.4" fill="#ffb347"/>
+          </g>
+
+          <!-- hull -->
+          <path d="M24 102 L62 104 L64 108 L176 108 Q188 106 196 98 Q196 128 176 150 Q156 164 126 166 L72 166 Q40 162 30 138 Q24 120 24 102 Z" fill="url(#mHull)" stroke="#5a3415" stroke-width="1.6"/>
+          <path d="M30 120 Q100 128 190 116 M33 132 Q104 140 184 128 M40 146 Q110 152 174 142" stroke="rgba(110,70,30,.35)" stroke-width="1" fill="none"/>
+          <path d="M26 112 Q104 120 194 106" stroke="#7a4b22" stroke-width="2.2" fill="none"/>
+          <!-- rail with balusters -->
+          <path d="M62 100 L176 100 Q186 99 192 94" stroke="#7a4b22" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+          <g stroke="#7a4b22" stroke-width="1.6">
+            <path d="M70 100v8M78 100v8M86 100v8M94 100v8M102 100v8M110 100v8M118 100v8M126 100v8M134 100v8M142 100v8M150 100v8M158 100v8M166 100v8M174 100v8M182 99v7"/>
+          </g>
+          <!-- cannon ports -->
+          <g fill="#3a2210" stroke="#c9a462" stroke-width="1">
+            <circle cx="86" cy="126" r="3.4"/><circle cx="110" cy="128" r="3.4"/><circle cx="134" cy="127" r="3.4"/><circle cx="158" cy="124" r="3.4"/>
+          </g>
+
+          <!-- ram figurehead -->
+          <path d="M188 104 Q198 98 202 90" stroke="#efe9dc" stroke-width="7" stroke-linecap="round" fill="none"/>
+          <circle cx="206" cy="84" r="11" fill="url(#mHead)" stroke="#a89d86" stroke-width="1"/>
+          <ellipse cx="215" cy="88" rx="6" ry="4.6" fill="#f4efe4" stroke="#a89d86" stroke-width=".9"/>
+          <circle cx="218.5" cy="87" r=".9" fill="#6d6352"/>
+          <path d="M209 80 q2 -1.5 3.5 0" stroke="#2a2018" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          <path d="M213 92 q2 1 4 0" stroke="#8e8370" stroke-width=".8" fill="none"/>
+          <!-- curled horn: a spiral -->
+          <path d="M202 76 C 190 72 186 86 194 90 C 200 93 204 86 199 83 C 196 81 194 85 196 86" stroke="url(#mHorn)" stroke-width="4.2" fill="none" stroke-linecap="round"/>
+          <path d="M202 76 C 190 72 186 86 194 90" stroke="rgba(120,80,10,.5)" stroke-width="1" fill="none"/>
+
+          <!-- bow wave + wake -->
+          <path class="ship__wake" d="M196 160 q10 -4 18 2 q-8 2 -18 -2z M20 150 q-10 6 -18 4 q8 -8 18 -4z" fill="rgba(255,255,255,.75)"/>
+          <path class="ship__foam" d="M28 166 Q60 172 92 167 T156 167 T204 162" stroke="rgba(255,255,255,.8)" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-dasharray="8 6"/>
+        </g>
+      </svg>
       </div>
-      <div class="stat">
-        <div class="stat__num"><span data-count="5" data-suffix="+">0</span></div>
-        <div class="stat__label">Fellowships &amp; scholars programs</div>
+    </div>
+
+    <!-- About -->
+    <section class="sea" id="about" aria-labelledby="about-h">
+      <header class="sea__head sea__head--left" style="position:relative">
+        <p class="region">Captain's log</p>
+        <h2 id="about-h" class="split">About</h2>
+        <span class="pin" aria-hidden="true"></span>
+      </header>
+      <div class="logpage">
+        <p>I'm pursuing a B.S. in Computer Science at the University of Massachusetts Lowell, graduating May 2027 as part of the Honors College. My interests sit where backend development meets infrastructure: automation, systems integration, and building tools that make complicated systems easier to understand.</p>
+        <dl>
+          <div><dt>Studying</dt><dd>B.S. Computer Science, UMass Lowell Honors College</dd></div>
+          <div><dt>Graduating</dt><dd>May 2027</dd></div>
+          <div><dt>Home port</dt><dd>Framingham, MA</dd></div>
+          <div><dt>Last voyage</dt><dd>Software Engineer Intern, Fidelity Investments</dd></div>
+        </dl>
+        <div class="logpage__more">
+          <section>
+            <h3>Honors &amp; programs</h3>
+            <ul class="ticks">
+              <li>UMass Lowell Honors College</li>
+              <li>MLT Career Prep '27 Fellow</li>
+              <li>Juniper Scholars Fellow, Juniper Networks</li>
+              <li>SEO Career, Technology Track</li>
+              <li>Grow with Google Scholar</li>
+              <li>RSM Excellence Academy Scholar</li>
+              <li>NSBE Executive Board Senator</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Coursework</h3>
+            <ul class="ticks">
+              <li>Software Engineering I</li>
+              <li>Operating Systems</li>
+              <li>Organization of Programming Languages</li>
+            </ul>
+            <p class="logpage__sig">M. Murray<span>Captain, keeper of this log</span></p>
+          </section>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
 
-<!-- ======================= ABOUT ======================= -->
-<section class="section section--sunken section--tight section--scene" id="about">
-  <div class="scene scene--knot" data-scene="knot" aria-hidden="true"></div>
-  <div class="wrap">
-    <div class="section-head" data-reveal>
-      <span class="eyebrow">About</span>
-      <h2>Backend systems, automation, and the tooling that keeps them observable</h2>
-      <p>
-        I'm pursuing a B.S. in Computer Science at the University of Massachusetts Lowell,
-        graduating May 2027 as part of the Honors College. My interests sit
-        where backend development meets infrastructure — automation, systems integration,
-        and building tools that make complicated systems easier to understand.
-      </p>
-    </div>
-
-  </div>
-</section>
-
-<!-- ======================= EXPERIENCE ======================= -->
-<section class="section" id="experience">
-  <div class="wrap">
-    <div class="section-head" data-reveal>
-      <span class="eyebrow">Experience</span>
-      <h2>Where I've worked</h2>
-      <p>Three internships across financial services, professional services, and higher education.</p>
-    </div>
-
-    <div class="timeline">
-
-      <!-- Fidelity -->
-      <article class="tl-item" data-reveal>
-        <div class="tl-head">
-          <span class="tl-role">Software Engineer Intern</span>
-          <span class="tl-org">Fidelity Investments</span>
-          <span class="tl-date">Summer 2026</span>
-        </div>
-        <p class="tl-sub">Merrimack, NH</p>
-        <ul class="bullets">
-          <li>Developed a full-stack Kubernetes observability experience using React, TypeScript, Grafana Scenes, Prometheus, OpenSearch and Kubernetes APIs, consolidating infrastructure health, configuration and operational insights across 9 Kubernetes resource types.</li>
-          <li>Built 16 telemetry-driven dashboards for pod-level performance analysis, surfacing CPU, memory, storage, network, restart and container health metrics, validated against Datadog.</li>
-          <li>Enhanced developer productivity with 6+ advanced exploration capabilities including semantic search, favorites, hierarchical resource grouping, YAML manifest inspection, Kubernetes event visualization and comparative pod analysis, reducing the time needed to diagnose distributed system issues.</li>
+      <div class="board" aria-labelledby="board-h">
+        <h3 id="board-h" class="board__title">Bounty board <span>the numbers behind the work</span></h3>
+        <ul class="board__grid">
+          <li class="board__item spot" data-tilt="5"><b><span data-count="9">9</span></b><span>Kubernetes resource types in one observability view</span><small>Fidelity Investments</small></li>
+          <li class="board__item spot" data-tilt="5"><b><span data-count="16">16</span></b><span>telemetry dashboards for pod-level performance</span><small>Fidelity Investments</small></li>
+          <li class="board__item spot" data-tilt="5"><b><span data-count="500" data-suffix="+">500+</span></b><span>employees on the support systems I optimized</span><small>RSM US LLP</small></li>
+          <li class="board__item spot" data-tilt="5"><b><span data-count="30" data-suffix="%">30%</span></b><span>fewer manual input errors in client onboarding</span><small>RSM US LLP</small></li>
         </ul>
-        <ul class="tags" style="margin-top:.9rem">
-          <li class="tag tag--brand">Kubernetes</li>
-          <li class="tag tag--brand">React</li>
-          <li class="tag tag--brand">TypeScript</li>
-          <li class="tag tag--brand">Grafana Scenes</li>
-          <li class="tag">OpenTelemetry</li>
-          <li class="tag">Prometheus</li>
-          <li class="tag">Docker</li>
-          <li class="tag">AWS EKS</li>
-        </ul>
-      </article>
+      </div>
+    </section>
 
-      <!-- RSM -->
-      <article class="tl-item" data-reveal>
-        <div class="tl-head">
-          <span class="tl-role">Information Technology Intern</span>
-          <span class="tl-org">RSM US LLP</span>
-          <span class="tl-date">Summer 2025</span>
-        </div>
-        <p class="tl-sub">Minneapolis, MN</p>
-        <ul class="bullets">
-          <li>Collaborated with a cross-functional team to integrate AI tools into client-facing systems, improving data processing efficiency and reducing client response times, and helped implement machine learning models that streamlined repetitive client service tasks.</li>
-          <li>Developed and optimized backend code for internal support systems used by over 500 employees, improving the ticket resolution process and cutting support handling time.</li>
-          <li>Participated in deploying AI-powered automation in client onboarding platforms, increasing onboarding speed and reducing manual input errors by 30%.</li>
-        </ul>
-        <ul class="tags" style="margin-top:.9rem">
-          <li class="tag">C#</li>
-          <li class="tag">Visual Studio 2022</li>
-          <li class="tag">Azure DevOps</li>
-          <li class="tag">AI automation</li>
-        </ul>
-      </article>
+    <!-- Experience -->
+    <section class="sea" id="experience" aria-labelledby="exp-h">
+      <header class="sea__head sea__head--right" style="position:relative">
+        <p class="region">The Grand Line</p>
+        <h2 id="exp-h" class="split">Where I've worked</h2>
+        <p class="lede">Three internships across financial services, professional services, and higher education.</p>
+        <span class="pin" aria-hidden="true"></span>
+      </header>
 
-      <!-- UML Data Management -->
-      <article class="tl-item" data-reveal>
-        <div class="tl-head">
-          <span class="tl-role">Data Management Intern</span>
-          <span class="tl-org">University of Massachusetts Lowell</span>
-          <span class="tl-date">Spring 2025</span>
-        </div>
-        <p class="tl-sub">Lowell, MA</p>
-        <ul class="bullets">
-          <li>Collaborated with university staff to support database development projects, gaining hands-on experience improving data accessibility across departments.</li>
-          <li>Worked with Salesforce and Microsoft 365 records to reduce redundancies and strengthen reporting accuracy, applying data management best practices learned from mentors.</li>
-          <li>Learned how different teams rely on shared data systems, deepening understanding of how effective database structures support decision-making across the university.</li>
-        </ul>
-        <ul class="tags" style="margin-top:.9rem">
-          <li class="tag">Salesforce</li>
-          <li class="tag">Microsoft 365</li>
-          <li class="tag">SQL</li>
-        </ul>
-      </article>
+      <ol class="islands">
+        <li class="isle" data-side="left">
+          <div class="isle__art" data-seed="11" data-flag="exp"><span class="pin" aria-hidden="true"></span><span class="isle__name" aria-hidden="true">Merrimack</span></div>
+          <article class="log" id="isle-fidelity" aria-labelledby="fid-h">
+            <h3 id="fid-h">Software Engineer Intern</h3>
+            <p class="log__org">Fidelity Investments</p>
+            <p class="log__meta">Summer 2026, Merrimack, NH</p>
+            <p class="log__coords" aria-label="Coordinates for Merrimack, NH">42.87° N, 71.49° W</p>
+            <p class="log__summary">Built a Kubernetes observability experience that brings cluster health, configuration and pod performance into one place.</p>
+            <div class="reveal readout"><div><ul aria-label="Impact">
+              <li>9 resource types</li><li>16 dashboards</li><li>6+ exploration tools</li><li>Validated against Datadog</li>
+            </ul></div></div>
+            <div class="reveal detail" id="fid-detail"><div>
+              <ul class="points">
+                <li>Developed a full-stack Kubernetes observability experience using React, TypeScript, Grafana Scenes, Prometheus, OpenSearch and Kubernetes APIs, consolidating infrastructure health, configuration and operational insights across <span class="metric">9 Kubernetes resource types</span>.</li>
+                <li>Built <span class="metric">16 telemetry-driven dashboards</span> for pod-level performance analysis, surfacing CPU, memory, storage, network, restart and container health metrics, validated against Datadog.</li>
+                <li>Enhanced developer productivity with <span class="metric">6+ advanced exploration capabilities</span> including semantic search, favorites, hierarchical resource grouping, YAML manifest inspection, Kubernetes event visualization and comparative pod analysis, reducing the time needed to diagnose distributed system issues.</li>
+              </ul>
+              <ul class="stack" aria-label="Tech stack"><li>Kubernetes</li><li>React</li><li>TypeScript</li><li>Grafana Scenes</li><li>OpenTelemetry</li><li>Prometheus</li><li>Docker</li><li>AWS EKS</li></ul>
+            </div></div>
+            <button class="harden" type="button" aria-expanded="false" aria-controls="fid-detail"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1l6 2.4v4.3c0 3.4-2.6 6.2-6 7.3-3.4-1.1-6-3.9-6-7.3V3.4z" fill="currentColor"/></svg><span>Harden for detail</span></button>
+          </article>
+        </li>
 
-    </div>
-  </div>
-</section>
+        <li class="isle" data-side="right">
+          <div class="isle__art" data-seed="27" data-flag="exp"><span class="pin" aria-hidden="true"></span><span class="isle__name" aria-hidden="true">Minneapolis</span></div>
+          <article class="log" id="isle-rsm" aria-labelledby="rsm-h">
+            <h3 id="rsm-h">Information Technology Intern</h3>
+            <p class="log__org">RSM US LLP</p>
+            <p class="log__meta">Summer 2025, Minneapolis, MN</p>
+            <p class="log__coords" aria-label="Coordinates for Minneapolis, MN">44.98° N, 93.27° W</p>
+            <p class="log__summary">Brought AI automation into client onboarding and support systems, and improved backend code behind internal support tools.</p>
+            <div class="reveal readout"><div><ul aria-label="Impact">
+              <li>500+ employees served</li><li>30% fewer manual input errors</li>
+            </ul></div></div>
+            <div class="reveal detail" id="rsm-detail"><div>
+              <ul class="points">
+                <li>Collaborated with a cross-functional team to integrate AI tools into client-facing systems, improving data processing efficiency and reducing client response times, and helped implement machine learning models that streamlined repetitive client service tasks.</li>
+                <li>Developed and optimized backend code for internal support systems used by <span class="metric">over 500 employees</span>, improving the ticket resolution process and cutting support handling time.</li>
+                <li>Participated in deploying AI-powered automation in client onboarding platforms, increasing onboarding speed and reducing manual input errors by <span class="metric">30%</span>.</li>
+              </ul>
+              <ul class="stack" aria-label="Tech stack"><li>C#</li><li>Visual Studio 2022</li><li>Azure DevOps</li><li>AI automation</li></ul>
+            </div></div>
+            <button class="harden" type="button" aria-expanded="false" aria-controls="rsm-detail"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1l6 2.4v4.3c0 3.4-2.6 6.2-6 7.3-3.4-1.1-6-3.9-6-7.3V3.4z" fill="currentColor"/></svg><span>Harden for detail</span></button>
+          </article>
+        </li>
 
-<!-- ======================= PROJECTS ======================= -->
-<section class="section section--sunken section--scene" id="projects">
-  <div class="scene scene--lattice" data-scene="lattice" aria-hidden="true"></div>
-  <div class="wrap">
-    <div class="section-head" data-reveal>
-      <span class="eyebrow">Projects</span>
-      <h2>Things I've built</h2>
-      <p>Personal projects where I get to choose the whole stack.</p>
-    </div>
+        <li class="isle" data-side="left">
+          <div class="isle__art" data-seed="43" data-flag="exp"><span class="pin" aria-hidden="true"></span><span class="isle__name" aria-hidden="true">Lowell</span></div>
+          <article class="log" id="isle-uml" aria-labelledby="uml-h">
+            <h3 id="uml-h">Data Management Intern</h3>
+            <p class="log__org">University of Massachusetts Lowell</p>
+            <p class="log__meta">Spring 2025, Lowell, MA</p>
+            <p class="log__coords" aria-label="Coordinates for Lowell, MA">42.65° N, 71.32° W</p>
+            <p class="log__summary">Cleaned up Salesforce and Microsoft 365 records to make university data easier to find and more accurate to report on.</p>
+            <div class="reveal readout"><div>
+              <p>What it taught me: how teams across a university depend on shared data systems to make decisions.</p>
+            </div></div>
+            <div class="reveal detail" id="uml-detail"><div>
+              <ul class="points">
+                <li>Collaborated with university staff to support database development projects, gaining hands-on experience improving data accessibility across departments.</li>
+                <li>Worked with Salesforce and Microsoft 365 records to reduce redundancies and strengthen reporting accuracy, applying data management best practices learned from mentors.</li>
+                <li>Learned how different teams rely on shared data systems, deepening understanding of how effective database structures support decision-making across the university.</li>
+              </ul>
+              <ul class="stack" aria-label="Tech stack"><li>Salesforce</li><li>Microsoft 365</li><li>SQL</li></ul>
+            </div></div>
+            <button class="harden" type="button" aria-expanded="false" aria-controls="uml-detail"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1l6 2.4v4.3c0 3.4-2.6 6.2-6 7.3-3.4-1.1-6-3.9-6-7.3V3.4z" fill="currentColor"/></svg><span>Harden for detail</span></button>
+          </article>
+        </li>
+      </ol>
+    </section>
 
+    <!-- Projects -->
+    <section class="sea" id="projects" aria-labelledby="proj-h">
+      <header class="sea__head sea__head--left" style="position:relative">
+        <p class="region">Islands I built</p>
+        <h2 id="proj-h" class="split">Things I've built</h2>
+        <p class="lede">Personal projects where I get to choose the whole stack.</p>
+        <span class="pin" aria-hidden="true"></span>
+      </header>
 
-    <div class="feature-stack">
-
-      <article class="card card--feature" data-reveal>
-        <div class="card--feature__text">
-          <div class="card__icon" aria-hidden="true">📅</div>
-          <span class="card__meta">Sep 2026 &ndash; Present</span>
-          <h3>Homework Tracker Extension</h3>
-          <p>
-            A Chrome extension that brings Canvas assignments to life. It syncs automatically the moment
-            you submit work, so there&rsquo;s no manual refresh, and lays every due date, exam and deadline
-            out on an interactive calendar with day-by-day detail views and custom notes.
-          </p>
-          <ul class="bullets">
-            <li>Built on Manifest V3 with a background service worker that detects Canvas activity in real time and syncs on a user-chosen interval.</li>
-            <li>Color-codes each day by urgency and tracks completion across all enrolled classes with a progress ring.</li>
-            <li>Light and dark themes, plus a side-panel mode so it stays open while you work.</li>
-          </ul>
-          <ul class="tags">
-            <li class="tag tag--accent">JavaScript</li>
-            <li class="tag tag--accent">Chrome MV3</li>
-            <li class="tag">Service Workers</li>
-            <li class="tag">Canvas API</li>
-          </ul>
-        </div>
-
-        <div class="carousel carousel--wide" data-carousel role="region" aria-roledescription="carousel" aria-label="Homework Tracker screenshots">
-          <div class="carousel__viewport">
-            <div class="carousel__track">
-            <figure class="carousel__slide" role="group" aria-roledescription="slide" aria-label="1 of 5: Calendar">
-              <div class="carousel__frame">
-                <img src="assets/projects/hw-1-calendar.webp" width="800" height="378" alt="Homework Tracker month calendar with color-coded status dots on each day" loading="lazy" decoding="async" />
+      <ol class="islands">
+        <li class="isle" data-side="right">
+          <div class="isle__art" data-seed="58" data-flag="proj"><span class="pin" aria-hidden="true"></span></div>
+          <article class="log" id="isle-homework" aria-labelledby="hw-h">
+            <h3 id="hw-h">Homework Tracker Extension</h3>
+            <p class="log__meta">Sep 2026 to present</p>
+            <p class="log__summary">A Chrome extension that brings Canvas assignments to life. It syncs automatically the moment you submit work, so there's no manual refresh, and lays every due date, exam and deadline out on an interactive calendar with day-by-day detail views and custom notes.</p>
+            <div class="reveal readout"><div><ul aria-label="Impact">
+              <li>Real-time Canvas sync</li><li>5 views</li><li>Every enrolled class tracked</li>
+            </ul></div></div>
+            <div class="spy">
+              <div class="spy__strip" tabindex="0" aria-label="Homework Tracker screenshots, scroll sideways">
+                <figure><img loading="lazy" src="assets/projects/hw-1-calendar.webp" alt="Homework Tracker month calendar with color-coded status dots on each day"><figcaption><b>Calendar.</b> A month grid with per-day status dots: red for overdue, amber for due within three days, green for completed.</figcaption></figure>
+                <figure><img loading="lazy" src="assets/projects/hw-2-alerts-notes.webp" alt="Homework Tracker day-detail panel showing assignments, notes and reminders"><figcaption><b>Alerts &amp; notes.</b> Clicking a day opens that date's assignments, custom notes and optional reminders.</figcaption></figure>
+                <figure><img loading="lazy" src="assets/projects/hw-3-announcements.webp" alt="Homework Tracker view listing university academic announcements"><figcaption><b>Announcements.</b> Academic announcements for your university, surfaced alongside your deadlines.</figcaption></figure>
+                <figure><img loading="lazy" src="assets/projects/hw-4-sort-by-class.webp" alt="Homework Tracker assignments grouped by class"><figcaption><b>Sort by class.</b> A per-course view of each class's assignments and their status.</figcaption></figure>
+                <figure><img loading="lazy" src="assets/projects/hw-5-agenda.webp" alt="Homework Tracker agenda list of upcoming assignments"><figcaption><b>Agenda.</b> A chronological list of everything due, color-coded by urgency.</figcaption></figure>
               </div>
-              <figcaption><strong>Calendar</strong> Month grid with per-day status dots: red for overdue, amber for due within three days, green for completed.</figcaption>
-            </figure>
-            <figure class="carousel__slide" role="group" aria-roledescription="slide" aria-label="2 of 5: Alerts &amp; notes">
-              <div class="carousel__frame">
-                <img src="assets/projects/hw-2-alerts-notes.webp" width="800" height="375" alt="Homework Tracker day-detail panel showing assignments, notes and reminders" loading="lazy" decoding="async" />
-              </div>
-              <figcaption><strong>Alerts &amp; notes</strong> Clicking a day opens a detail panel with that date&rsquo;s assignments, custom notes and optional reminders.</figcaption>
-            </figure>
-            <figure class="carousel__slide" role="group" aria-roledescription="slide" aria-label="3 of 5: Announcements">
-              <div class="carousel__frame">
-                <img src="assets/projects/hw-3-announcements.webp" width="800" height="375" alt="Homework Tracker view listing university academic announcements" loading="lazy" decoding="async" />
-              </div>
-              <figcaption><strong>Announcements</strong> Academic announcements for your university, surfaced alongside your deadlines.</figcaption>
-            </figure>
-            <figure class="carousel__slide" role="group" aria-roledescription="slide" aria-label="4 of 5: Sort by class">
-              <div class="carousel__frame">
-                <img src="assets/projects/hw-4-sort-by-class.webp" width="800" height="378" alt="Homework Tracker assignments grouped by class" loading="lazy" decoding="async" />
-              </div>
-              <figcaption><strong>Sort by class</strong> Switch to a per-course view to see each class&rsquo;s assignments and their status on their own.</figcaption>
-            </figure>
-            <figure class="carousel__slide" role="group" aria-roledescription="slide" aria-label="5 of 5: Agenda">
-              <div class="carousel__frame">
-                <img src="assets/projects/hw-5-agenda.webp" width="800" height="380" alt="Homework Tracker agenda list of upcoming assignments" loading="lazy" decoding="async" />
-              </div>
-              <figcaption><strong>Agenda</strong> A chronological agenda of everything due, color-coded by urgency.</figcaption>
-            </figure>
             </div>
-          </div>
-          <div class="carousel__controls">
-            <button class="carousel__btn" type="button" data-dir="-1" aria-label="Previous photo">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
-            </button>
-            <p class="carousel__count" aria-live="polite"><span data-current>1</span> / 5</p>
-            <button class="carousel__btn" type="button" data-dir="1" aria-label="Next photo">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
-            </button>
-          </div>
-        </div>
-      </article>
+            <div class="reveal detail" id="hw-detail"><div>
+              <ul class="points">
+                <li>Built on Manifest V3 with a background service worker that detects Canvas activity in real time and syncs on a user-chosen interval.</li>
+                <li>Color-codes each day by urgency and tracks completion across all enrolled classes with a progress ring.</li>
+                <li>Light and dark themes, plus a side-panel mode so it stays open while you work.</li>
+              </ul>
+              <ul class="stack" aria-label="Tech stack"><li>JavaScript</li><li>Chrome MV3</li><li>Service Workers</li><li>Canvas API</li></ul>
+            </div></div>
+            <button class="harden" type="button" aria-expanded="false" aria-controls="hw-detail"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1l6 2.4v4.3c0 3.4-2.6 6.2-6 7.3-3.4-1.1-6-3.9-6-7.3V3.4z" fill="currentColor"/></svg><span>Harden for detail</span></button>
+          </article>
+        </li>
 
-      <article class="card card--feature" data-reveal>
-        <div class="card--feature__text">
-          <div class="card__icon" aria-hidden="true">📱</div>
-          <span class="card__meta">Jun &ndash; Dec 2025</span>
-          <h3>Cryptocurrency Investment App</h3>
-          <p>
-            A multi-tab mobile app built in Flutter with five working screens &mdash; Dashboard, Invest,
-            News, Learn and Settings.
-          </p>
-          <ul class="bullets">
-            <li>Persistent Settings tab using SharedPreferences, so toggles and dropdown choices survive app restarts.</li>
-            <li>Custom login screen with a frosted-glass UI and animated slide-up transitions.</li>
-            <li>Tracked down and fixed navigation bugs so all five tabs render correctly in the bottom navigation bar.</li>
-          </ul>
-          <ul class="tags">
-            <li class="tag tag--accent">Dart</li>
-            <li class="tag tag--accent">Flutter</li>
-            <li class="tag">Mobile</li>
-            <li class="tag">SharedPreferences</li>
-          </ul>
-          <p class="card__note">Sample screens &mdash; some values shown are placeholders.</p>
-        </div>
-
-        <div class="carousel carousel--phone" data-carousel role="region" aria-roledescription="carousel" aria-label="Crypto app screenshots">
-          <div class="carousel__viewport">
-            <div class="carousel__track">
-            <figure class="carousel__slide" role="group" aria-roledescription="slide" aria-label="1 of 5: Dashboard">
-              <div class="carousel__frame">
-                <img src="assets/projects/crypto-1-dashboard.webp" width="374" height="835" alt="Crypto app dashboard screen showing a portfolio balance and holdings" loading="lazy" decoding="async" />
+        <li class="isle" data-side="left">
+          <div class="isle__art" data-seed="71" data-flag="proj"><span class="pin" aria-hidden="true"></span></div>
+          <article class="log" id="isle-crypto" aria-labelledby="cr-h">
+            <h3 id="cr-h">Cryptocurrency Investment App</h3>
+            <p class="log__meta">Jun to Dec 2025</p>
+            <p class="log__summary">A multi-tab mobile app built in Flutter with five working screens: Dashboard, Invest, News, Learn and Settings.</p>
+            <div class="reveal readout"><div><ul aria-label="Impact">
+              <li>5 working screens</li><li>Settings survive restarts</li>
+            </ul></div></div>
+            <div class="spy">
+              <div class="spy__strip" tabindex="0" aria-label="Crypto app screenshots, scroll sideways">
+                <figure><img loading="lazy" src="assets/projects/crypto-1-dashboard.webp" alt="Crypto app dashboard screen showing a portfolio balance and holdings"><figcaption><b>Dashboard.</b> Personal and global insights, currency holdings and total balance.</figcaption></figure>
+                <figure><img loading="lazy" src="assets/projects/crypto-2-invest.webp" alt="Crypto app invest screen with a currency search"><figcaption><b>Invest.</b> Search to find and browse currencies.</figcaption></figure>
+                <figure><img loading="lazy" src="assets/projects/crypto-3-news.webp" alt="Crypto app news screen with a list of articles"><figcaption><b>News.</b> A feed that updates with current crypto news.</figcaption></figure>
+                <figure><img loading="lazy" src="assets/projects/crypto-4-learn.webp" alt="Crypto app learn screen with educational content"><figcaption><b>Learn.</b> Content users can review to learn more about crypto.</figcaption></figure>
+                <figure><img loading="lazy" src="assets/projects/crypto-5-settings.webp" alt="Crypto app settings screen with toggles and dropdowns"><figcaption><b>Settings.</b> Toggles and dropdowns that persist across restarts via SharedPreferences.</figcaption></figure>
               </div>
-              <figcaption><strong>Dashboard</strong> Portfolio with personal and global insights, currency holdings and total balance.</figcaption>
-            </figure>
-            <figure class="carousel__slide" role="group" aria-roledescription="slide" aria-label="2 of 5: Invest">
-              <div class="carousel__frame">
-                <img src="assets/projects/crypto-2-invest.webp" width="376" height="842" alt="Crypto app invest screen with a currency search" loading="lazy" decoding="async" />
-              </div>
-              <figcaption><strong>Invest</strong> Search to find and browse currencies.</figcaption>
-            </figure>
-            <figure class="carousel__slide" role="group" aria-roledescription="slide" aria-label="3 of 5: News">
-              <div class="carousel__frame">
-                <img src="assets/projects/crypto-3-news.webp" width="361" height="831" alt="Crypto app news screen with a list of articles" loading="lazy" decoding="async" />
-              </div>
-              <figcaption><strong>News</strong> A feed that updates with current crypto news.</figcaption>
-            </figure>
-            <figure class="carousel__slide" role="group" aria-roledescription="slide" aria-label="4 of 5: Learn">
-              <div class="carousel__frame">
-                <img src="assets/projects/crypto-4-learn.webp" width="361" height="839" alt="Crypto app learn screen with educational content" loading="lazy" decoding="async" />
-              </div>
-              <figcaption><strong>Learn</strong> Content users can review to learn more about crypto.</figcaption>
-            </figure>
-            <figure class="carousel__slide" role="group" aria-roledescription="slide" aria-label="5 of 5: Settings">
-              <div class="carousel__frame">
-                <img src="assets/projects/crypto-5-settings.webp" width="374" height="833" alt="Crypto app settings screen with toggles and dropdowns" loading="lazy" decoding="async" />
-              </div>
-              <figcaption><strong>Settings</strong> Toggles and dropdowns that persist across restarts via SharedPreferences.</figcaption>
-            </figure>
+              <p class="spy__note">Sample screens; some values shown are placeholders.</p>
             </div>
-          </div>
-          <div class="carousel__controls">
-            <button class="carousel__btn" type="button" data-dir="-1" aria-label="Previous photo">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
-            </button>
-            <p class="carousel__count" aria-live="polite"><span data-current>1</span> / 5</p>
-            <button class="carousel__btn" type="button" data-dir="1" aria-label="Next photo">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
-            </button>
-          </div>
+            <div class="reveal detail" id="cr-detail"><div>
+              <ul class="points">
+                <li>Persistent Settings tab using SharedPreferences, so toggles and dropdown choices survive app restarts.</li>
+                <li>Custom login screen with a frosted-glass UI and animated slide-up transitions.</li>
+                <li>Tracked down and fixed navigation bugs so all <span class="metric">five tabs</span> render correctly in the bottom navigation bar.</li>
+              </ul>
+              <ul class="stack" aria-label="Tech stack"><li>Dart</li><li>Flutter</li><li>Mobile</li><li>SharedPreferences</li></ul>
+            </div></div>
+            <button class="harden" type="button" aria-expanded="false" aria-controls="cr-detail"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1l6 2.4v4.3c0 3.4-2.6 6.2-6 7.3-3.4-1.1-6-3.9-6-7.3V3.4z" fill="currentColor"/></svg><span>Harden for detail</span></button>
+          </article>
+        </li>
+
+        <li class="isle" data-side="right">
+          <div class="isle__art" data-seed="86" data-flag="proj"><span class="pin" aria-hidden="true"></span></div>
+          <article class="log" id="isle-site" aria-labelledby="site-h">
+            <h3 id="site-h">Personal Portfolio Website</h3>
+            <p class="log__meta">Summer 2025, redesigned 2026</p>
+            <p class="log__summary">This site. Built from scratch with a custom CSS design system, day and night theming and scroll-driven animation, version-controlled with Git and deployed on GitHub Pages.</p>
+            <div class="reveal readout"><div><ul aria-label="Impact">
+              <li>No framework</li><li>No build step</li><li>Reduced motion respected</li>
+            </ul></div></div>
+            <div class="reveal detail" id="site-detail"><div>
+              <ul class="points">
+                <li>Every color, space and shadow is a design token, so the whole site re-skins from one block of CSS.</li>
+                <li>The route, the Going Merry, the devil fruits and the Haki controls are vanilla JavaScript and hand-drawn SVG, with no dependencies.</li>
+                <li>Motion ideas adapted from the Motion Primitives kit (Tilt, Spotlight, Border Trail, Magnetic, Text Effect), rewritten without React so the site stays build-free.</li>
+                <li>Button and divider backgrounds are SVGs generated in the style of Haikei: layered waves and blob scenes.</li>
+              </ul>
+              <ul class="stack" aria-label="Tech stack"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>GitHub Pages</li></ul>
+              <p style="margin-top:14px"><a class="inline" href="https://github.com/MMurr2x" target="_blank" rel="noopener">View on GitHub</a></p>
+            </div></div>
+            <button class="harden" type="button" aria-expanded="false" aria-controls="site-detail"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1l6 2.4v4.3c0 3.4-2.6 6.2-6 7.3-3.4-1.1-6-3.9-6-7.3V3.4z" fill="currentColor"/></svg><span>Harden for detail</span></button>
+          </article>
+        </li>
+
+        <li class="isle" data-side="left">
+          <div class="isle__art" data-seed="93" data-flag="proj"><span class="pin" aria-hidden="true"></span></div>
+          <article class="log" id="isle-qr" aria-labelledby="qr-h">
+            <h3 id="qr-h">QR Code Generator</h3>
+            <p class="log__meta">Fall 2024</p>
+            <p class="log__summary">A Python tool that converts links and images into custom QR codes, built to make sharing resources easier across platforms for both individuals and small businesses.</p>
+            <div class="reveal readout"><div><ul aria-label="Impact">
+              <li>Links and images in</li><li>Custom QR codes out</li>
+            </ul></div></div>
+            <div class="reveal detail" id="qr-detail"><div>
+              <ul class="points">
+                <li>Takes either a link or an image as input and produces a QR code you can download and share.</li>
+                <li>Aimed at people and small businesses who need a quick way to hand out a resource across platforms.</li>
+              </ul>
+              <ul class="stack" aria-label="Tech stack"><li>Python</li><li>PyCharm</li></ul>
+            </div></div>
+            <button class="harden" type="button" aria-expanded="false" aria-controls="qr-detail"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1l6 2.4v4.3c0 3.4-2.6 6.2-6 7.3-3.4-1.1-6-3.9-6-7.3V3.4z" fill="currentColor"/></svg><span>Harden for detail</span></button>
+          </article>
+        </li>
+      </ol>
+    </section>
+
+    <!-- Skills -->
+    <section class="sea" id="skills" aria-labelledby="skills-h">
+      <header class="sea__head sea__head--right" style="position:relative">
+        <p class="region">Devil fruit encyclopedia</p>
+        <h2 id="skills-h" class="split">Languages, tools, and coursework</h2>
+        <p class="legend">Every skill is a fruit. Paramecia are the languages I write, Zoan are the frameworks I shape things with, and Logia are the infrastructure I run on. Every fruit here is an original drawing. Hover, tap or focus one to read its power and where I've used it.</p>
+        <span class="pin" aria-hidden="true"></span>
+      </header>
+
+      <div class="orchard">
+        <section class="grove" aria-labelledby="g-para">
+          <h3 id="g-para">Paramecia – Languages</h3>
+          <p>Superhuman abilities that change what you can do. These are the languages I write in.</p>
+          <ul class="fruits" data-type="paramecia">
+            <li><button class="fruit" type="button" data-used="Coursework">C</button></li>
+            <li><button class="fruit" type="button" data-used="Coursework">C++</button></li>
+            <li><button class="fruit" type="button" data-used="QR Code Generator">Python</button></li>
+            <li><button class="fruit" type="button" data-used="Homework Tracker, this site">JavaScript</button></li>
+            <li><button class="fruit" type="button" data-used="Fidelity Investments">TypeScript</button></li>
+            <li><button class="fruit" type="button" data-used="UMass Lowell">SQL</button></li>
+          </ul>
+        </section>
+        <section class="grove" aria-labelledby="g-zoan">
+          <h3 id="g-zoan">Zoan – Frameworks &amp; libraries</h3>
+          <p>Transformations. The frameworks I reshape an idea with until it becomes a product.</p>
+          <ul class="fruits" data-type="zoan">
+            <li><button class="fruit" type="button" data-used="Fidelity Investments">React</button></li>
+            <li><button class="fruit" type="button" data-used="Fidelity Investments">Grafana Scenes</button></li>
+            <li><button class="fruit" type="button" data-used="Cryptocurrency Investment App">Flutter</button></li>
+            <li><button class="fruit" type="button" data-used="Data analysis coursework">Pandas</button></li>
+            <li><button class="fruit" type="button" data-used="Data analysis coursework">Matplotlib</button></li>
+          </ul>
+        </section>
+        <section class="grove" aria-labelledby="g-logia">
+          <h3 id="g-logia">Logia – Cloud &amp; infrastructure</h3>
+          <p>Elemental power. The infrastructure everything else runs on.</p>
+          <ul class="fruits" data-type="logia">
+            <li><button class="fruit" type="button" data-used="Fidelity Investments">Kubernetes</button></li>
+            <li><button class="fruit" type="button" data-used="Fidelity Investments">Docker</button></li>
+            <li><button class="fruit" type="button" data-used="Fidelity Investments">AWS EKS</button></li>
+            <li><button class="fruit" type="button" data-used="Fidelity Investments">OpenTelemetry</button></li>
+          </ul>
+        </section>
+        <div class="instruments">
+          <section aria-labelledby="g-tools">
+            <h3 id="g-tools">Ship's instruments – Tools</h3>
+            <ul><li>Git</li><li>GitHub</li><li>Git Bash</li><li>Azure DevOps</li><li>VS Code</li></ul>
+          </section>
+          <section aria-labelledby="g-course">
+            <h3 id="g-course">Training – Coursework</h3>
+            <ul><li>Software Engineering I</li><li>Operating Systems</li><li>Organization of Programming Languages</li></ul>
+          </section>
         </div>
-      </article>
+      </div>
+    </section>
 
-    </div>
+    <!-- Leadership -->
+    <section class="sea" id="leadership" aria-labelledby="lead-h">
+      <header class="sea__head sea__head--left" style="position:relative">
+        <p class="region">Alliances</p>
+        <h2 id="lead-h" class="split">Communities I build with</h2>
+        <p class="lede">Selective fellowships, campus leadership, and the organizations where I mentor and get mentored.</p>
+        <span class="pin" aria-hidden="true"></span>
+      </header>
+      <ul class="flags">
+        <li class="flag spot" data-tilt="4" style="--band:#e8a93e">
+          <h3>National Society of Black Engineers</h3>
+          <p class="flag__when">Senator, Oct 2023 to present</p>
+          <p>I serve as a Senator for NSBE at UMass Lowell.</p>
+          <ul class="flag__list">
+            <li>Lead general body meetings and information sessions with companies including Red Hat, Liberty Mutual and Teradyne.</li>
+            <li>Organize regional and national conference involvement for chapter members.</li>
+            <li>Run study groups and share resources across the chapter.</li>
+            <li>Support peers with résumé review and interview preparation, and connect students to tutoring and internship opportunities.</li>
+          </ul>
+        </li>
+        <li class="flag spot" data-tilt="4" style="--band:#d24a4a">
+          <h3>MLT Career Prep '27 Fellow</h3>
+          <p class="flag__when">Aug 2025 to present</p>
+          <p>Management Leadership for Tomorrow's Career Prep fellowship: extensive leadership development, career navigation and personal branding through one-on-one coaching, workshops and corporate partner events, plus case studies and mock interviews with top-tier firms.</p>
+        </li>
+        <li class="flag spot" data-tilt="4" style="--band:#3f8f5a">
+          <h3>Juniper Scholars Fellow</h3>
+          <p class="flag__when">Sep 2024 to present</p>
+          <p>A competitive fellowship with Juniper Networks focused on academic and professional development for underrepresented students in tech, including mentoring sessions with Juniper engineers and workshops on technical and leadership skills.</p>
+        </li>
+        <li class="flag spot" data-tilt="4" style="--band:#2f7fb0">
+          <h3>SEO Career, Technology Track</h3>
+          <p class="flag__when">Jul 2024 to Jun 2025</p>
+          <p>Sponsors for Educational Opportunity's Finance, Corporate &amp; Technology program: industry-specific training in technical skills and business fundamentals, one-on-one coaching, and webinars and panels on corporate technology roles.</p>
+        </li>
+        <li class="flag spot" data-tilt="4" style="--band:#8a6bd1">
+          <h3>Grow with Google Scholar</h3>
+          <p class="flag__when">Jul 2025</p>
+          <p>Training in data analytics, résumé building, interview preparation and personal branding through curated Google and Coursera pathways, with a project portfolio demonstrating proficiency in digital tools.</p>
+        </li>
+        <li class="flag spot" data-tilt="4" style="--band:#5b5670">
+          <h3>Campus communities</h3>
+          <p class="flag__when">UMass Lowell</p>
+          <ul class="flag__list">
+            <li><b>Black Student Union</b> – events celebrating Black history, culture and identity on campus.</li>
+            <li><b>Society of Caribbean Ancestry</b> – cultural showcases and Caribbean Week programming.</li>
+            <li><b>Association of Students of African Origin</b> – leadership forums and mentoring first-year STEM students.</li>
+            <li><b>Competitive Programming Club</b> – weekly coding challenges and intro-to-LeetCode sessions for new members.</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
 
-    <div class="grid grid--2" style="margin-top:1.25rem">
+    <!-- Résumé -->
+    <section class="sea" id="resume" aria-labelledby="res-h">
+      <header class="sea__head sea__head--right" style="position:relative">
+        <p class="region">Vivre card</p>
+        <h2 id="res-h" class="split">The one-page version</h2>
+        <p class="lede">This card always points back to me. Read it below or download the PDF.</p>
+        <span class="pin" aria-hidden="true"></span>
+      </header>
+      <div class="vivre">
+        <div class="vivre__frame trail">
+          <iframe src="Mayne%20Murray%20Internship%20Resume.pdf#view=FitH" title="Mayne Murray résumé (PDF)" loading="lazy"></iframe>
+        </div>
+        <div class="vivre__card" data-tilt="5">
+          <svg class="vivre__burn" viewBox="0 0 60 60" aria-hidden="true"><path d="M30 4c9 9 22 14 22 30a22 22 0 0 1-44 0C8 20 21 15 30 4z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M30 20c4 5 10 8 10 15a10 10 0 0 1-20 0c0-7 6-10 10-15z" fill="currentColor" opacity=".55"/></svg>
+          <p class="vivre__kicker">Vivre card</p>
+          <h3>Mayne Murray</h3>
+          <p>B.S. Computer Science, UMass Lowell Honors College, May 2027.</p>
+          <ul class="vivre__facts">
+            <li>Software Engineer Intern, Fidelity Investments, Summer 2026</li>
+            <li>Information Technology Intern, RSM US LLP, Summer 2025</li>
+            <li>NSBE Executive Board Senator</li>
+          </ul>
+          <a class="btn btn--sail magnetic" href="Mayne%20Murray%20Internship%20Resume.pdf" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>Download PDF</a>
+          <a class="btn btn--parch magnetic" href="Mayne%20Murray%20Internship%20Resume.pdf" target="_blank" rel="noopener">Open in a new tab</a>
+        </div>
+      </div>
+    </section>
 
-      <article class="card card--tilt" data-reveal>
-        <div class="card__icon" aria-hidden="true">🌐</div>
-        <span class="card__meta">Summer 2025</span>
-        <h3>Personal Portfolio Website</h3>
-        <p>
-          This site. A responsive, accessible portfolio built from scratch with a custom CSS
-          design system, dark/light theming, scroll-driven animation, and a scrollspy navigation.
-          Version-controlled with Git and deployed on GitHub Pages.
-        </p>
-        <ul class="tags" style="margin-top:1rem">
-          <li class="tag tag--accent">HTML</li>
-          <li class="tag tag--accent">CSS</li>
-          <li class="tag tag--accent">JavaScript</li>
-          <li class="tag">GitHub Pages</li>
+    <!-- Recruit band -->
+    <section class="recruit" aria-labelledby="recruit-h">
+      <div class="recruit__in trail">
+        <p class="region">Now recruiting</p>
+        <h2 id="recruit-h">Looking for a software engineer for your crew?</h2>
+        <p>I'm open to 2027 software engineering roles and internships, especially backend, platform and observability work.</p>
+        <div class="recruit__actions">
+          <a class="btn btn--sail magnetic" href="mailto:maynemurray@gmail.com">Send a message</a>
+          <a class="btn btn--sea magnetic" href="Mayne%20Murray%20Internship%20Resume.pdf" download>Download résumé</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="sea" id="contact" aria-labelledby="con-h">
+      <header class="sea__head sea__head--left">
+        <p class="region">Final island</p>
+        <h2 id="con-h" class="split">Let's talk</h2>
+        <p class="lede">Recruiting, collaborating, or comparing notes on observability tooling, I'd like to hear from you.</p>
+      </header>
+      <div class="treasure">
+        <ul class="ports">
+          <li class="port">
+            <a href="mailto:maynemurray@gmail.com"><span class="port__label">Email</span><span class="port__value">maynemurray@gmail.com</span></a>
+            <button class="copy" type="button" data-copy="maynemurray@gmail.com" data-done="Email copied" aria-label="Copy email address">Copy</button>
+          </li>
+          <li class="port">
+            <a href="https://www.linkedin.com/in/mayne-murray/" target="_blank" rel="noopener"><span class="port__label">LinkedIn</span><span class="port__value">Mayne Murray</span></a>
+          </li>
+          <li class="port">
+            <a href="https://github.com/MMurr2x" target="_blank" rel="noopener"><span class="port__label">GitHub</span><span class="port__value">MMurr2x</span></a>
+          </li>
+          <li class="port">
+            <a href="tel:+16177497436"><span class="port__label">Phone</span><span class="port__value">(617) 749-7436</span></a>
+            <button class="copy" type="button" data-copy="(617) 749-7436" data-done="Phone number copied" aria-label="Copy phone number">Copy</button>
+          </li>
         </ul>
-        <p style="margin-top:1rem">
-          <a class="btn btn--ghost btn--sm" href="https://github.com/MMurr2x" target="_blank" rel="noopener">View on GitHub →</a>
-        </p>
-      </article>
-
-      <article class="card card--tilt" data-reveal>
-        <div class="card__icon" aria-hidden="true">📷</div>
-        <span class="card__meta">Fall 2024</span>
-        <h3>QR Code Generator</h3>
-        <p>
-          A Python tool that converts links and images into custom QR codes, built to make
-          sharing resources easier across platforms for both individuals and small businesses.
-        </p>
-        <ul class="tags" style="margin-top:1rem">
-          <li class="tag tag--accent">Python</li>
-          <li class="tag">PyCharm</li>
-        </ul>
-      </article>
-
-    </div>
+        <div class="xmark" data-seed="104">
+          <span class="pin" aria-hidden="true"></span>
+        </div>
+      </div>
+    </section>
   </div>
-</section>
 
-<!-- ======================= SKILLS ======================= -->
-<section class="section" id="skills">
-  <div class="wrap">
-    <div class="section-head" data-reveal>
-      <span class="eyebrow">Toolkit</span>
-      <h2>Languages, Tools, and Coursework</h2>
+  <footer class="footer">
+    <div class="footer__row">
+      <p>© 2026 Mayne Murray. Built from scratch with HTML, CSS and JavaScript.</p>
+      <p><a href="https://github.com/MMurr2x" target="_blank" rel="noopener">GitHub</a> &nbsp; <a href="#top">Sail back to the start</a></p>
     </div>
-
-    <div class="grid grid--2">
-
-      <article class="card card--tilt skill-group" data-reveal>
-        <h3>Languages</h3>
-        <ul class="tags">
-          <li class="tag tag--brand">C</li>
-          <li class="tag tag--brand">C++</li>
-          <li class="tag tag--brand">Python</li>
-          <li class="tag tag--brand">JavaScript</li>
-          <li class="tag tag--brand">TypeScript</li>
-          <li class="tag tag--brand">SQL</li>
-        </ul>
-      </article>
-
-      <article class="card card--tilt skill-group" data-reveal>
-        <h3>Frameworks &amp; libraries</h3>
-        <ul class="tags">
-          <li class="tag tag--accent">React</li>
-          <li class="tag tag--accent">Grafana Scenes</li>
-          <li class="tag tag--accent">Flutter</li>
-          <li class="tag">Pandas</li>
-          <li class="tag">Matplotlib</li>
-        </ul>
-      </article>
-
-      <article class="card card--tilt skill-group" data-reveal>
-        <h3>Cloud &amp; infrastructure</h3>
-        <ul class="tags">
-          <li class="tag tag--accent">Kubernetes</li>
-          <li class="tag tag--accent">Docker</li>
-          <li class="tag tag--accent">AWS EKS</li>
-          <li class="tag tag--accent">OpenTelemetry</li>
-        </ul>
-      </article>
-
-      <article class="card card--tilt skill-group" data-reveal>
-        <h3>Tools</h3>
-        <ul class="tags">
-          <li class="tag">Git</li>
-          <li class="tag">GitHub</li>
-          <li class="tag">Git Bash</li>
-          <li class="tag">Azure DevOps</li>
-          <li class="tag">VS Code</li>
-        </ul>
-      </article>
-
-      <article class="card card--tilt skill-group" data-reveal>
-        <h3>Relevant coursework</h3>
-        <ul class="tags">
-          <li class="tag">Software Engineering I</li>
-          <li class="tag">Operating Systems</li>
-          <li class="tag">Organization of Programming Languages</li>
-        </ul>
-      </article>
-
-    </div>
-  </div>
-</section>
-
-<!-- ======================= LEADERSHIP ======================= -->
-<section class="section section--sunken" id="leadership">
-  <div class="wrap">
-    <div class="section-head" data-reveal>
-      <span class="eyebrow">Leadership &amp; programs</span>
-      <h2>Communities I build with</h2>
-      <p>Selective fellowships, campus leadership, and the organizations where I mentor and get mentored.</p>
-    </div>
-
-    <div class="grid grid--2">
-
-      <article class="card card--tilt" data-reveal>
-        <div class="card__icon" aria-hidden="true">⚙️</div>
-        <span class="card__meta">Oct 2023 — Present</span>
-        <h3>National Society of Black Engineers</h3>
-        <p>
-          I serve as a Senator for the National Society of Black Engineers at UMass Lowell. I lead
-          general body meetings and information sessions with companies including Red Hat, Liberty
-          Mutual, and Teradyne, organize regional and national conference involvement, run study
-          groups, and support peers with resume review and interview prep.
-        </p>
-      </article>
-
-      <article class="card card--tilt" data-reveal>
-        <div class="card__icon" aria-hidden="true">🏆</div>
-        <span class="card__meta">Aug 2025 — Present</span>
-        <h3>MLT Career Prep '27 Fellow</h3>
-        <p>
-          Management Leadership for Tomorrow's Career Prep fellowship: extensive leadership
-          development, career navigation, and personal branding through one-on-one coaching,
-          workshops, and corporate partner events, plus case studies and mock interviews.
-        </p>
-      </article>
-
-      <article class="card card--tilt" data-reveal>
-        <div class="card__icon" aria-hidden="true">🌲</div>
-        <span class="card__meta">Sep 2024 — Present</span>
-        <h3>Juniper Scholars Fellow</h3>
-        <p>
-          A competitive fellowship with Juniper Networks focused on academic and professional
-          development for underrepresented students in tech — mentoring sessions with Juniper
-          engineers and workshops on technical and leadership skills.
-        </p>
-      </article>
-
-      <article class="card card--tilt" data-reveal>
-        <div class="card__icon" aria-hidden="true">📊</div>
-        <span class="card__meta">Jul 2024 — Jun 2025</span>
-        <h3>SEO Career — Technology Track</h3>
-        <p>
-          Sponsors for Educational Opportunity's Finance, Corporate &amp; Technology program:
-          industry-specific training in technical skills and business fundamentals, one-on-one
-          coaching, and industry-led panels on corporate technology roles.
-        </p>
-      </article>
-
-      <article class="card card--tilt" data-reveal>
-        <div class="card__icon" aria-hidden="true">🎓</div>
-        <span class="card__meta">Jul 2025</span>
-        <h3>Grow with Google Scholar</h3>
-        <p>
-          Completed training in data analytics, resume building, interview preparation, and
-          personal branding through curated Google and Coursera pathways, building a project
-          portfolio demonstrating proficiency in digital tools.
-        </p>
-      </article>
-
-      <article class="card card--tilt" data-reveal>
-        <div class="card__icon" aria-hidden="true">💻</div>
-        <span class="card__meta">Campus</span>
-        <h3>Campus communities</h3>
-        <p>
-          Active in the Black Student Union, the Society of Caribbean Ancestry, the Association of
-          Students of African Origin, and the Competitive Programming Club.
-        </p>
-      </article>
-
-    </div>
-  </div>
-</section>
-
-<!-- ======================= RESUME ======================= -->
-<section class="section" id="resume">
-  <div class="wrap">
-    <div class="section-head" data-reveal>
-      <span class="eyebrow">Résumé</span>
-      <h2>The one-page version</h2>
-      <p>Read it below or download the PDF.</p>
-    </div>
-
-    <div data-reveal>
-      <iframe class="pdf-frame" src="Mayne%20Murray%20Internship%20Resume.pdf#view=FitH" title="Mayne Murray résumé (PDF)" loading="lazy"></iframe>
-      <p style="margin-top:1.25rem">
-        <a class="btn btn--primary btn--magnetic" href="Mayne%20Murray%20Internship%20Resume.pdf" download>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>
-          Download PDF
-        </a>
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= CONTACT ======================= -->
-<section class="section section--sunken section--scene" id="contact">
-  <div class="scene scene--globe" data-scene="globe" aria-hidden="true"></div>
-  <div class="wrap">
-    <div class="section-head" data-reveal>
-      <span class="eyebrow">Contact</span>
-      <h2>Let's talk</h2>
-      <p>Recruiting, collaborating, or just comparing notes on observability tooling — I'd like to hear from you.</p>
-    </div>
-
-    <div class="grid grid--2">
-
-      <a class="contact-card" href="mailto:maynemurray@gmail.com" data-reveal>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
-        <span>
-          <span class="label">Email</span><br />
-          <span class="value">maynemurray@gmail.com</span>
-        </span>
-        <button class="copy-btn" type="button" data-copy="maynemurray@gmail.com" aria-label="Copy email address">Copy</button>
-      </a>
-
-      <a class="contact-card" href="https://www.linkedin.com/in/mayne-murray/" target="_blank" rel="noopener" data-reveal>
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21h-4v-5.6c0-1.34-.03-3.07-1.9-3.07-1.9 0-2.2 1.46-2.2 2.97V21H9z"/></svg>
-        <span>
-          <span class="label">LinkedIn</span><br />
-          <span class="value">Mayne Murray</span>
-        </span>
-      </a>
-
-
-      <a class="contact-card" href="tel:+16177497436" data-reveal>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
-        <span>
-          <span class="label">Phone</span><br />
-          <span class="value">(617) 749-7436</span>
-        </span>
-        <button class="copy-btn" type="button" data-copy="(617) 749-7436" aria-label="Copy phone number">Copy</button>
-      </a>
-
-    </div>
-  </div>
-</section>
-
+    <p class="footer__fine">Motion ideas adapted from Motion Primitives; landing layout patterns inspired by Watermelon UI; backgrounds generated in the style of Haikei. Fan-inspired design. Not affiliated with or endorsed by Eiichiro Oda, Shueisha, or Toei Animation.</p>
+  </footer>
 </main>
 
-<!-- ======================= FOOTER ======================= -->
-<footer class="footer">
-  <div class="footer__inner">
-    <p style="margin:0">© <span id="year">2026</span> Mayne Murray · Built from scratch with HTML, CSS &amp; JavaScript</p>
-    <ul class="footer__links">
-      <li><a href="about.html">About</a></li>
-      <li><a href="projects.html">Projects</a></li>
-      <li><a href="leadership.html">Leadership</a></li>
-      <li><a href="resume.html">Résumé</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
+<!-- Haki dock -->
+<div class="dock">
+  <div class="dock__in" role="group" aria-label="Haki">
+    <span class="dock__title" aria-hidden="true">Haki</span>
+    <button class="haki haki--obs" id="hakiObs" type="button" aria-pressed="false" aria-keyshortcuts="O">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="2.6" fill="currentColor"/><circle cx="12" cy="12" r="6.5" opacity=".7"/><circle cx="12" cy="12" r="10.2" opacity=".4"/></svg>
+      <span>Observation<small>Show the numbers</small></span>
+    </button>
+    <button class="haki haki--arm" id="hakiArm" type="button" aria-pressed="false" aria-keyshortcuts="A">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3.2v5.7c0 4.6-3.4 8.4-8 9.9-4.6-1.5-8-5.3-8-9.9V5.2z" fill="currentColor"/><path d="M8 9l4 3 4-3" fill="none" stroke="var(--bar-bg)" stroke-width="1.6"/></svg>
+      <span>Armament<small>Harden every card</small></span>
+    </button>
+    <button class="haki haki--conq" id="hakiConq" type="button" aria-pressed="false" aria-haspopup="dialog" aria-keyshortcuts="C">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 1.5L5 13.2h5.6L9 22.5l9.6-12.6h-6z" fill="currentColor"/></svg>
+      <span>Conqueror's<small>Show highlights</small></span>
+    </button>
   </div>
-</footer>
+</div>
+<div class="ripple" id="ripple" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<button class="to-top" type="button" aria-label="Back to top">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
-</button>
+<!-- Conqueror's view -->
+<dialog class="conq" id="conq" aria-labelledby="conq-h">
+  <svg class="conq__bolts" id="bolts" aria-hidden="true"></svg>
+  <div class="conq__wrap">
+    <div class="conq__panel">
+      <button class="iconbtn conq__close" type="button" data-close aria-label="Close highlights">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <h2 id="conq-h">Conqueror's view</h2>
+      <p>The highlights from every island, in one place.</p>
+      <ul class="conq__list">
+        <li><b>Fidelity</b><span>Built a Kubernetes observability experience across 9 resource types, with 16 telemetry dashboards in React, TypeScript and Grafana Scenes. <a href="#isle-fidelity" data-close>See the island</a></span></li>
+        <li><b>RSM</b><span>Deployed AI automation in client onboarding that cut manual input errors by 30%, and optimized backend code used by 500+ employees. <a href="#isle-rsm" data-close>See the island</a></span></li>
+        <li><b>UMass Lowell</b><span>Improved Salesforce and Microsoft 365 data quality for university reporting. <a href="#isle-uml" data-close>See the island</a></span></li>
+        <li><b>Built</b><span>A Manifest V3 Chrome extension that syncs Canvas deadlines in real time, plus a five-screen Flutter app. <a href="#projects" data-close>See the projects</a></span></li>
+        <li><b>Leads</b><span>NSBE Senator running company sessions with Red Hat, Liberty Mutual and Teradyne. MLT Career Prep '27, Juniper Scholars and SEO Career fellow. <a href="#leadership" data-close>See alliances</a></span></li>
+        <li><b>Graduates</b><span>B.S. Computer Science, UMass Lowell Honors College, May 2027.</span></li>
+      </ul>
+      <div class="conq__actions">
+        <a class="btn btn--sail" href="Mayne%20Murray%20Internship%20Resume.pdf" download>Download résumé</a>
+        <a class="btn" href="mailto:maynemurray@gmail.com">Email Mayne</a>
+        <a class="btn" href="https://www.linkedin.com/in/mayne-murray/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</dialog>
 
+<script src="assets/site.js?v=20" defer></script>
 </body>
 </html>
