@@ -122,50 +122,141 @@
     }
     return pts;
   }
-  function islandSVG(seed, flagVar) {
+  // Landmarks: one per island, drawn in island units (the island is about 2.2 wide)
+  var LANDMARK = {
+    // Fidelity: a lighthouse, because observability is about seeing what is coming
+    lighthouse: function (x, y) {
+      return '<g transform="translate(' + x + ' ' + y + ')">' +
+        '<path class="isle__beam" d="M0 -.62L1.1 -.86L1.1 -.4Z" fill="rgba(255,236,160,.28)"/>' +
+        '<ellipse cx="0" cy=".04" rx=".22" ry=".07" fill="#6a737c"/>' +
+        '<path d="M-.13 0L-.08 -.5H.08L.13 0Z" fill="#f4efe6" stroke="#5a3415" stroke-width=".015"/>' +
+        '<path d="M-.118 -.06L-.108 -.14H.108L.118 -.06ZM-.098 -.24L-.092 -.32H.092L.098 -.24ZM-.085 -.41L-.082 -.47H.082L.085 -.41Z" fill="#c8323a"/>' +
+        '<rect x="-.03" y="-.12" width=".06" height=".1" fill="#3a2412"/>' +
+        '<rect x="-.1" y="-.53" width=".2" height=".035" fill="#2b2b2b"/>' +
+        '<rect class="isle__lamp" x="-.065" y="-.63" width=".13" height=".1" fill="#ffe08a" stroke="#2b2b2b" stroke-width=".015"/>' +
+        '<path d="M-.09 -.63L0 -.71L.09 -.63Z" fill="#c8323a"/></g>';
+    },
+    // RSM: a windmill workshop, for automation that keeps turning
+    windmill: function (x, y) {
+      var blades = '';
+      for (var i = 0; i < 4; i++) blades += '<path d="M0 0L.05 -.04L.34 -.06L.34 .02L.05 .03Z" fill="#efe6d2" stroke="#6b4320" stroke-width=".012" transform="rotate(' + (i * 90) + ')"/>';
+      return '<g transform="translate(' + x + ' ' + y + ')">' +
+        '<path d="M-.16 0L-.1 -.42H.1L.16 0Z" fill="#b5835a" stroke="#5a3415" stroke-width=".015"/>' +
+        '<path d="M-.13 -.42L0 -.54L.13 -.42Z" fill="#7a4b22"/>' +
+        '<rect x="-.035" y="-.13" width=".07" height=".13" fill="#3a2412"/><rect x="-.04" y="-.32" width=".05" height=".05" fill="#ffe08a"/>' +
+        '<g class="isle__blades" transform="translate(0 -.43)">' + blades + '<circle r=".035" fill="#5a3415"/></g>' +
+        '<g transform="translate(.26 -.04)"><circle r=".07" fill="none" stroke="#8a8f96" stroke-width=".03" stroke-dasharray=".03 .025"/><circle r=".025" fill="#8a8f96"/></g></g>';
+    },
+    // UMass Lowell: a brick mill and canal, because Lowell is the Mill City
+    mill: function (x, y) {
+      var win = '';
+      for (var r = 0; r < 2; r++) for (var c = 0; c < 5; c++) win += '<rect x="' + (-.25 + c * .1).toFixed(2) + '" y="' + (-.27 + r * .12).toFixed(2) + '" width=".05" height=".07" fill="#ffe08a" opacity=".85"/>';
+      return '<g transform="translate(' + x + ' ' + y + ')">' +
+        '<path d="M-.7 .16Q0 .02 .7 .2" stroke="#4f9fc4" stroke-width=".06" fill="none"/>' +
+        '<rect x="-.3" y="-.34" width=".6" height=".34" fill="#9a4a32" stroke="#5a2414" stroke-width=".015"/>' +
+        '<path d="M-.3 -.34L-.15 -.44L0 -.34L.15 -.44L.3 -.34Z" fill="#6e3424"/>' + win +
+        '<rect x=".2" y="-.68" width=".07" height=".34" fill="#7a3a26"/>' +
+        '<g class="isle__smoke" fill="rgba(220,226,232,.75)"><circle cx=".24" cy="-.76" r=".05"/><circle cx=".3" cy="-.85" r=".065"/><circle cx=".38" cy="-.95" r=".08"/></g></g>';
+    },
+    // Homework Tracker: a clock tower stuck at five to midnight
+    clocktower: function (x, y) {
+      return '<g transform="translate(' + x + ' ' + y + ')">' +
+        '<rect x="-.12" y="-.5" width=".24" height=".5" fill="#d9c7a0" stroke="#5a3415" stroke-width=".015"/>' +
+        '<path d="M-.15 -.5L0 -.72L.15 -.5Z" fill="#4a6b8a"/>' +
+        '<circle cx="0" cy="-.36" r=".085" fill="#fff8e6" stroke="#2b2b2b" stroke-width=".015"/>' +
+        '<path d="M0 -.36V-.43M0 -.36L-.012 -.425" stroke="#2b2b2b" stroke-width=".014" stroke-linecap="round"/>' +
+        '<rect x="-.035" y="-.13" width=".07" height=".13" fill="#3a2412"/>' +
+        '<g transform="translate(.24 -.02)"><rect x="-.1" y="-.12" width=".2" height=".16" rx=".015" fill="#fff8e6" stroke="#5a3415" stroke-width=".012"/>' +
+        '<rect x="-.1" y="-.12" width=".2" height=".04" fill="#c8323a"/><circle cx="-.04" cy="-.03" r=".012" fill="#c8323a"/><circle cx=".01" cy="-.03" r=".012" fill="#e8a93e"/><circle cx=".06" cy="-.03" r=".012" fill="#3f8f5a"/></g></g>';
+    },
+    // Crypto app: a dug-up treasure chest spilling coins
+    treasure: function (x, y) {
+      var coins = '';
+      for (var i = 0; i < 9; i++) coins += '<ellipse cx="' + (-.2 + (i % 5) * .1 + (i > 4 ? .05 : 0)).toFixed(2) + '" cy="' + (.06 + (i > 4 ? .05 : 0)) + '" rx=".045" ry=".02" fill="#f2c14e" stroke="#9a6a10" stroke-width=".01"/>';
+      return '<g transform="translate(' + x + ' ' + y + ')">' +
+        '<ellipse cx="0" cy=".04" rx=".34" ry=".1" fill="#b8955c"/>' +
+        '<path d="M-.18 -.2H.18V.02H-.18Z" fill="#8a5a2b" stroke="#4a2a12" stroke-width=".015"/>' +
+        '<path d="M-.18 -.2L-.15 -.38H.21L.18 -.2Z" fill="#a8723f" stroke="#4a2a12" stroke-width=".015"/>' +
+        '<path d="M-.18 -.12H.18M0 -.2V.02" stroke="#e8a93e" stroke-width=".025"/>' +
+        '<ellipse class="isle__glint" cx="0" cy="-.2" rx=".14" ry=".04" fill="#ffe08a"/>' + coins +
+        '<path d="M.3 -.3L.45 .05" stroke="#7a4b22" stroke-width=".03"/><path d="M.42 0L.5 .06L.44 .1L.38 .04Z" fill="#8a8f96"/>' +
+        '<path d="M-.42 -.12L-.3 0M-.3 -.12L-.42 0" stroke="#b3122e" stroke-width=".035" stroke-linecap="round"/></g>';
+    },
+    // This site: a shipyard with a hull on the slipway
+    shipyard: function (x, y) {
+      var ribs = '';
+      for (var i = 0; i < 6; i++) ribs += '<path d="M' + (-.24 + i * .09).toFixed(2) + ' -.02Q' + (-.24 + i * .09).toFixed(2) + ' -.2 ' + (-.2 + i * .09).toFixed(2) + ' -.26" stroke="#8a5a2b" stroke-width=".022" fill="none"/>';
+      return '<g transform="translate(' + x + ' ' + y + ')">' +
+        '<path d="M-.4 .04L.5 .2" stroke="#7a4b22" stroke-width=".05"/>' +
+        '<path d="M-.3 -.02Q0 .06 .3 -.06" stroke="#6b4320" stroke-width=".04" fill="none"/>' + ribs +
+        '<path d="M.36 .02V-.6M.36 -.58L.06 -.48" stroke="#4a2a12" stroke-width=".025" fill="none"/>' +
+        '<path d="M.12 -.5V-.34" stroke="#2b2b2b" stroke-width=".01"/><rect x=".09" y="-.34" width=".06" height=".05" fill="#c8a35a"/>' +
+        '<rect x="-.48" y="-.14" width=".12" height=".12" fill="#a8723f" stroke="#4a2a12" stroke-width=".012"/><rect x="-.44" y="-.24" width=".1" height=".1" fill="#c99a52" stroke="#4a2a12" stroke-width=".012"/></g>';
+    },
+    // QR Code Generator: a standing stone carved with a QR-like pattern
+    checker: function (x, y) {
+      var cells = '', rr = rng(93);
+      for (var i = 0; i < 7; i++) for (var j = 0; j < 7; j++) {
+        var finder = (i < 3 && j < 3) || (i < 3 && j > 3) || (i > 3 && j < 3);
+        if (!finder && rr() > .5) cells += '<rect x="' + (-.105 + j * .03).toFixed(3) + '" y="' + (-.46 + i * .03).toFixed(3) + '" width=".03" height=".03" fill="#2b2b2b"/>';
+      }
+      var fp = function (fx, fy) { return '<rect x="' + fx + '" y="' + fy + '" width=".09" height=".09" fill="none" stroke="#2b2b2b" stroke-width=".018"/><rect x="' + (fx + .03) + '" y="' + (fy + .03) + '" width=".03" height=".03" fill="#2b2b2b"/>'; };
+      return '<g transform="translate(' + x + ' ' + y + ')">' +
+        '<path d="M-.16 0L-.15 -.52Q0 -.58 .15 -.52L.16 0Z" fill="#9aa3ab" stroke="#4d555c" stroke-width=".015"/>' +
+        '<rect x="-.12" y="-.475" width=".24" height=".24" fill="#e8ecef"/>' + cells +
+        fp(-.105, -.46) + fp(.015, -.46) + fp(-.105, -.34) +
+        '<ellipse cx="-.3" cy=".02" rx=".08" ry=".05" fill="#7d868e"/><ellipse cx=".28" cy=".04" rx=".06" ry=".04" fill="#7d868e"/></g>';
+    }
+  };
+  function islandSVG(seed, flagVar, landmark) {
     var r = rng(seed);
     var outline = blob(r, 13, 1, .42, 1.12, .82, 0, .05);
     var scale = function (pts, k, dx, dy) { return pts.map(function (p) { return [p[0] * k + (dx || 0), p[1] * k + (dy || 0)]; }); };
     var green = blob(r, 11, .66, .5, 1.05, .78, (r() - .5) * .18, -.04);
     var hill = blob(r, 9, .3, .4, 1, .8, (r() - .5) * .3, -.14);
-    var trees = '';
-    for (var t = 0; t < 5; t++) {
-      var tx = (r() - .5) * 1.0, ty = (r() - .5) * .55 - .05, tr = .07 + r() * .05;
-      trees += '<circle cx="' + tx.toFixed(2) + '" cy="' + ty.toFixed(2) + '" r="' + tr.toFixed(3) + '" fill="var(--grass-2)"/>';
+    var trees = '', k;
+    for (k = 0; k < 6; k++) {
+      var tx = (r() - .5) * 1.2, ty = (r() - .5) * .5 + .08, tr = .06 + r() * .04;
+      if (Math.abs(tx) < .35 && ty < .15) continue; // keep the landmark's footprint clear
+      trees += '<circle cx="' + tx.toFixed(2) + '" cy="' + ty.toFixed(2) + '" r="' + tr.toFixed(3) + '" fill="var(--grass-2)"/><circle cx="' + (tx - tr * .3).toFixed(2) + '" cy="' + (ty - tr * .3).toFixed(2) + '" r="' + (tr * .45).toFixed(3) + '" fill="rgba(255,255,255,.12)"/>';
     }
-    var fx = (r() - .5) * .4, fy = -.2;
-    var palms = '', rocks = '', k;
+    var palms = '', rocks = '', sandDots = '';
     for (k = 0; k < 3; k++) {
-      var px = (r() - .5) * 1.3, py = .05 + r() * .25, lean = (r() - .5) * .5, top = [px + lean * .5, py - .5];
+      var side = k % 2 ? 1 : -1, px = side * (.55 + r() * .35), py = .1 + r() * .25, lean = side * (.1 + r() * .25), top = [px + lean * .5, py - .48];
       palms += '<path d="M' + px.toFixed(2) + ' ' + py.toFixed(2) + 'Q' + (px + lean).toFixed(2) + ' ' + (py - .25).toFixed(2) + ' ' + top[0].toFixed(2) + ' ' + top[1].toFixed(2) + '" stroke="#6b4320" stroke-width=".045" fill="none" stroke-linecap="round"/>';
-      for (var f = 0; f < 5; f++) {
-        var ang = -Math.PI / 2 + (f - 2) * .62, ex = top[0] + Math.cos(ang) * .26, ey = top[1] + Math.sin(ang) * .2 + .08;
-        palms += '<path d="M' + top[0].toFixed(2) + ' ' + top[1].toFixed(2) + 'Q' + ((top[0] + ex) / 2).toFixed(2) + ' ' + (Math.min(top[1], ey) - .08).toFixed(2) + ' ' + ex.toFixed(2) + ' ' + ey.toFixed(2) + '" stroke="var(--grass-2)" stroke-width=".07" fill="none" stroke-linecap="round"/>';
+      for (var f = 0; f < 6; f++) {
+        var ang = -Math.PI / 2 + (f - 2.5) * .58, ex = top[0] + Math.cos(ang) * .27, ey = top[1] + Math.sin(ang) * .2 + .09;
+        palms += '<path d="M' + top[0].toFixed(2) + ' ' + top[1].toFixed(2) + 'Q' + ((top[0] + ex) / 2).toFixed(2) + ' ' + (Math.min(top[1], ey) - .08).toFixed(2) + ' ' + ex.toFixed(2) + ' ' + ey.toFixed(2) + '" stroke="var(--grass-2)" stroke-width=".065" fill="none" stroke-linecap="round"/>';
       }
       palms += '<circle cx="' + top[0].toFixed(2) + '" cy="' + (top[1] + .03).toFixed(2) + '" r=".035" fill="#5a3a1a"/>';
     }
-    for (k = 0; k < 4; k++) {
-      var a = r() * Math.PI * 2, rx = Math.cos(a) * 1.28, ry = Math.sin(a) * .98;
-      rocks += '<ellipse cx="' + rx.toFixed(2) + '" cy="' + ry.toFixed(2) + '" rx="' + (.05 + r() * .06).toFixed(3) + '" ry=".04" fill="#5c6670"/>';
+    for (k = 0; k < 6; k++) {
+      var a = r() * Math.PI * 2, rx = Math.cos(a) * 1.3, ry = Math.sin(a) * 1.0;
+      rocks += '<ellipse cx="' + rx.toFixed(2) + '" cy="' + ry.toFixed(2) + '" rx="' + (.04 + r() * .07).toFixed(3) + '" ry=".04" fill="#5c6670"/><path d="M' + (rx - .08).toFixed(2) + ' ' + (ry + .05).toFixed(2) + 'q.08 .04 .16 0" stroke="rgba(255,255,255,.5)" stroke-width=".018" fill="none"/>';
     }
-    var hx = (r() - .5) * .6, hy = .22;
-    var hut = '<path d="M' + (hx - .14).toFixed(2) + ' ' + hy + 'h.28v-.16h-.28z" fill="#a8723f"/><path d="M' + (hx - .19).toFixed(2) + ' ' + (hy - .15) + 'L' + hx.toFixed(2) + ' ' + (hy - .34) + 'L' + (hx + .19).toFixed(2) + ' ' + (hy - .15) + 'z" fill="#c99a52"/><rect x="' + (hx - .03).toFixed(2) + '" y="' + (hy - .09) + '" width=".06" height=".09" fill="#3a2412"/>';
-    var dock = '<path d="M' + (hx + .1).toFixed(2) + ' ' + (hy + .1) + 'l.42 .36" stroke="#7a4b22" stroke-width=".07"/><path d="M' + (hx + .2).toFixed(2) + ' ' + (hy + .2) + 'l-.06 .07M' + (hx + .36).toFixed(2) + ' ' + (hy + .33) + 'l-.06 .07" stroke="#4a2a12" stroke-width=".03"/>';
-    var gulls = '<g class="isle__gull" fill="none" stroke="var(--text)" stroke-width=".025" stroke-linecap="round" opacity=".7"><path d="M-1.1 -1q.06-.06 .12 0q.06-.06 .12 0"/><path d="M-.8 -1.12q.05-.05 .1 0q.05-.05 .1 0"/></g>';
+    for (k = 0; k < 14; k++) {
+      var sa = r() * Math.PI * 2, sr = .82 + r() * .12;
+      sandDots += '<circle cx="' + (Math.cos(sa) * sr * 1.1).toFixed(2) + '" cy="' + (Math.sin(sa) * sr * .8 + .05).toFixed(2) + '" r=".012" fill="rgba(120,80,30,.35)"/>';
+    }
+    var shells = '<path d="M.7 .62q.05-.07 .1 0z" fill="#f2b8a0"/><circle cx="-.72" cy=".55" r=".025" fill="#f4e2c4"/><path d="M-.2 .78l.03-.05.03.05z" fill="#e88a6a"/>';
+    var gulls = '<g class="isle__gull" fill="none" stroke="var(--text)" stroke-width=".025" stroke-linecap="round" opacity=".7"><path d="M-1.1 -1q.06-.06 .12 0q.06-.06 .12 0"/><path d="M-.8 -1.12q.05-.05 .1 0q.05-.05 .1 0"/><path d="M1 -1.05q.04-.04 .08 0q.04-.04 .08 0"/></g>';
+    var fx = -.55 + (r() - .5) * .2, fy = -.1;
+    var lm = LANDMARK[landmark] ? LANDMARK[landmark](0.05, 0.12) : '';
     return '<svg viewBox="-1.5 -1.3 3 2.6" aria-hidden="true">' +
       '<path class="isle__surf" d="' + smoothClosed(scale(outline, 1.42)) + '" fill="none" stroke="rgba(255,255,255,.35)" stroke-width=".03" stroke-dasharray=".08 .06"/>' +
-      '<path d="' + smoothClosed(scale(outline, 1.32)) + '" fill="var(--shoal)"/>' + rocks +
-      '<path d="' + smoothClosed(outline) + '" fill="var(--sand)" stroke="rgba(0,0,0,.18)" stroke-width=".02"/>' +
+      '<path d="' + smoothClosed(scale(outline, 1.32)) + '" fill="var(--shoal)"/>' +
+      '<path d="' + smoothClosed(scale(outline, 1.14)) + '" fill="none" stroke="rgba(255,255,255,.55)" stroke-width=".025"/>' + rocks +
+      '<path d="' + smoothClosed(outline) + '" fill="var(--sand)" stroke="rgba(0,0,0,.18)" stroke-width=".02"/>' + sandDots + shells +
       '<path d="' + smoothClosed(green) + '" fill="var(--grass)"/>' +
-      '<path d="' + smoothClosed(hill) + '" fill="var(--grass-2)" opacity=".85"/>' + trees + hut + dock + palms + gulls +
+      '<path d="' + smoothClosed(hill) + '" fill="var(--grass-2)" opacity=".55"/>' + trees + palms + lm + gulls +
       '<path d="M' + fx.toFixed(2) + ' ' + fy + 'v-.62" stroke="#3a2412" stroke-width=".035" stroke-linecap="round"/>' +
-      '<path d="M' + fx.toFixed(2) + ' ' + (fy - .62) + 'l.34 .09-.34 .1z" fill="var(' + flagVar + ')"/>' +
+      '<path class="isle__flag" d="M' + fx.toFixed(2) + ' ' + (fy - .62) + 'l.34 .09-.34 .1z" fill="var(' + flagVar + ')"/>' +
       '</svg>';
   }
   $$('.isle__art').forEach(function (el) {
     var seed = parseInt(el.getAttribute('data-seed'), 10) || 1;
     var flag = el.getAttribute('data-flag') === 'proj' ? '--flag-proj' : '--flag-exp';
-    el.insertAdjacentHTML('afterbegin', islandSVG(seed, flag));
+    el.insertAdjacentHTML('afterbegin', islandSVG(seed, flag, el.getAttribute('data-landmark')));
   });
 
   // Final island: a small island with an X marking the spot
@@ -180,110 +271,137 @@
       '</svg>');
   }
 
-  /* ------------------------------------------------------------ devil fruits (original, detailed art) */
+  /* ------------------------------------------------------------ devil fruits (original art, one shape per fruit) */
   var FRUIT = {
     paramecia: { name: 'Paramecia', blurb: 'A language I write in.' },
     zoan: { name: 'Zoan', blurb: 'A framework I shape things with.' },
     logia: { name: 'Logia', blurb: 'Infrastructure I run on.' }
   };
-  // shape, hue, saturation, fruit name, power
+  function starPath(cx, cy, R, r, n) {
+    var pts = [];
+    for (var i = 0; i < n * 2; i++) {
+      var a = -Math.PI / 2 + i * Math.PI / n, rad = i % 2 ? r : R;
+      pts.push([cx + Math.cos(a) * rad, cy + Math.sin(a) * rad]);
+    }
+    var d = 'M' + ((pts[0][0] + pts[1][0]) / 2).toFixed(1) + ' ' + ((pts[0][1] + pts[1][1]) / 2).toFixed(1);
+    for (i = 1; i <= pts.length; i++) {
+      var p = pts[i % pts.length], q = pts[(i + 1) % pts.length];
+      d += 'Q' + p[0].toFixed(1) + ' ' + p[1].toFixed(1) + ' ' + ((p[0] + q[0]) / 2).toFixed(1) + ' ' + ((p[1] + q[1]) / 2).toFixed(1);
+    }
+    return d + 'Z';
+  }
+  // shape: body path (or circles), grooves, where the stem attaches, crown style
+  var SHAPES = {
+    lobed:   { d: 'M50 29C55 24 64 23 70 27C80 26 88 40 87 56C88 74 80 90 66 96C60 99 55 98 50 96C45 98 40 99 34 96C20 90 12 74 13 56C12 40 20 26 30 27C36 23 45 24 50 29Z', g: 'M50 29Q46 62 50 96M30 28Q20 62 34 96M70 28Q80 62 66 96', top: [50, 29] },
+    flame:   { d: 'M52 20C47 26 50 32 56 36C70 44 84 58 82 77C80 94 66 102 50 102C34 102 18 94 18 77C18 59 30 47 40 39C46 34 43 27 52 20Z', g: 'M50 40Q40 70 50 101M66 48Q74 76 64 98', top: [52, 22], tip: true },
+    melon:   { d: 'M50 24C72 24 85 42 85 63C85 85 70 101 50 101C30 101 15 85 15 63C15 42 28 24 50 24Z', g: '', top: [50, 25], stripes: true },
+    heart:   { d: 'M50 100C30 86 12 70 14 50C15 36 26 28 37 30C44 31 48 36 50 40C52 36 56 31 63 30C74 28 85 36 86 50C88 70 70 86 50 100Z', g: 'M50 40Q48 70 50 100', top: [50, 40] },
+    gourd:   { d: 'M50 20C61 20 64 31 62 39C60 45 56 48 61 52C77 58 85 68 85 80C85 94 69 103 50 103C31 103 15 94 15 80C15 68 23 58 39 52C44 48 40 45 38 39C36 31 39 20 50 20Z', g: 'M38 52Q50 58 62 52', top: [50, 21] },
+    pumpkin: { d: 'M50 40C56 34 70 34 78 40C90 46 94 64 90 78C86 92 72 100 60 98C56 100 44 100 40 98C28 100 14 92 10 78C6 64 10 46 22 40C30 34 44 34 50 40Z', g: 'M50 40Q46 70 50 98M34 38Q24 68 38 98M66 38Q76 68 62 98M20 42Q8 70 24 94M80 42Q92 70 76 94', top: [50, 40] },
+    pine:    { d: 'M50 30C66 32 79 46 80 64C82 84 68 101 50 101C32 101 18 84 20 64C21 46 34 32 50 30Z', g: 'M24 50L64 100M30 36L80 88M44 30L82 66M20 74L40 100M76 46L34 100M64 32L20 82M52 30L18 62M80 74L58 100', top: [50, 30], crown: 'spiky' },
+    star:    { d: null, g: '', top: [50, 32] },
+    pear:    { d: 'M50 22C60 22 63 32 65 42C67 52 85 60 85 77C85 93 69 101 50 101C31 101 15 93 15 77C15 60 33 52 35 42C37 32 40 22 50 22Z', g: 'M50 22Q45 62 50 101', top: [50, 23] },
+    peach:   { d: 'M50 30C70 26 88 42 86 64C84 86 68 100 50 100C32 100 16 86 14 64C12 42 30 26 50 30Z', g: 'M50 30C40 50 42 80 50 100', top: [50, 30], patches: true },
+    lemon:   { d: 'M8 64C14 60 18 46 34 40C44 36 56 36 66 40C82 46 86 60 92 64C86 68 82 82 66 88C56 92 44 92 34 88C18 82 14 68 8 64Z', g: '', top: [50, 38] },
+    apple:   { d: 'M50 30C56 22 74 22 82 36C90 50 88 76 76 88C66 98 56 99 50 97C44 99 34 98 24 88C12 76 10 50 18 36C26 22 44 22 50 30Z', g: 'M50 30Q47 64 50 97', top: [50, 30] },
+    cluster: { c: [[50, 34, 11], [38, 44, 11], [62, 44, 11], [28, 57, 11], [50, 55, 11.5], [72, 57, 11], [38, 69, 11], [62, 69, 11], [50, 82, 11], [42, 94, 9], [58, 93, 9]], g: '', top: [50, 24] },
+    cone:    { d: 'M50 103C36 93 19 73 19 53C19 41 32 35 50 35C68 35 81 41 81 53C81 73 64 93 50 103Z', g: '', top: [50, 35], crown: 'cap' },
+    bean:    { d: 'M30 34C44 26 62 32 64 46C66 56 76 58 82 66C90 80 80 102 58 102C38 102 16 92 15 70C14 54 18 42 30 34Z', g: 'M64 46Q46 60 56 100', top: [44, 31] }
+  };
+  SHAPES.star.d = starPath(50, 67, 37, 23, 5);
+  // [shape, hue, saturation, fruit name, power, swirl radius]
   var SPEC = {
-    'C':            ['lobed', 272, 46, 'Kiso Kiso no Mi', 'Grants command over memory itself, down to the last pointer.'],
-    'C++':          ['pear', 318, 52, 'Zōka Zōka no Mi', 'Everything C can do, plus classes and templates.'],
-    'Python':       ['lobed', 208, 55, 'Nyoro Nyoro no Mi', 'Slithers through scripts and data in a few readable lines.'],
-    'JavaScript':   ['apple', 48, 78, 'Ugoki Ugoki no Mi', 'Brings any page to life; it powers the ship on this site.'],
-    'TypeScript':   ['pear', 212, 58, 'Kata Kata no Mi', 'Hardens loose code into strict, predictable types.'],
-    'SQL':          ['round', 24, 70, 'Kura Kura no Mi', 'Opens the storehouse and pulls out exactly the rows you ask for.'],
-    'React':        ['melon', 192, 62, 'Hannō Hannō no Mi', 'Interfaces that re-render the instant their state changes.'],
-    'Grafana Scenes': ['melon', 26, 80, 'Mie Mie no Mi', 'Turns raw telemetry into dashboards anyone can read.'],
-    'Flutter':      ['pine', 200, 72, 'Pata Pata no Mi', 'One codebase that takes flight on every phone.'],
-    'Pandas':       ['melon', 220, 10, 'Panda Panda no Mi', 'Model: Panda. Wrangles tables into shape.'],
-    'Matplotlib':   ['pear', 205, 45, 'Zu Zu no Mi', 'Draws any dataset as a chart.'],
-    'Kubernetes':   ['apple', 222, 72, 'Kaji Kaji no Mi', 'Takes the helm of entire fleets of containers.'],
-    'Docker':       ['round', 204, 82, 'Hako Hako no Mi', 'Seals anything inside a box that runs the same everywhere.'],
-    'AWS EKS':      ['lobed', 36, 92, 'Kumo Kumo no Mi', 'Summons Kubernetes clusters out of the cloud.'],
-    'OpenTelemetry':['apple', 262, 50, 'Kansoku Kansoku no Mi', 'Observation made solid: traces, metrics and logs from every service.']
-  };
-  var BODY = {
-    round: 'M50 26C71 26 86 41 86 62S71 98 50 98 14 83 14 62 29 26 50 26Z',
-    apple: 'M50 30C56 22 74 22 82 36C90 50 88 76 76 88C66 98 56 99 50 97C44 99 34 98 24 88C12 76 10 50 18 36C26 22 44 22 50 30Z',
-    lobed: 'M50 29C55 24 64 23 70 27C80 26 88 40 87 56C88 74 80 90 66 96C60 99 55 98 50 96C45 98 40 99 34 96C20 90 12 74 13 56C12 40 20 26 30 27C36 23 45 24 50 29Z',
-    pear:  'M50 22C60 22 63 32 65 42C67 52 85 60 85 77C85 93 69 101 50 101C31 101 15 93 15 77C15 60 33 52 35 42C37 32 40 22 50 22Z',
-    melon: 'M50 24C70 24 83 41 83 63C83 85 69 100 50 100C31 100 17 85 17 63C17 41 30 24 50 24Z',
-    pine:  'M50 22C64 24 78 40 80 60C82 82 68 100 50 100C32 100 18 82 20 60C22 40 36 24 50 22Z'
-  };
-  var GROOVES = {
-    lobed: 'M50 29Q46 62 50 96M30 28Q20 62 34 96M70 28Q80 62 66 96',
-    apple: 'M50 30Q47 64 50 97',
-    melon: 'M30 30Q22 64 32 96M50 24V100M70 30Q78 64 68 96M18 56Q50 66 82 56M20 78Q50 88 80 78',
-    pine:  'M22 48L66 100M34 30L80 82M50 22L82 62M20 70L46 100M78 46L34 100M66 28L20 80M50 22L18 62M80 70L56 100',
-    pear:  'M50 22Q45 62 50 101',
-    round: ''
+    'C':              ['lobed', 272, 46, 'Kiso Kiso no Mi', 'Grants command over memory itself, down to the last pointer.', 6.6],
+    'C++':            ['flame', 18, 86, 'Zōka Zōka no Mi', 'Everything C can do, plus classes and templates.', 7.6],
+    'Python':         ['melon', 205, 58, 'Nyoro Nyoro no Mi', 'Slithers through scripts and data in a few readable lines.', 6.2],
+    'JavaScript':     ['heart', 48, 80, 'Ugoki Ugoki no Mi', 'Brings any page to life; it powers the ship on this site.', 6],
+    'TypeScript':     ['gourd', 212, 60, 'Kata Kata no Mi', 'Hardens loose code into strict, predictable types.', 6.4],
+    'SQL':            ['pumpkin', 26, 78, 'Kura Kura no Mi', 'Opens the storehouse and pulls out exactly the rows you ask for.', 6.2],
+    'React':          ['pine', 190, 64, 'Hannō Hannō no Mi', 'Interfaces that re-render the instant their state changes.', 5.2],
+    'Grafana Scenes': ['star', 32, 88, 'Mie Mie no Mi', 'Turns raw telemetry into dashboards anyone can read.', 6.6],
+    'Flutter':        ['pear', 198, 74, 'Pata Pata no Mi', 'One codebase that takes flight on every phone.', 6.6],
+    'Pandas':         ['peach', 220, 8, 'Panda Panda no Mi', 'Model: Panda. Wrangles tables into shape.', 6.8],
+    'Matplotlib':     ['lemon', 210, 48, 'Zu Zu no Mi', 'Draws any dataset as a chart.', 5.6],
+    'Kubernetes':     ['apple', 222, 72, 'Kaji Kaji no Mi', 'Takes the helm of entire fleets of containers.', 6.8],
+    'Docker':         ['cluster', 202, 82, 'Hako Hako no Mi', 'Seals anything inside a box that runs the same everywhere.', 4.4],
+    'AWS EKS':        ['cone', 34, 94, 'Kumo Kumo no Mi', 'Summons Kubernetes clusters out of the cloud.', 5.6],
+    'OpenTelemetry':  ['bean', 262, 52, 'Kansoku Kansoku no Mi', 'Observation made solid: traces, metrics and logs from every service.', 6.8]
   };
   function hsl(h, s, l, a) { return 'hsl(' + h + ' ' + s + '% ' + l + '%' + (a !== undefined ? ' / ' + a : '') + ')'; }
   function spiral(cx, cy, rad, turns, dir, rot) {
-    var d = '', steps = 22;
+    var d = '', steps = 24;
     for (var i = 0; i <= steps; i++) {
-      var t = i / steps, a = rot + dir * t * turns * Math.PI * 2, rr = rad * (1 - t * .9) ;
+      var t = i / steps, a = rot + dir * t * turns * Math.PI * 2, rr = rad * (1 - t * .9);
       d += (i ? 'L' : 'M') + (cx + Math.cos(a) * rr).toFixed(2) + ' ' + (cy + Math.sin(a) * rr).toFixed(2);
     }
     return d;
   }
   function fruitSVG(name, type) {
-    var sp = SPEC[name] || ['round', 280, 50, 'Mi', ''];
-    var shape = sp[0], H = sp[1], S = sp[2], r = rng(hash(name)), id = 'df' + hash(name + type);
-    var groove = hsl(H, Math.min(90, S + 8), S < 15 ? 14 : 22), hi = hsl(H, S, S < 15 ? 94 : 86, .42);
-    // swirls on a jittered hex grid, every one embossed: groove, body, highlight
-    var sw = '', row = 0;
-    for (var y = 24; y <= 104; y += 11.2, row++) {
-      for (var x = 10 + (row % 2) * 6.2; x <= 92; x += 12.4) {
-        var jx = x + (r() - .5) * 2.4, jy = y + (r() - .5) * 2.4, rad = 6.4 + r() * 1.5, dir = r() > .5 ? 1 : -1, rot = r() * 6.28;
+    var sp = SPEC[name] || ['apple', 280, 50, '', '', 6], sh = SHAPES[sp[0]];
+    var H = sp[1], S = sp[2], R = sp[5], r = rng(hash(name)), id = 'df' + hash(name + type), grey = S < 15;
+    var groove = hsl(H, Math.min(92, S + 8), grey ? 16 : 22), hi = hsl(H, S, grey ? 95 : 86, .42);
+    var bodyShapes = sh.c
+      ? sh.c.map(function (c) { return '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="' + c[2] + '"/>'; }).join('')
+      : '<path d="' + sh.d + '"/>';
+    var fillShapes = sh.c
+      ? sh.c.map(function (c) { return '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="' + c[2] + '" fill="url(#' + id + 'b)" stroke="' + hsl(H, S, 16) + '" stroke-width="1"/>'; }).join('')
+      : '<path d="' + sh.d + '" fill="url(#' + id + 'b)"/>';
+    // swirls on a jittered hex grid; every one embossed (shadow, groove, highlight)
+    var sw = '', row = 0, step = R * 1.85;
+    for (var y = 18; y <= 106; y += step * .9, row++) {
+      for (var x = 6 + (row % 2) * step / 2; x <= 96; x += step) {
+        var jx = x + (r() - .5) * 2.2, jy = y + (r() - .5) * 2.2, rad = R + r() * 1.3, dir = r() > .5 ? 1 : -1, rot = r() * 6.28;
         var p = spiral(jx, jy, rad, 2 + r() * .35, dir, rot);
-        sw += '<path d="' + p + '" stroke="rgba(0,0,0,.2)" stroke-width="3" transform="translate(.8 .9)"/>' +
-              '<path d="' + p + '" stroke="' + groove + '" stroke-width="2.1"/>' +
+        sw += '<path d="' + p + '" stroke="rgba(0,0,0,.2)" stroke-width="' + (R * .45).toFixed(1) + '" transform="translate(.8 .9)"/>' +
+              '<path d="' + p + '" stroke="' + groove + '" stroke-width="' + (R * .32).toFixed(1) + '"/>' +
               '<path d="' + p + '" stroke="' + hi + '" stroke-width=".75" transform="translate(-.55 -.65)"/>';
       }
     }
-    var aura = type === 'logia'
-      ? '<circle cx="50" cy="63" r="47" fill="url(#' + id + 'a)"/>' : '';
-    var crown = type === 'zoan' || type === 'logia'
-      ? '<path d="M50 27C44 20 36 20 31 23 38 25 43 28 50 30ZM50 27C56 20 64 20 69 23 62 25 57 28 50 30Z" fill="url(#' + id + 'l)" stroke="#1f4a2c" stroke-width=".8"/>' : '';
+    var extra = '';
+    if (sh.stripes) for (var s2 = 0; s2 < 7; s2++) extra += '<path d="M' + (18 + s2 * 11) + ' 20Q' + (12 + s2 * 12.5) + ' 62 ' + (18 + s2 * 11) + ' 104" stroke="' + hsl(H, S, 30, .45) + '" stroke-width="4.5"/>';
+    if (sh.patches) extra += '<ellipse cx="30" cy="56" rx="11" ry="14" fill="' + hsl(0, 0, 14, .7) + '" stroke="none"/><ellipse cx="72" cy="78" rx="13" ry="11" fill="' + hsl(0, 0, 14, .7) + '" stroke="none"/>';
+    var crown = '';
+    if (sh.crown === 'spiky') {
+      for (var c = 0; c < 7; c++) { var ca = -Math.PI / 2 + (c - 3) * .32; crown += '<path d="M50 32Q' + (50 + Math.cos(ca) * 12).toFixed(1) + ' ' + (30 + Math.sin(ca) * 10).toFixed(1) + ' ' + (50 + Math.cos(ca) * 22).toFixed(1) + ' ' + (32 + Math.sin(ca) * 22).toFixed(1) + 'Q' + (50 + Math.cos(ca) * 8).toFixed(1) + ' ' + (32 + Math.sin(ca) * 6).toFixed(1) + ' 50 33Z" fill="url(#' + id + 'l)" stroke="#1f4a2c" stroke-width=".7"/>'; }
+    } else if (sh.crown === 'cap') {
+      for (var c2 = 0; c2 < 6; c2++) { var cb = (c2 / 6) * Math.PI * 2; crown += '<path d="M50 36L' + (50 + Math.cos(cb) * 18).toFixed(1) + ' ' + (38 + Math.sin(cb) * 6).toFixed(1) + 'L' + (50 + Math.cos(cb + .5) * 8).toFixed(1) + ' ' + (37 + Math.sin(cb + .5) * 3).toFixed(1) + 'Z" fill="url(#' + id + 'l)" stroke="#1f4a2c" stroke-width=".7"/>'; }
+    } else if (type !== 'paramecia') {
+      crown = '<path d="M' + sh.top[0] + ' ' + (sh.top[1] - 2) + 'C' + (sh.top[0] - 6) + ' ' + (sh.top[1] - 9) + ' ' + (sh.top[0] - 14) + ' ' + (sh.top[1] - 9) + ' ' + (sh.top[0] - 19) + ' ' + (sh.top[1] - 6) + ' ' + (sh.top[0] - 12) + ' ' + (sh.top[1] - 4) + ' ' + (sh.top[0] - 7) + ' ' + (sh.top[1] - 1) + ' ' + sh.top[0] + ' ' + sh.top[1] + 'Z" fill="url(#' + id + 'l)" stroke="#1f4a2c" stroke-width=".8"/>';
+    }
+    var tx = sh.top[0], ty = sh.top[1];
+    var stem = '<path d="M' + tx + ' ' + ty + 'C' + (tx - 1) + ' ' + (ty - 8) + ' ' + (tx + 2) + ' ' + (ty - 15) + ' ' + (tx + 9) + ' ' + (ty - 18) + 'C' + (tx + 16) + ' ' + (ty - 21) + ' ' + (tx + 22) + ' ' + (ty - 17) + ' ' + (tx + 20) + ' ' + (ty - 12) + 'C' + (tx + 18) + ' ' + (ty - 8) + ' ' + (tx + 13) + ' ' + (ty - 10) + ' ' + (tx + 15) + ' ' + (ty - 13) + '" fill="none" stroke="#3f2410" stroke-width="3.4" stroke-linecap="round"/>' +
+      '<path d="M' + (tx + 5) + ' ' + (ty - 14) + 'C' + (tx + 10) + ' ' + (ty - 24) + ' ' + (tx + 24) + ' ' + (ty - 28) + ' ' + (tx + 34) + ' ' + (ty - 24) + 'C' + (tx + 30) + ' ' + (ty - 14) + ' ' + (tx + 18) + ' ' + (ty - 8) + ' ' + (tx + 5) + ' ' + (ty - 14) + 'Z" fill="url(#' + id + 'l)" stroke="#1f4a2c" stroke-width="1"/>' +
+      '<path d="M' + (tx + 6) + ' ' + (ty - 14.5) + 'C' + (tx + 14) + ' ' + (ty - 19) + ' ' + (tx + 24) + ' ' + (ty - 23) + ' ' + (tx + 33) + ' ' + (ty - 23.6) + '" fill="none" stroke="#1f4a2c" stroke-width=".7"/>';
+    var tipCurl = sh.tip ? '<path d="M52 21C58 16 62 20 58 24C55 27 52 24 55 22" fill="none" stroke="' + hsl(H, S, 30) + '" stroke-width="2.4" stroke-linecap="round"/>' : '';
+    var aura = type === 'logia' ? '<circle cx="50" cy="64" r="48" fill="url(#' + id + 'a)"/>' : '';
     return '<svg viewBox="0 0 100 110" aria-hidden="true"><defs>' +
-      '<radialGradient id="' + id + 'b" cx=".36" cy=".32" r=".78"><stop offset="0" stop-color="' + hsl(H, S, S < 15 ? 86 : 70) + '"/><stop offset=".45" stop-color="' + hsl(H, S, S < 15 ? 66 : 52) + '"/><stop offset="1" stop-color="' + hsl(H, S, S < 15 ? 30 : 30) + '"/></radialGradient>' +
+      '<radialGradient id="' + id + 'b" cx=".36" cy=".3" r=".8"><stop offset="0" stop-color="' + hsl(H, S, grey ? 92 : 72) + '"/><stop offset=".45" stop-color="' + hsl(H, S, grey ? 80 : 54) + '"/><stop offset="1" stop-color="' + hsl(H, S, grey ? 46 : 30) + '"/></radialGradient>' +
       '<radialGradient id="' + id + 's" cx=".3" cy=".26" r=".9"><stop offset=".5" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".5"/></radialGradient>' +
       '<radialGradient id="' + id + 'h" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>' +
       '<radialGradient id="' + id + 'a" cx=".5" cy=".5" r=".5"><stop offset=".55" stop-color="' + hsl(H, S, 60, .35) + '"/><stop offset="1" stop-color="' + hsl(H, S, 60, 0) + '"/></radialGradient>' +
       '<linearGradient id="' + id + 'l" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6cc46f"/><stop offset="1" stop-color="#23663a"/></linearGradient>' +
-      '<clipPath id="' + id + 'c"><path d="' + BODY[shape] + '"/></clipPath></defs>' +
-      aura +
-      '<ellipse cx="50" cy="104" rx="30" ry="4.2" fill="rgba(0,0,0,.28)"/>' +
-      '<path d="' + BODY[shape] + '" fill="url(#' + id + 'b)"/>' +
-      '<g clip-path="url(#' + id + 'c)" fill="none" stroke-linecap="round">' +
-        (GROOVES[shape] ? '<path d="' + GROOVES[shape] + '" stroke="' + groove + '" stroke-width="2.6" opacity=".75"/><path d="' + GROOVES[shape] + '" stroke="' + hi + '" stroke-width=".9" transform="translate(1.2 0)" opacity=".7"/>' : '') +
-        sw +
-        '<rect x="0" y="0" width="100" height="110" fill="url(#' + id + 's)" stroke="none"/>' +
-        '<path d="' + BODY[shape] + '" stroke="' + hsl(H, S, 85, .5) + '" stroke-width="2.4" transform="translate(-1.6 -1.6)"/>' +
+      '<clipPath id="' + id + 'c">' + bodyShapes + '</clipPath></defs>' +
+      aura + '<ellipse cx="50" cy="106" rx="30" ry="3.6" fill="rgba(0,0,0,.28)"/>' + fillShapes +
+      '<g clip-path="url(#' + id + 'c)" fill="none" stroke-linecap="round">' + extra +
+        (sh.g ? '<path d="' + sh.g + '" stroke="' + groove + '" stroke-width="2.6" opacity=".75"/><path d="' + sh.g + '" stroke="' + hi + '" stroke-width=".9" transform="translate(1.2 0)" opacity=".7"/>' : '') +
+        sw + '<rect x="0" y="0" width="100" height="110" fill="url(#' + id + 's)" stroke="none"/>' +
       '</g>' +
-      '<path d="' + BODY[shape] + '" fill="none" stroke="' + hsl(H, S, 16) + '" stroke-width="1.3"/>' +
-      '<ellipse cx="36" cy="44" rx="10" ry="6.5" transform="rotate(-32 36 44)" fill="url(#' + id + 'h)"/>' +
-      '<circle cx="44" cy="38" r="1.8" fill="#fff" opacity=".85"/>' +
-      crown +
-      // stem with a curled tendril, and a veined leaf
-      '<path d="M50 30C49 22 52 15 59 12C66 9 72 13 70 18C68 22 63 20 65 17" fill="none" stroke="#3f2410" stroke-width="3.6" stroke-linecap="round"/>' +
-      '<path d="M50 30C49 22 52 15 59 12" fill="none" stroke="#8a5a2b" stroke-width="1.2" stroke-linecap="round" transform="translate(-.6 -.4)"/>' +
-      '<path d="M55 16C60 6 74 2 84 6C80 16 68 22 55 16Z" fill="url(#' + id + 'l)" stroke="#1f4a2c" stroke-width="1"/>' +
-      '<path d="M56 15.5C64 11 74 7 83 6.4M64 12.4l2-4.4M70 10l2.6-4M64 12.4l-1 4.2M71 9.8l-.2 4.4" fill="none" stroke="#1f4a2c" stroke-width=".7" stroke-linecap="round"/>' +
-      '</svg>';
+      (sh.c ? '' : '<path d="' + sh.d + '" fill="none" stroke="' + hsl(H, S, 16) + '" stroke-width="1.3"/>') +
+      '<ellipse cx="35" cy="' + (sh.top[1] + 16) + '" rx="9" ry="6" transform="rotate(-32 35 ' + (sh.top[1] + 16) + ')" fill="url(#' + id + 'h)"/>' +
+      tipCurl + crown + stem + '</svg>';
   }
   $$('.fruits').forEach(function (list) {
     var type = list.getAttribute('data-type');
     $$('.fruit', list).forEach(function (btn) {
       var name = btn.textContent.trim(), used = btn.getAttribute('data-used'), sp = SPEC[name] || [];
+      var target = { 'Fidelity Investments': '#isle-fidelity', 'Cryptocurrency Investment App': '#isle-crypto', 'QR Code Generator': '#isle-qr', 'UMass Lowell': '#isle-uml' }[used] || (used && used.indexOf('Homework') === 0 ? '#isle-homework' : '');
       var tip = '<b>' + (sp[3] || name) + '</b>' + FRUIT[type].name + ' type. ' + (sp[4] || FRUIT[type].blurb) +
-        (used ? '<i>Used at: ' + used + '</i>' : '');
+        (used ? '<i>Used at: ' + used + (target ? '. Click to sail there.' : '') + '</i>' : '');
+      btn.id = 'fruit-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      if (target) btn.setAttribute('data-target', target);
       btn.innerHTML = fruitSVG(name, type) + '<span class="fruit__name">' + name + '</span>' +
         (sp[3] ? '<span class="fruit__mi">' + sp[3] + '</span>' : '') + '<span class="fruit__tip" role="tooltip">' + tip + '</span>';
-      btn.setAttribute('aria-label', name + ', ' + (sp[3] ? sp[3] + ', ' : '') + FRUIT[type].name + ' type' + (used ? ', used at ' + used : ''));
+      btn.setAttribute('aria-label', name + ', ' + (sp[3] ? sp[3] + ', ' : '') + FRUIT[type].name + ' type' + (used ? ', used at ' + used : '') + (target ? '. Activate to go there.' : ''));
     });
   });
 
@@ -514,6 +632,183 @@
     else if (k === 'c') conqBtn.click();
   });
 
+
+  /* ------------------------------------------------------------ screenshot viewer: one photo, arrows to swap
+     (pattern adapted from Watermelon UI's Radial Carousel + Carousel Navigator) */
+  $$('.spy').forEach(function (spy, n) {
+    var strip = $('.spy__strip', spy), figs = $$('figure', strip);
+    if (!figs.length) return;
+    var label = (strip.getAttribute('aria-label') || 'Screenshots').replace(', scroll sideways', '');
+    var v = document.createElement('div');
+    v.className = 'viewer';
+    v.setAttribute('role', 'region'); v.setAttribute('aria-roledescription', 'carousel'); v.setAttribute('aria-label', label); v.tabIndex = 0;
+    var stage = document.createElement('div'); stage.className = 'viewer__stage';
+    var side = document.createElement('div'); side.className = 'viewer__side';
+    var cap = document.createElement('p'); cap.className = 'viewer__cap'; cap.setAttribute('aria-live', 'polite');
+    var nav = document.createElement('div'); nav.className = 'viewer__nav';
+    nav.innerHTML = '<button type="button" class="viewer__btn" data-dir="-1" aria-label="Previous screenshot"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
+      '<span class="viewer__dots"></span><span class="viewer__count"></span>' +
+      '<button type="button" class="viewer__btn viewer__btn--next" data-dir="1" aria-label="Next screenshot"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+    var dots = $('.viewer__dots', nav), count = $('.viewer__count', nav), i = 0;
+    figs.forEach(function (f, k) {
+      var c = $('figcaption', f); f.setAttribute('data-cap', c ? c.innerHTML : ''); if (c) c.remove();
+      f.setAttribute('aria-hidden', 'true');
+      stage.appendChild(f);
+      var d = document.createElement('button'); d.type = 'button'; d.className = 'viewer__dot'; d.setAttribute('aria-label', 'Show screenshot ' + (k + 1));
+      d.addEventListener('click', function () { show(k, k > i ? 1 : -1); });
+      dots.appendChild(d);
+    });
+    function show(k, dir) {
+      var prev = figs[i];
+      i = (k + figs.length) % figs.length;
+      figs.forEach(function (f, j) {
+        f.classList.remove('is-on', 'from-left', 'from-right', 'is-leaving');
+        f.setAttribute('aria-hidden', j === i ? 'false' : 'true');
+      });
+      if (prev !== figs[i]) prev.classList.add('is-leaving', dir > 0 ? 'to-left' : 'to-right');
+      setTimeout(function () { prev.classList.remove('is-leaving', 'to-left', 'to-right'); }, 450);
+      figs[i].classList.add('is-on', dir > 0 ? 'from-right' : 'from-left');
+      cap.innerHTML = figs[i].getAttribute('data-cap');
+      count.textContent = (i + 1) + ' / ' + figs.length;
+      $$('.viewer__dot', dots).forEach(function (d, j) { d.setAttribute('aria-current', j === i ? 'true' : 'false'); });
+    }
+    $$('.viewer__btn', nav).forEach(function (b) { b.addEventListener('click', function () { var dd = +b.getAttribute('data-dir'); show(i + dd, dd); }); });
+    v.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { e.preventDefault(); show(i + 1, 1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); show(i - 1, -1); }
+    });
+    var sx = null;
+    stage.addEventListener('pointerdown', function (e) { sx = e.clientX; });
+    stage.addEventListener('pointerup', function (e) { if (sx === null) return; var dx = e.clientX - sx; sx = null; if (Math.abs(dx) > 40) show(i + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1); });
+    side.appendChild(cap); side.appendChild(nav);
+    v.appendChild(stage); v.appendChild(side);
+    strip.replaceWith(v);
+    show(0, 1);
+  });
+
+  /* ------------------------------------------------------------ clickable details */
+  // Haki words in the hero list press the matching dock button
+  $$('.hakilink').forEach(function (b) { b.addEventListener('click', function () { var t = document.getElementById(b.getAttribute('data-haki')); if (t) t.click(); }); });
+
+  // Arriving somewhere by link makes the card glow so you can see where you landed
+  function flash(el) {
+    var card = el.classList.contains('log') || el.classList.contains('flag') || el.classList.contains('fruit') ? el : (el.querySelector && el.querySelector('.log'));
+    if (!card) return;
+    card.classList.remove('is-found'); void card.offsetWidth; card.classList.add('is-found');
+    setTimeout(function () { card.classList.remove('is-found'); }, 2200);
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var t = document.getElementById(a.getAttribute('href').slice(1));
+    if (t) setTimeout(function () { flash(t); }, 650);
+  });
+  function goTo(sel) {
+    var t = $(sel); if (!t) return;
+    sailTo(t); flash(t);
+  }
+
+  // Tech chips on every card jump to the matching devil fruit
+  $$('.stack li').forEach(function (li) {
+    var name = li.textContent.trim(), id = 'fruit-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    if (!document.getElementById(id)) return;
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'chip'; b.textContent = name;
+    b.setAttribute('aria-label', name + ': see its devil fruit');
+    b.addEventListener('click', function () { goTo('#' + id); });
+    li.textContent = ''; li.appendChild(b); li.classList.add('has-chip');
+  });
+  // Fruits that were used somewhere sail you there
+  $$('.fruit[data-target]').forEach(function (f) {
+    f.style.cursor = 'pointer';
+    f.addEventListener('click', function () { goTo(f.getAttribute('data-target')); });
+  });
+
+  // Log Pose: follow it to the next island below you
+  var lpBtn = $('#logposeBtn');
+  if (lpBtn) lpBtn.addEventListener('click', function () {
+    document.dispatchEvent(new CustomEvent('logpose:spin'));
+    var stops = $$('.isle, #about, #skills, #leadership, #resume, #contact');
+    var next = stops.filter(function (s) { return s.getBoundingClientRect().top > 140; })
+      .sort(function (a, b) { return a.getBoundingClientRect().top - b.getBoundingClientRect().top; })[0];
+    if (next) setTimeout(function () { sailTo(next); flash(next); }, reduceMotion.matches ? 0 : 500);
+  });
+
+  // The treasure chest on the final island
+  var chestBtn = $('#chestBtn'), chestNote = $('#chestNote');
+  if (chestBtn) chestBtn.addEventListener('click', function () {
+    var open = chestBtn.getAttribute('aria-pressed') !== 'true';
+    chestBtn.setAttribute('aria-pressed', open ? 'true' : 'false');
+    chestBtn.textContent = open ? 'Close the chest' : 'Open the treasure';
+    chestNote.textContent = open ? 'The real treasure is a conversation. Write to maynemurray@gmail.com.' : '';
+    document.dispatchEvent(new CustomEvent('chest:toggle', { detail: open }));
+  });
+
+  // Paper cards get a strip of tape or a tack, chosen per card so it stays put between visits
+  $$('.log, .flag, .logpage, .vivre__card, .port, .bounty').forEach(function (el, k) {
+    if (el.classList.contains('port')) { el.classList.add('paper'); el.style.setProperty('--lean', (((k * 53) % 5) - 2) * .1 + 'deg'); return; }
+    var kind = el.classList.contains('bounty') ? 'tack' : (k % 3 === 0 ? 'tack' : 'tape');
+    var s = document.createElement('span');
+    s.className = kind; s.setAttribute('aria-hidden', 'true');
+    if (kind === 'tape') s.style.setProperty('--tilt', ((k * 37 % 9) - 4) + 'deg');
+    el.appendChild(s);
+    el.classList.add('paper');
+    el.style.setProperty('--lean', (((k * 53) % 7) - 3) * .12 + 'deg');
+  });
+
+  /* ------------------------------------------------------------ the sea moves with you */
+  (function sea() {
+    if (!voyage) return;
+    var layers = '<div class="swell swell--far" aria-hidden="true"></div><div class="swell swell--near" aria-hidden="true"></div>';
+    voyage.insertAdjacentHTML('afterbegin', layers);
+    var far = $('.swell--far', voyage), near = $('.swell--near', voyage);
+    // things floating on the open water, kept in the margins beside the content
+    var D = {
+      whale: '<svg viewBox="0 0 120 60"><path d="M10 40Q30 20 62 24Q92 28 104 40Q90 46 60 46Q30 46 10 40Z" fill="#2a4a63"/><path d="M104 40Q112 30 118 24Q112 38 116 50Q110 44 104 40Z" fill="#2a4a63"/><circle cx="28" cy="34" r="2" fill="#0b1a26"/><path d="M40 22Q38 10 32 6M40 22Q44 10 50 6" stroke="#cfe8f1" stroke-width="2" fill="none" stroke-linecap="round" class="spout"/><path d="M4 46Q60 56 116 46" stroke="rgba(255,255,255,.5)" stroke-width="2" fill="none"/></svg>',
+      barrel: '<svg viewBox="0 0 50 50"><g class="bob"><ellipse cx="25" cy="25" rx="14" ry="16" fill="#8a5a2b" stroke="#4a2a12" stroke-width="2"/><path d="M11 19H39M11 31H39" stroke="#c9a462" stroke-width="3"/><path d="M8 40Q25 46 42 40" stroke="rgba(255,255,255,.55)" stroke-width="2" fill="none"/></g></svg>',
+      rocks: '<svg viewBox="0 0 90 50"><path d="M8 42L20 18L34 26L42 8L60 30L74 22L84 42Z" fill="#4d5862"/><path d="M42 8L48 22L60 30" stroke="#6e7a85" stroke-width="2" fill="none"/><path d="M2 44Q45 52 88 44" stroke="rgba(255,255,255,.55)" stroke-width="2.4" fill="none" stroke-dasharray="6 5"/></svg>',
+      gulls: '<svg viewBox="0 0 80 40"><g fill="none" stroke="#e8f4f6" stroke-width="2" stroke-linecap="round" class="flap"><path d="M6 20q6-7 12 0q6-7 12 0"/><path d="M40 10q5-6 10 0q5-6 10 0"/><path d="M52 28q4-5 8 0q4-5 8 0"/></g></svg>',
+      serpent: '<svg viewBox="0 0 140 60"><path d="M6 46Q20 14 36 40Q50 62 64 34Q78 10 92 38" stroke="#3f7a5e" stroke-width="11" fill="none" stroke-linecap="round"/><path d="M92 38Q100 50 112 40Q122 30 132 34L134 42Q124 40 116 48" fill="#3f7a5e"/><circle cx="124" cy="36" r="2" fill="#ffd27a"/><path d="M6 50Q70 58 136 50" stroke="rgba(255,255,255,.45)" stroke-width="2" fill="none"/></svg>',
+      bottle: '<svg viewBox="0 0 40 40"><g class="bob"><rect x="12" y="10" width="14" height="22" rx="5" fill="rgba(170,220,200,.55)" stroke="#cfe8f1"/><rect x="16" y="5" width="6" height="7" fill="#8a5a2b"/><path d="M15 16h8M15 20h7M15 24h8" stroke="#eedcb6" stroke-width="1.6"/></g></svg>',
+      buoy: '<svg viewBox="0 0 40 50"><g class="bob"><path d="M12 36L20 8L28 36Z" fill="#c8323a"/><path d="M14 28H26" stroke="#f4efe6" stroke-width="4"/><circle cx="20" cy="8" r="3" fill="#ffe08a"/><path d="M4 40Q20 46 36 40" stroke="rgba(255,255,255,.55)" stroke-width="2" fill="none"/></g></svg>',
+      fish: '<svg viewBox="0 0 60 50"><g class="leap"><path d="M14 30Q26 12 44 22Q32 34 14 30Z" fill="#e8a93e"/><path d="M44 22L54 14L52 28Z" fill="#e8a93e"/><circle cx="22" cy="26" r="1.6" fill="#2a1a06"/></g><path d="M6 42Q30 48 54 42" stroke="rgba(255,255,255,.5)" stroke-width="2" fill="none"/></svg>'
+    };
+    var order = ['gulls', 'whale', 'barrel', 'rocks', 'fish', 'bottle', 'serpent', 'buoy', 'gulls', 'barrel', 'whale', 'rocks', 'fish', 'buoy'];
+    var decor = [];
+    function placeDecor() {
+      decor.forEach(function (d) { d.el.remove(); }); decor = [];
+      var w = voyage.clientWidth, h = voyage.scrollHeight;
+      var margin = Math.max(0, (w - 1180) / 2);
+      if (margin < 70) return; // not enough open water beside the content
+      var n = Math.floor(h / 560);
+      for (var k = 0; k < n; k++) {
+        var kind = order[k % order.length], left = k % 2 === 0;
+        var size = kind === 'whale' || kind === 'serpent' ? Math.min(margin - 10, 150) : Math.min(margin - 20, 70);
+        if (size < 40) continue;
+        var el = document.createElement('div');
+        el.className = 'flotsam flotsam--' + kind; el.setAttribute('aria-hidden', 'true');
+        el.innerHTML = D[kind];
+        el.style.width = size + 'px';
+        el.style.left = (left ? (margin - size) * .45 : w - margin + (margin - size) * .55) + 'px';
+        el.style.top = (380 + k * 560 + (k * 131 % 200)) + 'px';
+        voyage.appendChild(el);
+        decor.push({ el: el, speed: .04 + (k % 3) * .035 });
+      }
+    }
+    var ticking = false;
+    function drift() {
+      ticking = false;
+      var y = window.pageYOffset;
+      far.style.transform = 'translate3d(' + (-(y * .06) % 160).toFixed(1) + 'px,' + (y * .18).toFixed(1) + 'px,0)';
+      near.style.transform = 'translate3d(' + ((y * .1) % 220).toFixed(1) + 'px,' + (y * -.08).toFixed(1) + 'px,0)';
+      decor.forEach(function (d) { d.el.style.transform = 'translate3d(0,' + (-(y * d.speed)).toFixed(1) + 'px,0)'; });
+    }
+    if (!reduceMotion.matches) window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(drift); } }, { passive: true });
+    window.addEventListener('load', function () { placeDecor(); drift(); });
+    var dt = null; window.addEventListener('resize', function () { clearTimeout(dt); dt = setTimeout(placeDecor, 200); });
+    placeDecor(); drift();
+  })();
+
   /* ------------------------------------------------------------ Motion Primitives ports (vanilla) */
   var fine = window.matchMedia('(hover: hover) and (pointer: fine)');
   var calm = reduceMotion.matches;
@@ -542,7 +837,7 @@
   });
 
   // In View: cards rise in as they reach the viewport
-  var rising = $$('.log, .flag, .board__item, .grove, .instruments section, .logpage, .vivre, .recruit__in, .port');
+  var rising = $$('.log, .flag, .bounty, .grove, .logpage, .vivre, .port');
   if ('IntersectionObserver' in window && !calm) {
     rising.forEach(function (el) { el.classList.add('inview'); });
     var vio = new IntersectionObserver(function (es) {

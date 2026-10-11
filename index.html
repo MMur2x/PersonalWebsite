@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+DW+Pica+SC&family=Playfair+Display:wght@700;800;900&display=swap">
-<link rel="stylesheet" href="assets/style.css?v=20">
+<link rel="stylesheet" href="assets/style.css?v=21">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -97,9 +97,20 @@
           <a class="btn btn--sea magnetic" href="#resume">Read the résumé</a>
           <a class="btn btn--sea magnetic" href="https://www.linkedin.com/in/mayne-murray/" target="_blank" rel="noopener">LinkedIn</a>
         </div>
-        <p class="hero__haki"><strong>Haki is at the bottom of your screen.</strong> Observation brings out the numbers, Armament opens the technical detail on every card, and Conqueror's shows the highlights in one view.</p>
+        <div class="hero__haki">
+          <p><strong>Haki is at the bottom of your screen.</strong></p>
+          <ul>
+            <li><button type="button" class="hakilink" data-haki="hakiObs"><b>Observation</b></button> brings out the numbers.</li>
+            <li><button type="button" class="hakilink" data-haki="hakiArm"><b>Armament</b></button> opens the technical detail on every card.</li>
+            <li><button type="button" class="hakilink" data-haki="hakiConq"><b>Conqueror's</b></button> shows the highlights in one view.</li>
+          </ul>
+        </div>
       </div>
     </div>
+    <figure class="logpose" aria-label="Log Pose">
+      <canvas class="logpose__canvas" data-scene="logpose" aria-hidden="true"></canvas>
+      <button type="button" class="logpose__btn" id="logposeBtn">Follow the Log Pose<small>Sails to the next island</small></button>
+    </figure>
     <div class="callports" aria-label="Ports of call">
       <p class="callports__label">Ports of call</p>
       <div class="callports__track"><ul class="callports__row">
@@ -227,26 +238,28 @@
         <span class="pin" aria-hidden="true"></span>
       </header>
       <div class="logpage">
-        <p>I'm pursuing a B.S. in Computer Science at the University of Massachusetts Lowell, graduating May 2027 as part of the Honors College. My interests sit where backend development meets infrastructure: automation, systems integration, and building tools that make complicated systems easier to understand.</p>
-        <dl>
-          <div><dt>Studying</dt><dd>B.S. Computer Science, UMass Lowell Honors College</dd></div>
-          <div><dt>Graduating</dt><dd>May 2027</dd></div>
-          <div><dt>Home port</dt><dd>Framingham, MA</dd></div>
-          <div><dt>Last voyage</dt><dd>Software Engineer Intern, Fidelity Investments</dd></div>
-        </dl>
-        <div class="logpage__more">
+        <div class="logpage__main">
+          <p>I'm pursuing a B.S. in Computer Science at the University of Massachusetts Lowell, graduating May 2027 as part of the Honors College. My interests sit where backend development meets infrastructure: automation, systems integration, and building tools that make complicated systems easier to understand.</p>
           <section>
             <h3>Honors &amp; programs</h3>
             <ul class="ticks">
               <li>UMass Lowell Honors College</li>
-              <li>MLT Career Prep '27 Fellow</li>
-              <li>Juniper Scholars Fellow, Juniper Networks</li>
-              <li>SEO Career, Technology Track</li>
-              <li>Grow with Google Scholar</li>
-              <li>RSM Excellence Academy Scholar</li>
-              <li>NSBE Executive Board Senator</li>
+              <li><a class="jump" href="#flag-mlt">MLT Career Prep '27 Fellow</a></li>
+              <li><a class="jump" href="#flag-juniper">Juniper Scholars Fellow, Juniper Networks</a></li>
+              <li><a class="jump" href="#flag-seo">SEO Career, Technology Track</a></li>
+              <li><a class="jump" href="#flag-google">Grow with Google Scholar</a></li>
+              <li><a class="jump" href="#isle-rsm">RSM Excellence Academy Scholar</a></li>
+              <li><a class="jump" href="#flag-nsbe">NSBE Executive Board Senator</a></li>
             </ul>
           </section>
+        </div>
+        <div class="logpage__side">
+        <dl>
+          <div><dt>Studying</dt><dd>B.S. Computer Science, UMass Lowell Honors College</dd></div>
+          <div><dt>Graduating</dt><dd><a class="jump" href="#resume">May 2027</a></dd></div>
+          <div><dt>Home port</dt><dd><a class="jump" href="#contact">Framingham, MA</a></dd></div>
+          <div><dt>Last voyage</dt><dd><a class="jump" href="#isle-fidelity">Software Engineer Intern, Fidelity Investments</a></dd></div>
+        </dl>
           <section>
             <h3>Coursework</h3>
             <ul class="ticks">
@@ -259,15 +272,7 @@
         </div>
       </div>
 
-      <div class="board" aria-labelledby="board-h">
-        <h3 id="board-h" class="board__title">Bounty board <span>the numbers behind the work</span></h3>
-        <ul class="board__grid">
-          <li class="board__item spot" data-tilt="5"><b><span data-count="9">9</span></b><span>Kubernetes resource types in one observability view</span><small>Fidelity Investments</small></li>
-          <li class="board__item spot" data-tilt="5"><b><span data-count="16">16</span></b><span>telemetry dashboards for pod-level performance</span><small>Fidelity Investments</small></li>
-          <li class="board__item spot" data-tilt="5"><b><span data-count="500" data-suffix="+">500+</span></b><span>employees on the support systems I optimized</span><small>RSM US LLP</small></li>
-          <li class="board__item spot" data-tilt="5"><b><span data-count="30" data-suffix="%">30%</span></b><span>fewer manual input errors in client onboarding</span><small>RSM US LLP</small></li>
-        </ul>
-      </div>
+
     </section>
 
     <!-- Experience -->
@@ -279,9 +284,22 @@
         <span class="pin" aria-hidden="true"></span>
       </header>
 
+      <div class="bounties" aria-labelledby="bounty-h">
+        <div class="bounties__intro">
+          <h3 id="bounty-h">Bounties earned</h3>
+          <p>On the Grand Line, a bounty measures how much impact a pirate has made. These are mine: measured results from my internships. Each poster sails you to the island where it was earned.</p>
+        </div>
+        <ul class="bounties__grid">
+          <li><a class="bounty" href="#isle-fidelity" data-tilt="6"><span class="bounty__head">Wanted</span><b><span data-count="9">9</span></b><span class="bounty__what">Kubernetes resource types brought into one observability view</span><small>Fidelity Investments, 2026</small><span class="bounty__go">Sail to Merrimack</span></a></li>
+          <li><a class="bounty" href="#isle-fidelity" data-tilt="6"><span class="bounty__head">Wanted</span><b><span data-count="16">16</span></b><span class="bounty__what">telemetry dashboards for pod-level performance</span><small>Fidelity Investments, 2026</small><span class="bounty__go">Sail to Merrimack</span></a></li>
+          <li><a class="bounty" href="#isle-rsm" data-tilt="6"><span class="bounty__head">Wanted</span><b><span data-count="500" data-suffix="+">500+</span></b><span class="bounty__what">employees using the support systems I optimized</span><small>RSM US LLP, 2025</small><span class="bounty__go">Sail to Minneapolis</span></a></li>
+          <li><a class="bounty" href="#isle-rsm" data-tilt="6"><span class="bounty__head">Wanted</span><b><span data-count="30" data-suffix="%">30%</span></b><span class="bounty__what">fewer manual input errors in client onboarding</span><small>RSM US LLP, 2025</small><span class="bounty__go">Sail to Minneapolis</span></a></li>
+        </ul>
+      </div>
+
       <ol class="islands">
         <li class="isle" data-side="left">
-          <div class="isle__art" data-seed="11" data-flag="exp"><span class="pin" aria-hidden="true"></span><span class="isle__name" aria-hidden="true">Merrimack</span></div>
+          <div class="isle__art" data-landmark="lighthouse" data-seed="11" data-flag="exp"><span class="pin" aria-hidden="true"></span><span class="isle__name" aria-hidden="true">Merrimack</span></div>
           <article class="log" id="isle-fidelity" aria-labelledby="fid-h">
             <h3 id="fid-h">Software Engineer Intern</h3>
             <p class="log__org">Fidelity Investments</p>
@@ -304,7 +322,7 @@
         </li>
 
         <li class="isle" data-side="right">
-          <div class="isle__art" data-seed="27" data-flag="exp"><span class="pin" aria-hidden="true"></span><span class="isle__name" aria-hidden="true">Minneapolis</span></div>
+          <div class="isle__art" data-landmark="windmill" data-seed="27" data-flag="exp"><span class="pin" aria-hidden="true"></span><span class="isle__name" aria-hidden="true">Minneapolis</span></div>
           <article class="log" id="isle-rsm" aria-labelledby="rsm-h">
             <h3 id="rsm-h">Information Technology Intern</h3>
             <p class="log__org">RSM US LLP</p>
@@ -327,7 +345,7 @@
         </li>
 
         <li class="isle" data-side="left">
-          <div class="isle__art" data-seed="43" data-flag="exp"><span class="pin" aria-hidden="true"></span><span class="isle__name" aria-hidden="true">Lowell</span></div>
+          <div class="isle__art" data-landmark="mill" data-seed="43" data-flag="exp"><span class="pin" aria-hidden="true"></span><span class="isle__name" aria-hidden="true">Lowell</span></div>
           <article class="log" id="isle-uml" aria-labelledby="uml-h">
             <h3 id="uml-h">Data Management Intern</h3>
             <p class="log__org">University of Massachusetts Lowell</p>
@@ -362,7 +380,7 @@
 
       <ol class="islands">
         <li class="isle" data-side="right">
-          <div class="isle__art" data-seed="58" data-flag="proj"><span class="pin" aria-hidden="true"></span></div>
+          <div class="isle__art" data-landmark="clocktower" data-seed="58" data-flag="proj"><span class="pin" aria-hidden="true"></span><span class="isle__name" aria-hidden="true">Deadline Cay</span></div>
           <article class="log" id="isle-homework" aria-labelledby="hw-h">
             <h3 id="hw-h">Homework Tracker Extension</h3>
             <p class="log__meta">Sep 2026 to present</p>
@@ -392,7 +410,7 @@
         </li>
 
         <li class="isle" data-side="left">
-          <div class="isle__art" data-seed="71" data-flag="proj"><span class="pin" aria-hidden="true"></span></div>
+          <div class="isle__art" data-landmark="treasure" data-seed="71" data-flag="proj"><span class="pin" aria-hidden="true"></span><span class="isle__name" aria-hidden="true">Coin Key</span></div>
           <article class="log" id="isle-crypto" aria-labelledby="cr-h">
             <h3 id="cr-h">Cryptocurrency Investment App</h3>
             <p class="log__meta">Jun to Dec 2025</p>
@@ -423,7 +441,7 @@
         </li>
 
         <li class="isle" data-side="right">
-          <div class="isle__art" data-seed="86" data-flag="proj"><span class="pin" aria-hidden="true"></span></div>
+          <div class="isle__art" data-landmark="shipyard" data-seed="86" data-flag="proj"><span class="pin" aria-hidden="true"></span><span class="isle__name" aria-hidden="true">Shipwright's Rest</span></div>
           <article class="log" id="isle-site" aria-labelledby="site-h">
             <h3 id="site-h">Personal Portfolio Website</h3>
             <p class="log__meta">Summer 2025, redesigned 2026</p>
@@ -446,7 +464,7 @@
         </li>
 
         <li class="isle" data-side="left">
-          <div class="isle__art" data-seed="93" data-flag="proj"><span class="pin" aria-hidden="true"></span></div>
+          <div class="isle__art" data-landmark="checker" data-seed="93" data-flag="proj"><span class="pin" aria-hidden="true"></span><span class="isle__name" aria-hidden="true">Checker Rock</span></div>
           <article class="log" id="isle-qr" aria-labelledby="qr-h">
             <h3 id="qr-h">QR Code Generator</h3>
             <p class="log__meta">Fall 2024</p>
@@ -471,7 +489,7 @@
     <section class="sea" id="skills" aria-labelledby="skills-h">
       <header class="sea__head sea__head--right" style="position:relative">
         <p class="region">Devil fruit encyclopedia</p>
-        <h2 id="skills-h" class="split">Languages, tools, and coursework</h2>
+        <h2 id="skills-h" class="split">Languages, frameworks, and infrastructure</h2>
         <p class="legend">Every skill is a fruit. Paramecia are the languages I write, Zoan are the frameworks I shape things with, and Logia are the infrastructure I run on. Every fruit here is an original drawing. Hover, tap or focus one to read its power and where I've used it.</p>
         <span class="pin" aria-hidden="true"></span>
       </header>
@@ -510,16 +528,7 @@
             <li><button class="fruit" type="button" data-used="Fidelity Investments">OpenTelemetry</button></li>
           </ul>
         </section>
-        <div class="instruments">
-          <section aria-labelledby="g-tools">
-            <h3 id="g-tools">Ship's instruments – Tools</h3>
-            <ul><li>Git</li><li>GitHub</li><li>Git Bash</li><li>Azure DevOps</li><li>VS Code</li></ul>
-          </section>
-          <section aria-labelledby="g-course">
-            <h3 id="g-course">Training – Coursework</h3>
-            <ul><li>Software Engineering I</li><li>Operating Systems</li><li>Organization of Programming Languages</li></ul>
-          </section>
-        </div>
+
       </div>
     </section>
 
@@ -532,7 +541,7 @@
         <span class="pin" aria-hidden="true"></span>
       </header>
       <ul class="flags">
-        <li class="flag spot" data-tilt="4" style="--band:#e8a93e">
+        <li class="flag" id="flag-nsbe" style="--band:#e8a93e">
           <h3>National Society of Black Engineers</h3>
           <p class="flag__when">Senator, Oct 2023 to present</p>
           <p>I serve as a Senator for NSBE at UMass Lowell.</p>
@@ -543,27 +552,27 @@
             <li>Support peers with résumé review and interview preparation, and connect students to tutoring and internship opportunities.</li>
           </ul>
         </li>
-        <li class="flag spot" data-tilt="4" style="--band:#d24a4a">
+        <li class="flag" id="flag-mlt" style="--band:#d24a4a">
           <h3>MLT Career Prep '27 Fellow</h3>
           <p class="flag__when">Aug 2025 to present</p>
           <p>Management Leadership for Tomorrow's Career Prep fellowship: extensive leadership development, career navigation and personal branding through one-on-one coaching, workshops and corporate partner events, plus case studies and mock interviews with top-tier firms.</p>
         </li>
-        <li class="flag spot" data-tilt="4" style="--band:#3f8f5a">
+        <li class="flag" id="flag-juniper" style="--band:#3f8f5a">
           <h3>Juniper Scholars Fellow</h3>
           <p class="flag__when">Sep 2024 to present</p>
           <p>A competitive fellowship with Juniper Networks focused on academic and professional development for underrepresented students in tech, including mentoring sessions with Juniper engineers and workshops on technical and leadership skills.</p>
         </li>
-        <li class="flag spot" data-tilt="4" style="--band:#2f7fb0">
+        <li class="flag" id="flag-seo" style="--band:#2f7fb0">
           <h3>SEO Career, Technology Track</h3>
           <p class="flag__when">Jul 2024 to Jun 2025</p>
           <p>Sponsors for Educational Opportunity's Finance, Corporate &amp; Technology program: industry-specific training in technical skills and business fundamentals, one-on-one coaching, and webinars and panels on corporate technology roles.</p>
         </li>
-        <li class="flag spot" data-tilt="4" style="--band:#8a6bd1">
+        <li class="flag" id="flag-google" style="--band:#8a6bd1">
           <h3>Grow with Google Scholar</h3>
           <p class="flag__when">Jul 2025</p>
           <p>Training in data analytics, résumé building, interview preparation and personal branding through curated Google and Coursera pathways, with a project portfolio demonstrating proficiency in digital tools.</p>
         </li>
-        <li class="flag spot" data-tilt="4" style="--band:#5b5670">
+        <li class="flag" id="flag-campus" style="--band:#5b5670">
           <h3>Campus communities</h3>
           <p class="flag__when">UMass Lowell</p>
           <ul class="flag__list">
@@ -604,19 +613,6 @@
       </div>
     </section>
 
-    <!-- Recruit band -->
-    <section class="recruit" aria-labelledby="recruit-h">
-      <div class="recruit__in trail">
-        <p class="region">Now recruiting</p>
-        <h2 id="recruit-h">Looking for a software engineer for your crew?</h2>
-        <p>I'm open to 2027 software engineering roles and internships, especially backend, platform and observability work.</p>
-        <div class="recruit__actions">
-          <a class="btn btn--sail magnetic" href="mailto:maynemurray@gmail.com">Send a message</a>
-          <a class="btn btn--sea magnetic" href="Mayne%20Murray%20Internship%20Resume.pdf" download>Download résumé</a>
-        </div>
-      </div>
-    </section>
-
     <!-- Contact -->
     <section class="sea" id="contact" aria-labelledby="con-h">
       <header class="sea__head sea__head--left">
@@ -643,6 +639,9 @@
         </ul>
         <div class="xmark" data-seed="104">
           <span class="pin" aria-hidden="true"></span>
+          <canvas class="chest__canvas" data-scene="chest" aria-hidden="true"></canvas>
+          <button type="button" class="chest__btn btn btn--sea" id="chestBtn" aria-pressed="false">Open the treasure</button>
+          <p class="chest__note" id="chestNote" role="status"></p>
         </div>
       </div>
     </section>
@@ -653,7 +652,7 @@
       <p>© 2026 Mayne Murray. Built from scratch with HTML, CSS and JavaScript.</p>
       <p><a href="https://github.com/MMurr2x" target="_blank" rel="noopener">GitHub</a> &nbsp; <a href="#top">Sail back to the start</a></p>
     </div>
-    <p class="footer__fine">Motion ideas adapted from Motion Primitives; landing layout patterns inspired by Watermelon UI; backgrounds generated in the style of Haikei. Fan-inspired design. Not affiliated with or endorsed by Eiichiro Oda, Shueisha, or Toei Animation.</p>
+    <p class="footer__fine">Motion ideas adapted from Motion Primitives; carousel, card and stat patterns adapted from Watermelon UI; 3D pieces built with Three.js; backgrounds generated in the style of Haikei. Fan-inspired design. Not affiliated with or endorsed by Eiichiro Oda, Shueisha, or Toei Animation.</p>
   </footer>
 </main>
 
@@ -705,6 +704,8 @@
   </div>
 </dialog>
 
-<script src="assets/site.js?v=20" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+<script src="assets/site.js?v=21" defer></script>
+<script src="assets/voyage3d.js?v=21" defer></script>
 </body>
 </html>
