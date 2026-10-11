@@ -626,10 +626,10 @@ html.haki-conq .voyage, html.haki-conq .hero, html.haki-conq .footer, html.haki-
 /* ---------------------------------------------------------------- Haikei-style buttons */
 .btn { position: relative; overflow: hidden; isolation: isolate; transition: transform .25s cubic-bezier(.2,.8,.2,1), filter .2s, box-shadow .2s; }
 .btn svg { width: 18px; height: 18px; flex: none; }
-.btn--sail { background: #e8a93e url("bg/btn-gold.svg") center / cover no-repeat; border-color: #c98a22; box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 6px 18px -8px rgba(232,169,62,.8); }
-.btn--sea { background: #1d5579 url("bg/btn-sea.svg") center / cover no-repeat; border-color: rgba(255,255,255,.28); color: #eaf6f7; box-shadow: inset 0 1px 0 rgba(255,255,255,.18); }
+.btn--sail { background: #e8a93e url("../images/backgrounds/button-gold.svg") center / cover no-repeat; border-color: #c98a22; box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 6px 18px -8px rgba(232,169,62,.8); }
+.btn--sea { background: #1d5579 url("../images/backgrounds/button-sea.svg") center / cover no-repeat; border-color: rgba(255,255,255,.28); color: #eaf6f7; box-shadow: inset 0 1px 0 rgba(255,255,255,.18); }
 .btn--sea:hover { filter: brightness(1.12); }
-.btn--parch { background: #eedcb6 url("bg/btn-parch.svg") center / cover no-repeat; border-color: var(--ink); color: var(--ink); }
+.btn--parch { background: #eedcb6 url("../images/backgrounds/button-parchment.svg") center / cover no-repeat; border-color: var(--ink); color: var(--ink); }
 .btn::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.28) 50%, transparent 70%); transform: translateX(-120%); transition: transform .6s ease; }
 .btn:hover::after { transform: translateX(120%); }
 
@@ -714,7 +714,7 @@ html.haki-obs .board__item { border-color: var(--obs); box-shadow: 0 0 18px rgba
 .recruit { position: relative; z-index: 2; max-width: 1180px; margin: 0 auto; padding: 110px 24px 0; }
 .recruit__in {
   position: relative; padding: clamp(28px, 5vw, 56px); border-radius: 6px; text-align: center; color: #eaf6f7;
-  background: #0d2e45 url("bg/btn-sea.svg") center / cover no-repeat;
+  background: #0d2e45 url("../images/backgrounds/button-sea.svg") center / cover no-repeat;
   box-shadow: var(--shadow);
 }
 .recruit__in .region { color: #e8a93e; }
