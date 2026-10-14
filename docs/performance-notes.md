@@ -1,46 +1,25 @@
-# Performance review after the ocean remodel
+# Portfolio performance notes
 
-The ocean now uses one static SVG wave texture at two scales over a blue depth gradient.
-Only the two viewport-sized texture layers' transforms animate. There is no ocean WebGL
-context, per-frame JavaScript loop, or scroll handler. Motion pauses when the tab is hidden
-and stops under reduced motion. The floating Log Pose, its scene, pointer handler and
-scroll-driven heading updates have been removed.
+The site uses seven focused HTML pages with shared CSS and small JavaScript files. There is no build step or runtime framework. `contact.html` is a compatibility redirect to the résumé's contact section.
 
-Local checks: two automated regression tests pass; all three active JavaScript files pass
-syntax checks. The browser preview shows an animated DIV ocean and only the treasure chest
-canvas. Wave transforms changed between observations, confirming independent motion.
-The preview reported no browser warnings or errors.
+## Rendering
 
-## Remaining optimization candidates
+- The neutral backdrop uses static CSS gradients with no image download, parallax, or JavaScript render loop.
+- Scroll navigation uses CSS paper folds and wooden rollers. Stone panels use a small inline SVG fleck tile, gradients, bevels, and inset grooves.
+- Main headings use Shojumaru, subheadings use Kaushan Script, and body text and controls use Noto Sans. One font stylesheet requests the fonts with `display=swap`.
+- Pages load scripts for their relevant interactions. The Blog uses native FAQ disclosures and shared navigation controls.
+- The résumé embeds its PDF lazily and provides direct open/download links. Contact artwork is static SVG.
 
-These are source and browser observations, not a measured ranking of frame-time costs.
-No claim of zero lag on every device is made.
+## Interactions
 
-1. **Route painting during scrolling.** `placeShip()` changes the gold SVG route's stroke
-   dash offset. The route spans the voyage (about 14,000 CSS pixels in the narrow preview),
-   and `.route` retains `will-change: transform` despite not being transformed. Cache
-   voyage bounds and document height, and consider drawing only the visible route segment.
-   `frame()` also reads document height after ship style writes, which can cause layout work.
-2. **Paper and distressed ink.** There are 23 paper cards. Paper combines drop shadows,
-   many background layers, crumple blending, and detailed polygon clipping. Poster and bounty
-   lettering use SVG turbulence/displacement filters. These are mostly static, but costly
-   when first painted or invalidated by transitions, counters or hover effects.
-3. **Persistent decorative animation.** Island flags, smoke, windmill blades, lighthouse
-   details, ship foam, the hero clouds and Haki hints retain infinite CSS animation.
-   Some animate paint properties (fill, stroke offsets and glow filters). Their code does
-   not explicitly pause them offscreen. Pause decorative animations outside the viewport.
-4. **Rotating button border.** One `.trail` element continuously animates a custom angle
-   driving a conic gradient, with masking. This can repaint every animation frame.
-5. **Pointer effects.** Six tilt cards plus spotlight and magnetic effects read element
-   bounds on pointer movement and write transforms or gradient positions. Batch pointer
-   updates and cache bounds while hovering if desktop interaction still feels slow.
-6. **Treasure chest.** The remaining Three.js scene renders when its canvas is visible,
-   even when the closed chest is idle. It includes 70 separate coin meshes and pixel ratios
-   up to 2. Prefer a still frame when idle and render only the opening/closing animation.
-7. **New ocean's residual cost.** Two moving textures still require compositor work and
-   image rasterization on initial load. Their size is bounded by the viewport rather than
-   page length; there are no shader calculations or per-scroll repaint instructions.
+- Experience alone offers Byakugan numerical readouts, Sharingan expanded details with a light static tint, and a Sage Mode highlights dialog.
+- Eye controls start with a normal eye and blink into the selected appearance. The temporary activation cue lasts 1.6 seconds. New activations replace the previous cue; cancellation, hidden tabs, and reduced-motion changes remove it. Reduced motion preserves the reading action and skips the cue.
+- Byakugan's white numerical glow and Sharingan's tint are static while selected. The highlights overview uses a brief entrance and then stays still.
+- Project galleries change only when selected through buttons, indicators, arrow keys, or touch swipes. Transitions cancel stale timers during rapid navigation; gallery controls have 44-pixel hit targets.
+- Contact copy confirmations and page transitions are brief. There is no continuous background animation or 3D rendering loop.
 
-Next measurement: compare identical scroll runs with the route, paper filters and
-decorative animations disabled separately in browser performance tools. Record frame
-times and paint/layout costs before choosing further changes.
+## Areas to inspect if scrolling feels slow
+
+Project image decoding, gallery transitions, the browser's PDF viewer, CSS compositing, and font loading are potential sources of delay. These are inspection candidates, not measured causes. No fixed frame-rate claim is made.
+
+Run local checks with `node --test` after changes. Check navigation, local links and fragments, factual content, galleries, Experience modes, contact copying, and the PDF preview on desktop and mobile layouts before an explicitly requested publication.

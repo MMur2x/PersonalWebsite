@@ -1,41 +1,50 @@
 # Mayne Murray — Portfolio
 
-Live site: https://mmur2x.github.io/PersonalWebsite/
+[Live portfolio](https://mmur2x.github.io/PersonalWebsite/)
 
-A One Piece–themed "Grand Line voyage" portfolio: a wanted poster, the Going Merry sailing down
-a route of islands, devil fruits for skills, and Haki toggles that reveal more detail. Plain HTML,
-CSS and JavaScript with no build step, deployed by GitHub Pages from `main`.
+A personal portfolio built with plain HTML, CSS, and JavaScript. There is no build step or runtime framework. Seven pages cover professional experience, projects, education, skills, and contact information.
 
-## Folder layout
+## Pages
 
-```
-index.html                    the whole site (one page)
-about.html, projects.html,    old page addresses; each redirects to its section of index.html
-leadership.html, contact.html,
-resume.html
-assets/
-  css/site.css                every style; color and font tokens are at the top
-  js/site.js                  route + ship, islands, devil fruits, screenshot viewer, Haki, effects
-  js/ocean.js                 visibility handling for the CSS animated ocean
-  js/voyage-3d.js             Three.js scene: the treasure chest
-  js/archive/scenes-3d-v1.js  3D scenes from the previous design (not loaded)
-  images/headshot.jpg         wanted-poster photo
-  images/projects/            screenshots, one folder per project, numbered in viewer order
-  images/backgrounds/         button backgrounds and cached ocean wave artwork
-  docs/mayne-murray-resume.pdf
-```
+- `index.html`: introduction and six scroll-style navigation links.
+- `experience.html`: three internships, measured results, and expandable technical details.
+- `projects.html`: four personal projects, implementation details, and screenshot galleries.
+- `about.html`: background, education, leadership, and fellowships.
+- `skills.html`: technology badges linked to relevant experience and projects.
+- `resume.html`: résumé PDF preview and download, contact links, and email/phone copy buttons.
+- `blog.html`: a portfolio guide with a table of contents and native FAQ disclosures.
 
-## Updating
+`contact.html` redirects to the résumé's contact section. Shared links using former `index.html#section` addresses route to the corresponding page. Detail pages include a Back to home link and shared navigation.
 
-- Text lives in `index.html`. Each section is marked with a comment (`<!-- Experience -->`, …).
-- Add a project screenshot: put it in `assets/images/projects/<project>/`, numbered, and add a
-  `<figure>` to that project's card. The viewer picks it up automatically.
-- Replace the résumé: overwrite `assets/docs/mayne-murray-resume.pdf` with the same name.
-- After changing CSS or JS, bump the `?v=` number on their links in `index.html` so browsers
-  load the new files.
+## Design and interactions
 
-## Credits
+A neutral static CSS backdrop sits behind carved-stone content panels and parchment scroll navigation. Light and dark themes share three font roles: Shojumaru for main headings, Kaushan Script for subheadings and scroll labels, and Noto Sans for body text and controls. Fonts load together with `display=swap`.
 
-Motion ideas adapted from Motion Primitives; carousel and card patterns from Watermelon UI;
-backgrounds generated in the style of Haikei; 3D with Three.js r128. Fan-inspired design, not
-affiliated with or endorsed by Eiichiro Oda, Shueisha, or Toei Animation.
+Experience offers three optional reading modes:
+
+- **Byakugan:** reveals numerical impact readouts.
+- **Sharingan:** expands internship details and applies a light static tint.
+- **Sage Mode:** opens a calm highlights overview with links to the full records.
+
+Each mode has a normal eye that blinks into its selected appearance during a 1.6-second activation cue. Reduced-motion preferences skip the cue. Individual detail buttons and the measured-results section remain available independently.
+
+Project galleries support previous/next buttons, indicators, arrow keys, and touch swipes. Contact copy buttons confirm successful copying. The Blog explains these features and links directly to the relevant portfolio sections.
+
+## Source files
+
+- `assets/css/site.css`: shared theme, typography, materials, and component styles.
+- `assets/css/pages.css`: home and detail-page layouts.
+- `assets/js/site.js`: detail controls, Experience reading modes, skills, galleries, and contact interactions.
+- `assets/js/pages.js`: page navigation, theme/menu controls, and legacy section routing.
+- `assets/js/atmosphere.js`: visibility flags for the static backdrop.
+- `assets/js/mission-scroll.js`: résumé-page contact scroll illustration.
+- `assets/images/`: portfolio imagery and project screenshots.
+- `assets/docs/mayne-murray-resume.pdf`: downloadable résumé.
+
+After changing CSS or JavaScript, update its version query in the pages that load it. Run the local regression checks with `node --test`.
+
+The site is hosted on GitHub Pages. Publish only when the owner explicitly requests a push or publication.
+
+## Design references
+
+The implementation uses native HTML, CSS, and JavaScript.

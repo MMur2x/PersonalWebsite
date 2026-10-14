@@ -2,13 +2,157 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mayne Murray</title>
-<link rel="canonical" href="https://mmur2x.github.io/PersonalWebsite/#projects">
-<meta http-equiv="refresh" content="0; url=index.html#projects">
-<script>location.replace('index.html#projects');</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Projects — Mayne Murray</title>
+<meta name="description" content="Mayne Murray — Computer Science student at UMass Lowell (Class of 2027). Software Engineer Intern at Fidelity Investments working on Kubernetes, OpenTelemetry and Grafana observability. NSBE Executive Board Senator.">
+<meta name="author" content="Mayne Murray">
+<meta property="og:title" content="Mayne Murray — Computer Science @ UMass Lowell">
+<meta property="og:description" content="CS student, Software Engineer Intern, and NSBE Executive Board Senator building backend systems, observability tooling, and AI-assisted software.">
+<meta property="og:image" content="https://mmur2x.github.io/PersonalWebsite/assets/images/headshot.jpg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#13212b">
+<script>try{var t=localStorage.getItem('mm-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+<link rel="stylesheet" href="assets/css/site.css?v=46">
+<link rel="stylesheet" href="assets/css/pages.css?v=46">
 </head>
-<body style="background:#051726;color:#dcedea;font-family:system-ui,sans-serif;padding:24px">
-<p>This page moved into the main voyage. <a style="color:#e8a93e" href="index.html#projects">Continue to the projects section</a>.</p>
-</body>
-</html>
+<body class="portfolio-detail" data-page="projects">
+<a class="skip" href="#main">Skip to content</a>
+<div class="atmosphere" id="atmosphere" aria-hidden="true"></div>
+<header class="topbar">
+  <div class="topbar__in">
+    <a class="brand" href="index.html" aria-label="Mayne Murray, back to the start">
+      <span class="brand__plate" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true" focusable="false"><path d="M5 34V14l8 12 8-12v20M27 34V14l8 12 8-12v20" stroke="currentColor" stroke-width="2.8" stroke-linecap="square" stroke-linejoin="miter"/></svg></span>
+      <span>Mayne Murray</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Portfolio pages"><ul><li><a href="experience.html">Experience</a></li><li><a href="projects.html">Projects</a></li><li><a href="about.html">About</a></li><li><a href="skills.html">Skills</a></li><li><a href="blog.html">Blog</a></li><li><a href="resume.html">Résumé &amp; contact</a></li></ul></nav>
+    <button class="iconbtn motion" id="motion" type="button" aria-pressed="false" aria-label="Pause background motion" title="Pause background motion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg></button>
+    <button class="iconbtn theme" id="theme" type="button" aria-label="Switch to light mode">
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>
+    </button>
+    <button class="iconbtn burger" id="burger" type="button" aria-label="Open the section menu" aria-expanded="false" aria-controls="nav">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main" class="portfolio-page"><div class="page-toolbar"><a class="back-home" href="index.html">← Back to home</a><span>Projects</span></div><div class="voyage page-content"><section class="sea" id="projects" aria-labelledby="proj-h">
+      <header class="sea__head sea__head--left" style="position:relative">
+        <p class="region">Selected projects</p>
+        <h1 id="proj-h" class="split">Things I've built</h1>
+        <p class="lede">Personal projects where I get to choose the whole stack.</p>
+
+      </header>
+
+      <ol class="islands">
+        <li class="isle" data-side="right">
+          <div class="isle__art" data-landmark="clocktower" data-seed="58" data-flag="proj"><span class="isle__name" aria-hidden="true">Assignment calendar</span></div>
+          <article class="log" id="isle-homework" aria-labelledby="hw-h">
+            <h3 id="hw-h">Homework Tracker Extension</h3>
+            <p class="log__meta">Sep 2026 to present</p>
+            <p class="log__summary">A Chrome extension that brings Canvas assignments to life. It syncs automatically the moment you submit work, so there's no manual refresh, and lays every due date, exam and deadline out on an interactive calendar with day-by-day detail views and custom notes.</p>
+            <div class="reveal readout"><div><ul aria-label="Impact">
+              <li>Real-time Canvas sync</li><li>5 views</li><li>Every enrolled class tracked</li>
+            </ul></div></div>
+            <div class="spy">
+              <div class="spy__strip" tabindex="0" aria-label="Homework Tracker screenshots, scroll sideways">
+                <figure><img loading="lazy" src="assets/images/projects/homework-tracker/01-calendar.webp" alt="Homework Tracker month calendar with color-coded status dots on each day"><figcaption><b>Calendar.</b> A month grid with per-day status dots: red for overdue, amber for due within three days, green for completed.</figcaption></figure>
+                <figure><img loading="lazy" src="assets/images/projects/homework-tracker/02-alerts-and-notes.webp" alt="Homework Tracker day-detail panel showing assignments, notes and reminders"><figcaption><b>Alerts &amp; notes.</b> Clicking a day opens that date's assignments, custom notes and optional reminders.</figcaption></figure>
+                <figure><img loading="lazy" src="assets/images/projects/homework-tracker/03-announcements.webp" alt="Homework Tracker view listing university academic announcements"><figcaption><b>Announcements.</b> Academic announcements for your university, surfaced alongside your deadlines.</figcaption></figure>
+                <figure><img loading="lazy" src="assets/images/projects/homework-tracker/04-sort-by-class.webp" alt="Homework Tracker assignments grouped by class"><figcaption><b>Sort by class.</b> A per-course view of each class's assignments and their status.</figcaption></figure>
+                <figure><img loading="lazy" src="assets/images/projects/homework-tracker/05-agenda.webp" alt="Homework Tracker agenda list of upcoming assignments"><figcaption><b>Agenda.</b> A chronological list of everything due, color-coded by urgency.</figcaption></figure>
+              </div>
+            </div>
+            <div class="reveal detail" id="hw-detail"><div>
+              <ul class="points">
+                <li>Built on Manifest V3 with a background service worker that detects Canvas activity in real time and syncs on a user-chosen interval.</li>
+                <li>Color-codes each day by urgency and tracks completion across all enrolled classes with a progress ring.</li>
+                <li>Light and dark themes, plus a side-panel mode so it stays open while you work.</li>
+              </ul>
+              <ul class="stack" aria-label="Tech stack"><li>JavaScript</li><li>Chrome MV3</li><li>Service Workers</li><li>Canvas API</li></ul>
+            </div></div>
+            <button class="harden" type="button" aria-expanded="false" aria-controls="hw-detail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h12a3 3 0 0 1 3 3v10H8a3 3 0 0 1-3-3V4Zm0 0a2 2 0 0 0-2 2v2h2M8 17v3h12a2 2 0 0 0 2-2v-1h-2M9 8h7M9 12h7"/></svg><span>Open details</span></button>
+          </article>
+        </li>
+
+        <li class="isle" data-side="left">
+          <div class="isle__art" data-landmark="treasure" data-seed="71" data-flag="proj"><span class="isle__name" aria-hidden="true">Mobile finance app</span></div>
+          <article class="log" id="isle-crypto" aria-labelledby="cr-h">
+            <h3 id="cr-h">Cryptocurrency Investment App</h3>
+            <p class="log__meta">Jun to Dec 2025</p>
+            <p class="log__summary">A multi-tab mobile app built in Flutter with five working screens: Dashboard, Invest, News, Learn and Settings.</p>
+            <div class="reveal readout"><div><ul aria-label="Impact">
+              <li>5 working screens</li><li>Settings survive restarts</li>
+            </ul></div></div>
+            <div class="spy">
+              <div class="spy__strip" tabindex="0" aria-label="Crypto app screenshots, scroll sideways">
+                <figure><img loading="lazy" src="assets/images/projects/crypto-app/01-dashboard.webp" alt="Crypto app dashboard screen showing a portfolio balance and holdings"><figcaption><b>Dashboard.</b> Personal and global insights, currency holdings and total balance.</figcaption></figure>
+                <figure><img loading="lazy" src="assets/images/projects/crypto-app/02-invest.webp" alt="Crypto app invest screen with a currency search"><figcaption><b>Invest.</b> Search to find and browse currencies.</figcaption></figure>
+                <figure><img loading="lazy" src="assets/images/projects/crypto-app/03-news.webp" alt="Crypto app news screen with a list of articles"><figcaption><b>News.</b> A feed that updates with current crypto news.</figcaption></figure>
+                <figure><img loading="lazy" src="assets/images/projects/crypto-app/04-learn.webp" alt="Crypto app learn screen with educational content"><figcaption><b>Learn.</b> Content users can review to learn more about crypto.</figcaption></figure>
+                <figure><img loading="lazy" src="assets/images/projects/crypto-app/05-settings.webp" alt="Crypto app settings screen with toggles and dropdowns"><figcaption><b>Settings.</b> Toggles and dropdowns that persist across restarts via SharedPreferences.</figcaption></figure>
+              </div>
+              <p class="spy__note">Sample screens; some values shown are placeholders.</p>
+            </div>
+            <div class="reveal detail" id="cr-detail"><div>
+              <ul class="points">
+                <li>Persistent Settings tab using SharedPreferences, so toggles and dropdown choices survive app restarts.</li>
+                <li>Custom login screen with a frosted-glass UI and animated slide-up transitions.</li>
+                <li>Tracked down and fixed navigation bugs so all <span class="metric">five tabs</span> render correctly in the bottom navigation bar.</li>
+              </ul>
+              <ul class="stack" aria-label="Tech stack"><li>Dart</li><li>Flutter</li><li>Mobile</li><li>SharedPreferences</li></ul>
+            </div></div>
+            <button class="harden" type="button" aria-expanded="false" aria-controls="cr-detail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h12a3 3 0 0 1 3 3v10H8a3 3 0 0 1-3-3V4Zm0 0a2 2 0 0 0-2 2v2h2M8 17v3h12a2 2 0 0 0 2-2v-1h-2M9 8h7M9 12h7"/></svg><span>Open details</span></button>
+          </article>
+        </li>
+
+        <li class="isle" data-side="right">
+          <div class="isle__art" data-landmark="shipyard" data-seed="86" data-flag="proj"><span class="isle__name" aria-hidden="true">Portfolio website</span></div>
+          <article class="log" id="isle-site" aria-labelledby="site-h">
+            <h3 id="site-h">Personal Portfolio Website</h3>
+            <p class="log__meta">Summer 2025, redesigned 2026</p>
+            <p class="log__summary">This site. Built from scratch with a custom CSS design system, light and dark themes, expandable details, and screenshot galleries, version-controlled with Git and deployed on GitHub Pages.</p>
+            <div class="reveal readout"><div><ul aria-label="Impact">
+              <li>No framework</li><li>No build step</li><li>Reduced motion respected</li>
+            </ul></div></div>
+            <div class="reveal detail" id="site-detail"><div>
+              <ul class="points">
+                <li>Every color, space and shadow is a design token, so the whole site re-skins from one block of CSS.</li>
+                <li>Project illustrations and skill badges use SVG; the reading controls and galleries use vanilla JavaScript with no framework.</li>
+                <li>Page transitions use short native CSS animations with reduced-motion support.</li>
+                <li>A lightweight CSS cloud layer moves without a JavaScript rendering loop or scroll-driven parallax.</li>
+              </ul>
+              <ul class="stack" aria-label="Tech stack"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>GitHub Pages</li></ul>
+              <p style="margin-top:14px"><a class="inline" href="https://github.com/MMur2x/PersonalWebsite" target="_blank" rel="noopener">View source repository</a></p>
+            </div></div>
+            <button class="harden" type="button" aria-expanded="false" aria-controls="site-detail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h12a3 3 0 0 1 3 3v10H8a3 3 0 0 1-3-3V4Zm0 0a2 2 0 0 0-2 2v2h2M8 17v3h12a2 2 0 0 0 2-2v-1h-2M9 8h7M9 12h7"/></svg><span>Open details</span></button>
+          </article>
+        </li>
+
+        <li class="isle" data-side="left">
+          <div class="isle__art" data-landmark="checker" data-seed="93" data-flag="proj"><span class="isle__name" aria-hidden="true">QR code tool</span></div>
+          <article class="log" id="isle-qr" aria-labelledby="qr-h">
+            <h3 id="qr-h">QR Code Generator</h3>
+            <p class="log__meta">Fall 2024</p>
+            <p class="log__summary">A Python tool that converts links and images into custom QR codes, built to make sharing resources easier across platforms for both individuals and small businesses.</p>
+            <div class="reveal readout"><div><ul aria-label="Impact">
+              <li>Links and images in</li><li>Custom QR codes out</li>
+            </ul></div></div>
+            <div class="reveal detail" id="qr-detail"><div>
+              <ul class="points">
+                <li>Takes either a link or an image as input and produces a QR code you can download and share.</li>
+                <li>Aimed at people and small businesses who need a quick way to hand out a resource across platforms.</li>
+              </ul>
+              <ul class="stack" aria-label="Tech stack"><li>Python</li><li>PyCharm</li></ul>
+            </div></div>
+            <button class="harden" type="button" aria-expanded="false" aria-controls="qr-detail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h12a3 3 0 0 1 3 3v10H8a3 3 0 0 1-3-3V4Zm0 0a2 2 0 0 0-2 2v2h2M8 17v3h12a2 2 0 0 0 2-2v-1h-2M9 8h7M9 12h7"/></svg><span>Open details</span></button>
+          </article>
+        </li>
+      </ol>
+    </section></div></main><footer class="footer">
+    <div class="footer__row">
+      <p>© 2026 Mayne Murray. Built from scratch with HTML, CSS and JavaScript.</p>
+      <p><a href="https://github.com/MMur2x" target="_blank" rel="noopener">GitHub</a> &nbsp; <a href="index.html">Back to home</a></p>
+    </div>
+    <p class="footer__fine">Engineering · Projects · Community</p>
+  </footer><script src="assets/js/atmosphere.js?v=46" defer></script><script src="assets/js/site.js?v=46" defer></script><script src="assets/js/pages.js?v=46" defer></script></body></html>
