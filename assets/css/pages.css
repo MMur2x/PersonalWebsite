@@ -75,7 +75,7 @@ html.page-leaving main { opacity: 0; }
   .landing__social { margin-top: 22px; }
 }
 @media (max-width: 600px) {
-  .landing { padding: calc(var(--topbar-h) + 34px) 22px 30px; }
+  .landing { padding: calc(var(--topbar-h) + 22px + env(safe-area-inset-top, 0px)) 18px 26px; }
   .landing__in { max-width: 520px; }
   .landing__copy h1 { font-size: clamp(2rem, 7.9vw, 3.5rem); line-height: 1.19; }
   .landing__stone { margin-bottom: 27px; }
@@ -89,11 +89,12 @@ html.page-leaving main { opacity: 0; }
   .landing-menu__arrow { margin-top: -15px; }
   .landing-menu a small { font-size: .75rem; }
   .landing-footer { flex-direction: column; gap: 5px; padding: 14px 22px 22px; max-width: 564px; }
-  .page-toolbar { padding: 8px 20px 16px; }
+  .landing__social a, .back-home { min-height: 44px; }
+  .page-toolbar { padding: 4px 16px 8px; }
   .page-toolbar > span { display: none; }
-  .portfolio-page .sea { padding: 20px 20px 30px; }
+  .portfolio-page .sea { padding: 16px 16px 28px; }
 }
 @media (max-width: 360px) {
-  .portfolio-page .sea__head h1 { font-size: 1.3rem; }
+  .portfolio-page .sea__head h1 { font-size: 1.65rem; }
 }
 @media (prefers-reduced-motion: reduce) { main, .landing-menu a, .landing-menu__arrow { transition: none; } }

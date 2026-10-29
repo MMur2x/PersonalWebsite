@@ -293,7 +293,7 @@
       var target = { 'Fidelity Investments': '#isle-fidelity', 'Cryptocurrency Investment App': '#isle-crypto', 'QR Code Generator': '#isle-qr', 'UMass Lowell': '#isle-uml' }[used] || (used && used.indexOf('Homework') === 0 ? '#isle-homework' : '');
       var capability = name + ' ' + (sp[3] || '');
       var tip = '<b>' + capability + '</b>' + group.name + '. ' + (sp[4] || group.blurb) +
-        (used ? '<i>Used at: ' + used + (target ? '. Open the mission record.' : '') + '</i>' : '');
+        (used ? '<i>Used at: ' + used + (target ? '. View related work →' : '') + '</i>' : '');
       btn.id = 'fruit-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       if (target) btn.setAttribute('data-target', target);
       btn.innerHTML = skillSVG(name, type) + '<span class="fruit__name">' + name + '</span>' +
@@ -420,6 +420,22 @@
   /* ------------------------------------------------------------ record details and reading modes */
   var logs = $$('.log'), armBtn = $('#hakiArm'), activeReadingMode = null;
   var closeConqueror = function () {};
+  // A dock tap should reveal something in the phone's reading area, not below the fold.
+  function showReadingTarget(selector, withinRecord) {
+    if (!window.matchMedia('(max-width: 760px), (hover: none) and (pointer: coarse)').matches) return;
+    var header = $('.topbar'), dock = $('.dock');
+    var top = header ? header.getBoundingClientRect().bottom + 12 : 12;
+    var bottom = dock ? dock.getBoundingClientRect().top - 12 : window.innerHeight - 12;
+    function inView(element) {
+      var bounds = element.getBoundingClientRect();
+      return Math.min(bounds.bottom, bottom) - Math.max(bounds.top, top) >= 80;
+    }
+    var evidence = $$(selector);
+    if (evidence.some(inView)) return;
+    var visibleRecord = logs.filter(inView)[0];
+    var target = (visibleRecord && $(withinRecord, visibleRecord)) || evidence[0];
+    if (target) sailTo(target);
+  }
   function setHard(log, on) {
     log.classList.toggle('is-hard', on);
     var button = $('.harden', log);
@@ -471,6 +487,7 @@
       setReadingMode(on ? 'clarity' : null);
       if (on) abilityEffects.play(obsBtn, 'clarity'); else abilityEffects.clear();
       say(on ? 'Numbers revealed' : 'Number highlights off');
+      if (on) showReadingTarget('.bounty, .readout', '.readout');
     });
     armBtn.addEventListener('click', function () {
       var on = activeReadingMode !== 'insight';
@@ -479,6 +496,7 @@
       logs.forEach(function (log) { setHard(log, on); });
       if (on) abilityEffects.play(armBtn, 'insight'); else abilityEffects.clear();
       say(on ? 'Supporting details revealed' : 'Supporting details closed');
+      if (on) showReadingTarget('.log .detail', '.detail');
     });
     function openOverview() {
       if (!conq || conq.open) return;

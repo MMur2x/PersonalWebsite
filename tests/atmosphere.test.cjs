@@ -158,13 +158,13 @@ test('removed lore techniques do not produce effects', () => {
   assert.equal(h.timers.size, 0);
 });
 
-function readingModeHarness(reduced = false) {
+function readingModeHarness(reduced = false, mobile = false) {
   const source = fs.readFileSync(path.join(root, 'assets/js/site.js'), 'utf8');
   const effectsStart = source.indexOf('/* ability activation controller */');
   const modesStart = source.indexOf('/* ------------------------------------------------------------ record details and reading modes */');
   const modesEnd = source.indexOf('/* ------------------------------------------------------------ native screenshot viewer */');
   assert.ok(modesEnd > modesStart, 'Reading-mode test boundary must precede the gallery');
-  const timers = new Map(), listeners = {}, classes = new Set();
+  const timers = new Map(), listeners = {}, classes = new Set(), scrolls = [];
   let nextTimer = 0, focused = null;
   class Node {
     constructor(tag) {
@@ -180,6 +180,7 @@ function readingModeHarness(reduced = false) {
     emit(event, data = {}) { for (const fn of this.listeners[event] || []) fn({ target: this, currentTarget: this, ...data }); }
     click() { this.emit('click'); }
     focus() { focused = this; }
+    getBoundingClientRect() { return this.rect || { top: 1400, bottom: 1900 }; }
     showModal() { this.open = true; }
     close() { this.open = false; this.emit('close'); }
     querySelector(selector) { return this.selectors && this.selectors[selector] || null; }
@@ -195,23 +196,31 @@ function readingModeHarness(reduced = false) {
     const log = new Node('article'), button = new Node('button');
     button.selectors = { span: new Node('span') }; log.selectors = { '.harden': button }; return log;
   });
+  const details = logs.map(() => new Node('div'));
+  logs.forEach((log, index) => { log.selectors['.detail'] = details[index]; });
+  const results = new Node('div'); results.rect = { top: 480, bottom: 700 };
+  const header = new Node('header'); header.rect = { top: 0, bottom: 68 };
+  const dock = new Node('div'); dock.rect = { top: 720, bottom: 844 };
   const dialog = new Node('dialog'), close = new Node('button'), link = new Node('a');
-  const selectors = { '#hakiObs': buttons[0], '#hakiArm': buttons[1], '#hakiConq': buttons[2], '#conq': dialog };
+  const selectors = { '#hakiObs': buttons[0], '#hakiArm': buttons[1], '#hakiConq': buttons[2], '#conq': dialog,
+    '.topbar': header, '.dock': dock, '.bounties': results };
   const document = { hidden: false, body: new Node('body'), querySelector: () => null,
     createElement: tag => new Node(tag), createElementNS: (_, tag) => new Node(tag),
     addEventListener: (event, fn) => { (listeners[event] ||= []).push(fn); }
   };
   const context = { document, reduceMotion: { matches: reduced, addEventListener() {} },
+    window: { matchMedia: () => ({ matches: mobile }), innerHeight: 844 },
     doc: { classList: { toggle: (name, on) => { if (on === undefined) on = !classes.has(name); if (on) classes.add(name); else classes.delete(name); return on; }, contains: name => classes.has(name) } },
     $: (selector, host) => host ? host.querySelector(selector) : selectors[selector] || null,
-    $$: (selector, host) => selector === '.log' ? logs : selector === '[data-close]' && host === dialog ? [close, link] : [],
+    $$: (selector, host) => selector === '.log' ? logs : selector === '.log .detail' ? details : selector === '.bounty, .readout' ? [results] : selector === '[data-close]' && host === dialog ? [close, link] : [],
+    sailTo: target => scrolls.push(target),
     say() {}, setTimeout: (fn, ms) => { const id = ++nextTimer; timers.set(id, { fn, ms }); return id; },
     clearTimeout: id => timers.delete(id),
     requestAnimationFrame: () => assert.fail('Reading modes must not schedule per-frame work')
   };
   vm.createContext(context);
   vm.runInContext(source.slice(effectsStart, modesStart) + source.slice(modesStart, modesEnd), context);
-  return { buttons, logs, dialog, close, link, classes, timers, document,
+  return { buttons, logs, details, results, scrolls, dialog, close, link, classes, timers, document,
     focused: () => focused,
     key: key => { for (const fn of listeners.keydown || []) fn({ key, target: new Node('body') }); },
     hide: () => { document.hidden = true; for (const fn of listeners.visibilitychange || []) fn(); }
@@ -233,6 +242,38 @@ test('Experience modes replace each other and remain selected after transient cl
   h.buttons[1].click();
   assert.equal(h.classes.size, 0);
   assert.ok(h.logs.every(log => !log.classes.has('is-hard')));
+});
+
+test('phone eye controls bring offscreen evidence into view without disturbing visible evidence', () => {
+  const h = readingModeHarness(false, true);
+  h.buttons[0].click();
+  assert.equal(h.scrolls.length, 0, 'Visible results should stay in place');
+  h.buttons[1].click();
+  assert.equal(h.scrolls[0], h.details[0], 'The revealed text itself must move above the dock, even on a short screen');
+  h.buttons[1].click();
+  assert.equal(h.scrolls.length, 1, 'Turning a mode off should not move the page');
+  h.details[1].rect = { top: 150, bottom: 650 };
+  h.buttons[1].click();
+  assert.equal(h.scrolls.length, 1, 'Details already in view should not move');
+});
+
+test('phone reveals keep the current work record when its detail is below the dock', () => {
+  const h = readingModeHarness(false, true);
+  h.logs[1].rect = { top: 100, bottom: 600 };
+  h.buttons[1].click();
+  assert.equal(h.scrolls[0], h.details[1]);
+});
+
+test('offscreen eye reveals respect desktop position and still work with reduced motion on phones', () => {
+  const desktop = readingModeHarness();
+  desktop.buttons[1].click();
+  assert.equal(desktop.scrolls.length, 0);
+  const phone = readingModeHarness(true, true);
+  phone.results.rect = { top: -1000, bottom: -500 };
+  phone.buttons[0].click();
+  assert.equal(phone.scrolls[0], phone.results);
+  assert.ok(phone.classes.has('haki-obs'));
+  assert.equal(phone.document.body.children.length, 0, 'Reduced motion must not create an animated overlay');
 });
 
 test('native record buttons can change details without selecting or stacking eye modes', () => {
