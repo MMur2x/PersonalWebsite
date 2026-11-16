@@ -1,56 +1,536 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Mayne Murray — Software Engineer, UMass Lowell CS</title>
-<meta name="description" content="Mayne Murray — Computer Science student at UMass Lowell (Class of 2027). Software Engineer Intern at Fidelity Investments working on Kubernetes, OpenTelemetry and Grafana observability. NSBE Executive Board Senator.">
+<title>Mayne’s Room — Mayne Murray, Software Engineer</title>
+<meta name="description" content="Mayne’s Room is the portfolio of Mayne Murray, a software engineer and Computer Science student at UMass Lowell (Class of 2027) and former Software Engineer Intern at Fidelity Investments. Walk around a 3D bedroom and click things to find out who he is.">
 <meta name="author" content="Mayne Murray">
-<meta property="og:title" content="Mayne Murray — Computer Science @ UMass Lowell">
-<meta property="og:description" content="CS student, Software Engineer Intern, and NSBE Executive Board Senator building backend systems, observability tooling, and AI-assisted software.">
+<meta property="og:title" content="Mayne’s Room — Mayne Murray, Software Engineer">
+<meta property="og:description" content="A 3D bedroom you can walk around. Everything in it is something Mayne built, earned or cares about.">
 <meta property="og:image" content="https://mmur2x.github.io/PersonalWebsite/assets/images/headshot.jpg">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#13212b">
-<script>try{var t=localStorage.getItem('mm-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
-<link rel="preload" as="image" href="assets/images/backgrounds/mountain-village.webp">
-<link rel="stylesheet" href="assets/css/site.css?v=47">
-<link rel="stylesheet" href="assets/css/pages.css?v=47">
+<meta name="theme-color" content="#090817">
+<meta name="color-scheme" content="dark">
+<script>document.documentElement.classList.add('js');</script>
+<link rel="preload" href="assets/fonts/manrope-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/instrument-serif-latin-400-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/site.css?v=70">
 </head>
-<body class="portfolio-home">
-<a class="skip" href="#main">Skip to content</a>
-<div class="atmosphere" id="atmosphere" aria-hidden="true"><span class="ninja-star"></span><span class="ninja-star"></span><span class="ninja-star"></span></div>
-<header class="topbar">
-  <div class="topbar__in">
-    <a class="brand" href="index.html" aria-label="Mayne Murray, back to the start">
-      <span class="brand__plate" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true" focusable="false"><path d="M5 34V14l8 12 8-12v20M27 34V14l8 12 8-12v20" stroke="currentColor" stroke-width="2.8" stroke-linecap="square" stroke-linejoin="miter"/></svg></span>
-      <span>Mayne Murray</span>
-    </a>
+<body>
+<!-- The room. It is fixed behind the whole page and never leaves the screen. -->
+<canvas class="stage" id="stage" aria-hidden="true" data-portrait="assets/images/headshot.jpg" data-qr="M0 0h7v1h-7zM8 0h1v1h-1zM10 0h3v1h-3zM14 0h1v1h-1zM16 0h5v1h-5zM22 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM8 1h1v1h-1zM10 1h1v1h-1zM13 1h2v1h-2zM17 1h1v1h-1zM20 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM10 2h2v1h-2zM13 2h4v1h-4zM18 2h1v1h-1zM20 2h1v1h-1zM22 2h1v1h-1zM24 2h3v1h-3zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM8 3h2v1h-2zM12 3h4v1h-4zM17 3h1v1h-1zM19 3h1v1h-1zM22 3h1v1h-1zM24 3h3v1h-3zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM11 4h6v1h-6zM19 4h2v1h-2zM22 4h1v1h-1zM24 4h3v1h-3zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM12 5h2v1h-2zM17 5h3v1h-3zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h7v1h-7zM8 7h3v1h-3zM12 7h1v1h-1zM16 7h5v1h-5zM0 8h1v1h-1zM2 8h2v1h-2zM5 8h3v1h-3zM9 8h3v1h-3zM14 8h1v1h-1zM16 8h2v1h-2zM19 8h1v1h-1zM22 8h1v1h-1zM25 8h1v1h-1zM27 8h2v1h-2zM0 9h1v1h-1zM5 9h1v1h-1zM10 9h3v1h-3zM14 9h1v1h-1zM16 9h5v1h-5zM22 9h1v1h-1zM24 9h1v1h-1zM28 9h1v1h-1zM1 10h1v1h-1zM5 10h2v1h-2zM8 10h1v1h-1zM10 10h2v1h-2zM16 10h1v1h-1zM18 10h1v1h-1zM23 10h2v1h-2zM26 10h2v1h-2zM0 11h1v1h-1zM2 11h3v1h-3zM7 11h1v1h-1zM9 11h2v1h-2zM13 11h1v1h-1zM15 11h1v1h-1zM18 11h3v1h-3zM28 11h1v1h-1zM0 12h7v1h-7zM9 12h8v1h-8zM20 12h1v1h-1zM23 12h1v1h-1zM25 12h2v1h-2zM0 13h4v1h-4zM5 13h1v1h-1zM7 13h3v1h-3zM11 13h1v1h-1zM14 13h1v1h-1zM16 13h4v1h-4zM21 13h2v1h-2zM26 13h3v1h-3zM2 14h1v1h-1zM4 14h1v1h-1zM6 14h1v1h-1zM8 14h1v1h-1zM13 14h2v1h-2zM16 14h1v1h-1zM19 14h1v1h-1zM23 14h1v1h-1zM26 14h3v1h-3zM0 15h2v1h-2zM4 15h2v1h-2zM9 15h1v1h-1zM14 15h3v1h-3zM18 15h1v1h-1zM21 15h1v1h-1zM23 15h2v1h-2zM27 15h1v1h-1zM0 16h3v1h-3zM5 16h5v1h-5zM11 16h5v1h-5zM18 16h3v1h-3zM24 16h2v1h-2zM27 16h1v1h-1zM2 17h3v1h-3zM8 17h5v1h-5zM15 17h1v1h-1zM20 17h1v1h-1zM23 17h1v1h-1zM25 17h3v1h-3zM0 18h1v1h-1zM2 18h1v1h-1zM4 18h4v1h-4zM9 18h2v1h-2zM12 18h5v1h-5zM22 18h3v1h-3zM26 18h1v1h-1zM2 19h2v1h-2zM7 19h2v1h-2zM11 19h2v1h-2zM17 19h2v1h-2zM22 19h1v1h-1zM24 19h1v1h-1zM26 19h1v1h-1zM1 20h3v1h-3zM6 20h2v1h-2zM9 20h3v1h-3zM13 20h1v1h-1zM16 20h11v1h-11zM8 21h1v1h-1zM10 21h3v1h-3zM16 21h1v1h-1zM19 21h2v1h-2zM24 21h5v1h-5zM0 22h7v1h-7zM8 22h2v1h-2zM14 22h1v1h-1zM19 22h2v1h-2zM22 22h1v1h-1zM24 22h2v1h-2zM27 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h1v1h-1zM10 23h1v1h-1zM13 23h1v1h-1zM15 23h1v1h-1zM20 23h1v1h-1zM24 23h2v1h-2zM27 23h2v1h-2zM0 24h1v1h-1zM2 24h3v1h-3zM6 24h1v1h-1zM12 24h1v1h-1zM17 24h1v1h-1zM20 24h5v1h-5zM26 24h3v1h-3zM0 25h1v1h-1zM2 25h3v1h-3zM6 25h1v1h-1zM8 25h1v1h-1zM10 25h1v1h-1zM13 25h9v1h-9zM23 25h3v1h-3zM28 25h1v1h-1zM0 26h1v1h-1zM2 26h3v1h-3zM6 26h1v1h-1zM8 26h4v1h-4zM13 26h1v1h-1zM17 26h1v1h-1zM19 26h2v1h-2zM23 26h1v1h-1zM26 26h1v1h-1zM28 26h1v1h-1zM0 27h1v1h-1zM6 27h1v1h-1zM11 27h4v1h-4zM16 27h1v1h-1zM20 27h1v1h-1zM23 27h3v1h-3zM27 27h1v1h-1zM0 28h7v1h-7zM8 28h1v1h-1zM13 28h1v1h-1zM15 28h1v1h-1zM18 28h5v1h-5zM24 28h1v1h-1zM27 28h1v1h-1z"></canvas>
+<div class="shade" aria-hidden="true"></div>
+<div class="loader" id="loader" aria-hidden="true"><span class="loader__bulb"></span><span class="mono">Switching on the lights</span></div>
+<a class="skip" href="#work">Skip the room, go to the details</a>
 
-    <button class="iconbtn motion" id="motion" type="button" aria-pressed="false" aria-label="Pause background motion" title="Pause background motion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg></button>
-    <button class="iconbtn theme" id="theme" type="button" aria-label="Switch to light mode">
-      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>
+<header class="nav" id="nav">
+  <a class="nav__brand" href="#top" aria-label="Mayne’s Room, back to the doorway">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 27V9l11-5 11 5v18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M12 27V15h8v12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="17.6" cy="21" r="1.1" fill="currentColor"/></svg>
+    <span>Mayne’s Room</span>
+  </a>
+  <nav class="nav__links" aria-label="Places in the room">
+    <a href="#top" data-stop="1">Experience</a>
+    <a href="#top" data-stop="2">Projects</a>
+    <a href="#top" data-stop="3">Leadership</a>
+    <a href="#top" data-stop="4">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div class="nav__tools">
+    <button class="iconbtn" id="lampBtn" type="button" aria-pressed="true" aria-label="Desk lamp: on. Switch it off">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M8.2 14.5a6 6 0 1 1 7.6 0c-.6.5-.8 1.1-.8 1.5H9c0-.4-.2-1-.8-1.5Z"/></svg>
     </button>
-
+    <button class="key key--ink key--sm" type="button" data-resume>Résumé</button>
   </div>
 </header>
 
-<main id="main" class="landing"><section class="landing__in" aria-labelledby="home-name">
-<div class="landing__copy"><div class="landing__stone stone-panel"><p class="landing__badge"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true" focusable="false"><path d="M5 34V14l8 12 8-12v20M27 34V14l8 12 8-12v20" stroke="currentColor" stroke-width="2.8" stroke-linecap="square" stroke-linejoin="miter"/></svg>Portfolio archive</p><p class="landing__intro">Software engineer · UMass Lowell Honors College</p>
-<h1 id="home-name">Mayne Murray<span>Engineering through projects.</span></h1>
-<p class="landing__summary">I build backend systems and the tools that keep them observable. Previously at Fidelity Investments. Graduating May 2027.</p>
+<aside class="rail" aria-label="Find Mayne elsewhere">
+  <a href="https://github.com/MMur2x" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.2-3.4-1.2-.5-1.1-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.3-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7c-.1-.3-.4-1.3.1-2.6 0 0 .8-.3 2.8 1a9.5 9.5 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .6 1.3.2 2.3.1 2.6a3.9 3.9 0 0 1 1 2.7c0 3.9-2.3 4.7-4.6 5 .4.3.7.9.7 1.8V21c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/></svg></a>
+  <a href="https://www.linkedin.com/in/mayne-murray/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.5 3.5a2 2 0 1 1 0 4 2 2 0 0 1 0-4ZM3 9h3v12H3V9Zm6 0h2.9v1.7c.5-.9 1.7-2 3.6-2 3.6 0 4.5 2.3 4.5 5.5V21h-3v-6.1c0-1.5-.3-2.9-2.1-2.9s-2.4 1.3-2.4 2.8V21H9V9Z"/></svg></a>
+  <a href="mailto:maynemurray@gmail.com" aria-label="Email Mayne"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></svg></a>
+  <span class="rail__line" aria-hidden="true"></span>
+</aside>
+
+<main id="main">
+
+<!-- ============================================================ The film: an empty scroll track. p = how far through it you are. -->
+<section class="film" id="film" aria-label="A walk around Mayne’s room"><span id="top"></span></section>
+
+<!-- Fixed overlays. Each .fx fades in at data-in and out at data-out (both are values of p). -->
+<div class="layers" id="layers">
+
+  <section class="layer layer--hero" aria-labelledby="hero-h">
+    <div class="layer__copy fx" data-in="-1" data-out=".085">
+      <p class="eyebrow hi"><span class="eyebrow__dot"></span>Framingham, MA · lights on</p>
+      <h1 id="hero-h" class="hi">Mayne’s <em>Room</em></h1>
+      <p class="lede hi">I’m Mayne Murray, a software engineer studying Computer Science at UMass Lowell, most recently at Fidelity Investments. Everything in this room is something I built, earned or care about.</p>
+      <div class="hero__cta hi">
+        <button class="key key--ink" type="button" data-go="1">Walk in <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <button class="key" type="button" data-resume>Read the résumé</button>
+      </div>
+      <p class="hint hi mono"><span class="hint__dot"></span>Scroll to move. Click anything that glows.</p>
+    </div>
+    <div class="cards fx" data-in="-1" data-out=".07">
+      <a class="glass hi" href="#exp-fidelity" data-flip="#exp-fidelity">
+        <span class="mono">On the monitor · Fidelity, 2026</span>
+        <svg class="spark" viewBox="0 0 220 60" aria-hidden="true"><path class="spark__area" d="M0 50 C24 46 34 30 56 34 S92 46 116 30 S150 8 174 16 S204 22 220 8 V60 H0Z"/><path class="spark__line" pathLength="1" d="M0 50 C24 46 34 30 56 34 S92 46 116 30 S150 8 174 16 S204 22 220 8"/><circle class="spark__dot" cx="220" cy="8" r="4"/></svg>
+        <span class="glass__row"><b>16</b> dashboards across <b>9</b> Kubernetes resource types</span>
+      </a>
+      <a class="glass glass--gauge hi" href="#exp-rsm" data-flip="#exp-rsm">
+        <svg class="gauge" viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="32"/><circle class="gauge__val" cx="40" cy="40" r="32" pathLength="100"/></svg>
+        <span><b>−30%</b><span class="glass__sub">manual input errors after automation at RSM</span></span>
+      </a>
+    </div>
+  </section>
+
+  <section class="layer layer--left" aria-labelledby="s1-h">
+    <div class="layer__copy note fx" data-in=".17" data-out=".335">
+      <p class="eyebrow"><span class="eyebrow__num">01</span>The desk</p>
+      <h2 id="s1-h">Where the <em>work</em> happens</h2>
+      <p>Three internships so far. The monitor still has my Fidelity dashboards up, the laptop is open to the RSM project, and the résumé is on the corner of the desk.</p>
+      <ul class="note__list"><li><b>Fidelity Investments</b><span>Software Engineer Intern · 2026</span></li><li><b>RSM US LLP</b><span>Information Technology Intern · 2025</span></li><li><b>UMass Lowell</b><span>Data Management Intern · 2025</span></li></ul>
+      <a class="key key--sm" href="#work">All experience</a>
+    </div>
+  </section>
+
+  <section class="layer layer--right" aria-labelledby="s2-h">
+    <div class="layer__copy note fx" data-in=".395" data-out=".555">
+      <p class="eyebrow"><span class="eyebrow__num">02</span>The shelf</p>
+      <h2 id="s2-h">What I’ve <em>built</em>, and what I know</h2>
+      <p>Books for the languages and tools I use, a diploma that’s almost earned, and a cap waiting for May 2027. The projects are scattered around the room: check the calendar, the poster and the phone.</p>
+      <div class="note__keys"><a class="key key--sm" href="#projects">Projects</a><a class="key key--sm" href="#skills">Skills</a></div>
+    </div>
+  </section>
+
+  <section class="layer layer--right" aria-labelledby="s3-h">
+    <div class="layer__copy note fx" data-in=".615" data-out=".775">
+      <p class="eyebrow"><span class="eyebrow__num">03</span>The wall</p>
+      <h2 id="s3-h">The <em>communities</em> behind me</h2>
+      <p>Five frames, five programs that shaped how I lead and who I learn from. Click a frame to read what each one was.</p>
+      <a class="key key--sm" href="#about">Leadership in full</a>
+    </div>
+  </section>
+
+  <section class="layer layer--left" aria-labelledby="s4-h">
+    <div class="layer__copy note fx" data-in=".835" data-out="2">
+      <p class="eyebrow"><span class="eyebrow__num">04</span>The bed</p>
+      <h2 id="s4-h">The <em>person</em> who lives here</h2>
+      <p>My photo is on the nightstand, my phone is next to it, and the backpack is packed for campus. Keep scrolling for the full write-up, or just say hello.</p>
+      <div class="note__keys"><a class="key key--sm key--ink" href="#contact">Say hello</a><a class="key key--sm" href="#about">About me</a></div>
+    </div>
+  </section>
 </div>
-<nav class="landing-menu" aria-label="Explore my portfolio">
-<a class="landing-menu__primary" href="experience.html"><span class="landing-menu__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12q10-13 20 0-10 13-20 0ZM4 7 2 5M20 7l2-2"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/></svg></span><span class="landing-menu__text">Experience<small>Three internships. Real impact.</small></span><svg class="landing-menu__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
-<a class="landing-menu__primary" href="projects.html"><span class="landing-menu__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.1 6.9L22 12l-6.9 3.1L12 22l-3.1-6.9L2 12l6.9-3.1Z"/><circle cx="12" cy="12" r="2"/><path d="M12 3v5M21 12h-5M12 21v-5M3 12h5"/></svg></span><span class="landing-menu__text">Projects<small>Tools, apps, and things I’ve built.</small></span><svg class="landing-menu__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
-<a class="landing-menu__primary" href="about.html"><span class="landing-menu__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2M17 5a3 3 0 0 1 0 6M18 15a5 5 0 0 1 3 5"/></svg></span><span class="landing-menu__text">About &amp; leadership<small>My story and the communities I build with.</small></span><svg class="landing-menu__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
-<a class="landing-menu__primary" href="skills.html"><span class="landing-menu__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h14v18H5Z"/><path d="M3 3h18M3 21h18M9 8l-2 4 2 4M15 8l2 4-2 4M13 7l-2 10"/></svg></span><span class="landing-menu__text">Skills<small>Languages, frameworks, and infrastructure.</small></span><svg class="landing-menu__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
-<a class="landing-menu__primary" href="resume.html"><span class="landing-menu__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h12v18H5q-3 0-3-3V6q0-3 3-3ZM5 3q-3 0-3 3h5M5 21q-3 0-3-3h5M17 3q4 0 4 3v12q0 3-4 3M9 9h5M9 13h5"/></svg></span><span class="landing-menu__text">Résumé &amp; contact<small>Read my résumé. Start a conversation.</small></span><svg class="landing-menu__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
-<a class="landing-menu__primary" href="blog.html"><span class="landing-menu__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5c-3-2-7-2-10-1v15c3-1 7-1 10 1 3-2 7-2 10-1V4c-3-1-7-1-10 1ZM12 5v15M5 8h4M5 12h4M15 8h4M15 12h4"/></svg></span><span class="landing-menu__text">Blog<small>A guide to the work and how to explore it.</small></span><svg class="landing-menu__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
-</nav>
-<div class="landing__social"><a href="https://github.com/MMur2x" target="_blank" rel="noopener">GitHub ↗</a><a href="https://www.linkedin.com/in/mayne-murray/" target="_blank" rel="noopener">LinkedIn ↗</a><a href="mailto:maynemurray@gmail.com">Email ↗</a></div>
-</div></section></main>
-<footer class="landing-footer"><span>© 2026 Mayne Murray</span><span>Engineering · Projects · Community</span></footer>
-<script src="assets/js/atmosphere.js?v=47" defer></script>
-<script src="assets/js/pages.js?v=47" defer></script>
-</body></html>
+
+<!-- Hotspots. room.js pins each one to its object; clicking opens the drawer. -->
+<div class="spots" id="spots">
+  <button class="spot" type="button" data-spot="monitor" tabindex="-1"><i></i><span>Monitor</span></button>
+  <button class="spot" type="button" data-spot="laptop" tabindex="-1"><i></i><span>Laptop</span></button>
+  <button class="spot" type="button" data-spot="paper" tabindex="-1"><i></i><span>Résumé</span></button>
+  <button class="spot" type="button" data-spot="lamp" tabindex="-1"><i></i><span>Desk lamp</span></button>
+  <button class="spot" type="button" data-spot="calendar" tabindex="-1"><i></i><span>Calendar</span></button>
+  <button class="spot" type="button" data-spot="qr" tabindex="-1"><i></i><span>QR poster</span></button>
+  <button class="spot" type="button" data-spot="books" tabindex="-1"><i></i><span>Books</span></button>
+  <button class="spot" type="button" data-spot="diploma" tabindex="-1"><i></i><span>Diploma</span></button>
+  <button class="spot" type="button" data-spot="cap" tabindex="-1"><i></i><span>Grad cap</span></button>
+  <button class="spot" type="button" data-spot="frames" tabindex="-1"><i></i><span>The wall</span></button>
+  <button class="spot" type="button" data-spot="f0" tabindex="-1"><i></i><span>NSBE</span></button>
+  <button class="spot" type="button" data-spot="f1" tabindex="-1"><i></i><span>MLT</span></button>
+  <button class="spot" type="button" data-spot="f2" tabindex="-1"><i></i><span>Juniper</span></button>
+  <button class="spot" type="button" data-spot="f3" tabindex="-1"><i></i><span>SEO</span></button>
+  <button class="spot" type="button" data-spot="f4" tabindex="-1"><i></i><span>Google</span></button>
+  <button class="spot" type="button" data-spot="portrait" tabindex="-1"><i></i><span>Photo</span></button>
+  <button class="spot" type="button" data-spot="phone" tabindex="-1"><i></i><span>Phone</span></button>
+  <button class="spot" type="button" data-spot="window" tabindex="-1"><i></i><span>Window</span></button>
+  <button class="spot" type="button" data-spot="bag" tabindex="-1"><i></i><span>Backpack</span></button>
+</div>
+
+<!-- The drawer: what you find when you click something. -->
+<aside class="drawer" id="drawer" role="dialog" aria-modal="false" aria-labelledby="drawerTitle" hidden>
+  <button class="iconbtn drawer__x" type="button" id="drawerClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <p class="eyebrow" id="drawerKicker"></p>
+  <h2 id="drawerTitle"></h2>
+  <p class="drawer__org" id="drawerOrg"></p>
+  <div class="drawer__body" id="drawerBody"></div>
+  <div class="drawer__keys" id="drawerKeys"></div>
+</aside>
+
+<!-- Fixed controls -->
+<div class="dock" id="dock">
+  <button class="found" type="button" id="foundBtn" aria-label="Things found in the room"><span class="found__ring" aria-hidden="true"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15"/><circle id="foundArc" cx="18" cy="18" r="15" pathLength="100"/></svg></span><span><b id="foundN">0</b> of <span id="foundT">18</span> found</span></button>
+  <button class="key key--sm dock__replay" type="button" id="replay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.6-5.9M4 4v5h5"/></svg>Replay</button>
+</div>
+<ol class="steps" id="steps" aria-label="Where you are in the room">
+  <li><button type="button" data-go="0" aria-label="The doorway"><span>Doorway</span></button></li>
+  <li><button type="button" data-go="1" aria-label="The desk"><span>Desk</span></button></li>
+  <li><button type="button" data-go="2" aria-label="The shelf"><span>Shelf</span></button></li>
+  <li><button type="button" data-go="3" aria-label="The wall"><span>Wall</span></button></li>
+  <li><button type="button" data-go="4" aria-label="The bed"><span>Bed</span></button></li>
+</ol>
+<button class="chev" type="button" id="chev" aria-label="Go to the next part of the room"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+
+<!-- ============================================================ After the film: the details slide up over the dimmed room -->
+<div class="after" id="after">
+<section class="section" id="work" aria-labelledby="work-h">
+  <div class="wrap">
+    <header class="head">
+      <div class="head__text" data-reveal>
+        <p class="eyebrow"><span class="eyebrow__dot"></span>Experience</p>
+        <h2 id="work-h">Where I’ve <em>worked</em></h2>
+        <p class="lede">Three internships across financial services, professional services, and higher education. Flip any card for the technical detail.</p>
+      </div>
+    </header>
+
+    <div class="bento">
+      <article class="flip bento__a" id="exp-fidelity" data-tilt="5" data-reveal>
+        <div class="flip__inner">
+          <div class="flip__face flip__front panel">
+            <div class="card__top"><span class="mono">Summer 2026 · Merrimack, NH</span><span class="chip chip--accent">Most recent</span></div>
+            <h3>Software Engineer Intern</h3>
+            <p class="card__org">Fidelity Investments</p>
+            <p class="card__sum">Built a Kubernetes observability experience that brings cluster health, configuration and pod performance into one place.</p>
+            <svg class="chart" viewBox="0 0 560 150" aria-hidden="true">
+              <g class="chart__grid"><path d="M0 30H560M0 75H560M0 120H560"/></g>
+              <path class="chart__line chart__line--c" pathLength="1" d="M0 118 C50 112 70 96 110 100 S180 124 230 104 S300 60 350 70 S440 96 480 78 S530 60 560 64"/>
+              <path class="chart__line chart__line--b" pathLength="1" d="M0 96 C40 100 80 70 120 76 S200 104 250 84 S320 40 370 52 S450 80 500 54 S540 40 560 44"/>
+              <path class="chart__line chart__line--a" pathLength="1" d="M0 72 C40 60 70 40 110 48 S190 88 240 60 S310 18 360 30 S440 62 490 34 S540 18 560 22"/>
+              <circle class="chart__dot" cx="560" cy="22" r="5"/>
+            </svg>
+            <ul class="facts"><li><b>9</b> resource types</li><li><b>16</b> dashboards</li><li><b>6+</b> exploration tools</li><li>Validated against Datadog</li></ul>
+            <button class="key key--sm flip__btn" type="button" aria-expanded="false">Flip for detail <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5.3L20 9M20 4v5h-5M20 12a8 8 0 0 1-14 5.3L4 15M4 20v-5h5"/></svg></button>
+          </div>
+          <div class="flip__face flip__back panel panel--ink">
+            <div class="card__top"><span class="mono">Fidelity Investments · Detail</span></div>
+            <ul class="points">
+              <li>Developed a full-stack Kubernetes observability experience using React, TypeScript, Grafana Scenes, Prometheus, OpenSearch and Kubernetes APIs, consolidating infrastructure health, configuration and operational insights across <b>9 Kubernetes resource types</b>.</li>
+              <li>Built <b>16 telemetry-driven dashboards</b> for pod-level performance analysis, surfacing CPU, memory, storage, network, restart and container health metrics, validated against Datadog.</li>
+              <li>Added <b>6+ exploration capabilities</b> including semantic search, favorites, hierarchical resource grouping, YAML manifest inspection, Kubernetes event visualization and comparative pod analysis, reducing the time needed to diagnose distributed system issues.</li>
+            </ul>
+            <ul class="stack" aria-label="Tech stack"><li>Kubernetes</li><li>React</li><li>TypeScript</li><li>Grafana Scenes</li><li>OpenTelemetry</li><li>Prometheus</li><li>Docker</li><li>AWS EKS</li></ul>
+            <button class="key key--sm key--light flip__btn" type="button">Flip back</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="flip bento__b" id="exp-rsm" data-tilt="6" data-reveal>
+        <div class="flip__inner">
+          <div class="flip__face flip__front panel">
+            <div class="card__top"><span class="mono">Summer 2025 · Minneapolis, MN</span></div>
+            <h3>Information Technology Intern</h3>
+            <p class="card__org">RSM US LLP</p>
+            <p class="card__sum">Brought AI automation into client onboarding and support systems, and improved the backend code behind internal support tools.</p>
+            <div class="bars" role="img" aria-label="Manual input errors fell by 30 percent after automation">
+              <div class="bars__row"><span>Before</span><i style="--w:100%"></i></div>
+              <div class="bars__row bars__row--after"><span>After</span><i style="--w:70%"></i><b>−30% manual input errors</b></div>
+            </div>
+            <ul class="facts"><li><b>500+</b> employees served</li></ul>
+            <button class="key key--sm flip__btn" type="button" aria-expanded="false">Flip for detail <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5.3L20 9M20 4v5h-5M20 12a8 8 0 0 1-14 5.3L4 15M4 20v-5h5"/></svg></button>
+          </div>
+          <div class="flip__face flip__back panel panel--ink">
+            <div class="card__top"><span class="mono">RSM US LLP · Detail</span></div>
+            <ul class="points">
+              <li>Worked with a cross-functional team to integrate AI tools into client-facing systems, improving data processing efficiency and reducing client response times.</li>
+              <li>Developed and optimized backend code for internal support systems used by <b>over 500 employees</b>, improving ticket resolution and cutting support handling time.</li>
+              <li>Helped deploy AI-powered automation in client onboarding platforms, increasing onboarding speed and reducing manual input errors by <b>30%</b>.</li>
+            </ul>
+            <ul class="stack" aria-label="Tech stack"><li>C#</li><li>Visual Studio 2022</li><li>Azure DevOps</li><li>AI automation</li></ul>
+            <button class="key key--sm key--light flip__btn" type="button">Flip back</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="flip bento__c" id="exp-uml" data-tilt="6" data-reveal>
+        <div class="flip__inner">
+          <div class="flip__face flip__front panel">
+            <div class="card__top"><span class="mono">Spring 2025 · Lowell, MA</span></div>
+            <h3>Data Management Intern</h3>
+            <p class="card__org">University of Massachusetts Lowell</p>
+            <p class="card__sum">Cleaned up Salesforce and Microsoft 365 records so university data is easier to find and more accurate to report on.</p>
+            <svg class="merge" viewBox="0 0 220 90" aria-hidden="true"><circle class="merge__a" cx="78" cy="45" r="30"/><circle class="merge__b" cx="142" cy="45" r="30"/><circle class="merge__c" cx="110" cy="45" r="8"/></svg>
+            <button class="key key--sm flip__btn" type="button" aria-expanded="false">Flip for detail <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5.3L20 9M20 4v5h-5M20 12a8 8 0 0 1-14 5.3L4 15M4 20v-5h5"/></svg></button>
+          </div>
+          <div class="flip__face flip__back panel panel--ink">
+            <div class="card__top"><span class="mono">UMass Lowell · Detail</span></div>
+            <ul class="points">
+              <li>Supported database development projects with university staff, improving data accessibility across departments.</li>
+              <li>Worked with Salesforce and Microsoft 365 records to reduce redundancies and strengthen reporting accuracy.</li>
+              <li>Learned how different teams rely on shared data systems to make decisions across the university.</li>
+            </ul>
+            <ul class="stack" aria-label="Tech stack"><li>Salesforce</li><li>Microsoft 365</li><li>SQL</li></ul>
+            <button class="key key--sm key--light flip__btn" type="button">Flip back</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel bento__d edu" data-tilt="4" data-reveal>
+        <div class="card__top"><span class="mono">Education</span><span class="chip">Honors College</span></div>
+        <h3>B.S. Computer Science</h3>
+        <p class="card__org">University of Massachusetts Lowell · May 2027</p>
+        <ul class="stack stack--plain" aria-label="Coursework"><li>Software Engineering I</li><li>Operating Systems</li><li>Organization of Programming Languages</li></ul>
+      </article>
+    </div>
+
+    <div class="stats" data-reveal>
+      <a class="stat" href="#exp-fidelity" data-flip="#exp-fidelity"><b><span data-count="9">9</span></b><span>Kubernetes resource types in one observability view</span><small class="mono">Fidelity · 2026</small></a>
+      <a class="stat" href="#exp-fidelity" data-flip="#exp-fidelity"><b><span data-count="16">16</span></b><span>telemetry dashboards for pod-level performance</span><small class="mono">Fidelity · 2026</small></a>
+      <a class="stat" href="#exp-rsm" data-flip="#exp-rsm"><b><span data-count="500" data-suffix="+">500+</span></b><span>employees on the support systems I optimized</span><small class="mono">RSM · 2025</small></a>
+      <a class="stat" href="#exp-rsm" data-flip="#exp-rsm"><b><span data-count="30" data-suffix="%">30%</span></b><span>fewer manual input errors in client onboarding</span><small class="mono">RSM · 2025</small></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ Projects -->
+<section class="section" id="projects" aria-labelledby="proj-h">
+  <div class="wrap">
+    <header class="head head--flip">
+      <div class="head__text" data-reveal>
+        <p class="eyebrow"><span class="eyebrow__dot"></span>Projects</p>
+        <h2 id="proj-h">Things I’ve <em>built</em></h2>
+        <p class="lede">Personal projects where I chose the whole stack. Pick one and the stage turns to it.</p>
+      </div>
+    </header>
+
+    <div class="show" id="show" data-reveal>
+      <div class="show__tabs" role="tablist" aria-label="Projects">
+        <button class="tab" role="tab" type="button" id="tab-0" aria-selected="true" aria-controls="pp-0"><span class="mono">2026 · Chrome extension</span><b>Homework Tracker</b></button>
+        <button class="tab" role="tab" type="button" id="tab-1" aria-selected="false" aria-controls="pp-1" tabindex="-1"><span class="mono">2025 · Flutter</span><b>Crypto Investment App</b></button>
+        <button class="tab" role="tab" type="button" id="tab-2" aria-selected="false" aria-controls="pp-2" tabindex="-1"><span class="mono">2025–26 · Web</span><b>This Portfolio</b></button>
+        <button class="tab" role="tab" type="button" id="tab-3" aria-selected="false" aria-controls="pp-3" tabindex="-1"><span class="mono">2024 · Python</span><b>QR Code Generator</b></button>
+      </div>
+
+      <div class="show__stage" data-tilt="7" data-nodrag>
+        <div class="ring" id="ring">
+          <figure class="face" data-screens>
+            <div class="device device--window">
+              <div class="device__bar"><i></i><i></i><i></i><span class="mono">Homework Tracker</span></div>
+              <div class="device__screen">
+                <img src="assets/images/projects/homework-tracker/01-calendar.webp" alt="Homework Tracker month calendar with color-coded status dots on each day" data-cap="Calendar. A month grid with status dots: red for overdue, amber for due within three days, green for done." width="800" height="378">
+                <img src="assets/images/projects/homework-tracker/02-alerts-and-notes.webp" alt="Day detail panel showing assignments, notes and reminders" data-cap="Alerts and notes. Clicking a day opens its assignments, custom notes and optional reminders." loading="lazy" width="800" height="375">
+                <img src="assets/images/projects/homework-tracker/03-announcements.webp" alt="List of university academic announcements" data-cap="Announcements. Academic announcements for your university, next to your deadlines." loading="lazy" width="800" height="375">
+                <img src="assets/images/projects/homework-tracker/04-sort-by-class.webp" alt="Assignments grouped by class" data-cap="Sort by class. A per-course view of each class and its status." loading="lazy" width="800" height="378">
+                <img src="assets/images/projects/homework-tracker/05-agenda.webp" alt="Agenda list of upcoming assignments" data-cap="Agenda. Everything due, in order, color-coded by urgency." loading="lazy" width="800" height="380">
+              </div>
+            </div>
+          </figure>
+          <figure class="face" data-screens>
+            <div class="device device--phone">
+              <div class="device__screen">
+                <img src="assets/images/projects/crypto-app/01-dashboard.webp" alt="Crypto app dashboard with portfolio balance and holdings" data-cap="Dashboard. Personal and global insights, holdings and total balance." loading="lazy" width="374" height="835">
+                <img src="assets/images/projects/crypto-app/02-invest.webp" alt="Invest screen with a currency search" data-cap="Invest. Search to find and browse currencies." loading="lazy" width="376" height="842">
+                <img src="assets/images/projects/crypto-app/03-news.webp" alt="News screen with a list of articles" data-cap="News. A feed of current crypto stories." loading="lazy" width="361" height="831">
+                <img src="assets/images/projects/crypto-app/04-learn.webp" alt="Learn screen with educational content" data-cap="Learn. Content to review and learn more about crypto." loading="lazy" width="361" height="839">
+                <img src="assets/images/projects/crypto-app/05-settings.webp" alt="Settings screen with toggles and dropdowns" data-cap="Settings. Toggles and dropdowns that persist across restarts." loading="lazy" width="374" height="833">
+              </div>
+            </div>
+          </figure>
+          <figure class="face">
+            <div class="device device--window device--self">
+              <div class="device__bar"><i></i><i></i><i></i><span class="mono">mmur2x.github.io</span></div>
+              <div class="device__screen device__screen--self" aria-label="A miniature of this page">
+                <span class="self__word" aria-hidden="true">Murray</span>
+                <span class="self__orb" aria-hidden="true"></span>
+                <span class="self__line self__line--1" aria-hidden="true"></span><span class="self__line self__line--2" aria-hidden="true"></span><span class="self__btn" aria-hidden="true"></span>
+              </div>
+            </div>
+          </figure>
+          <figure class="face">
+            <div class="device device--card">
+              <svg class="qr" viewBox="-2 -2 33 33" role="img" aria-label="QR code that opens this portfolio"><rect x="-2" y="-2" width="33" height="33" rx="2.5" class="qr__bg"/><path class="qr__fg" d="M0 0h7v1h-7zM8 0h1v1h-1zM10 0h3v1h-3zM14 0h1v1h-1zM16 0h5v1h-5zM22 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM8 1h1v1h-1zM10 1h1v1h-1zM13 1h2v1h-2zM17 1h1v1h-1zM20 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM10 2h2v1h-2zM13 2h4v1h-4zM18 2h1v1h-1zM20 2h1v1h-1zM22 2h1v1h-1zM24 2h3v1h-3zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM8 3h2v1h-2zM12 3h4v1h-4zM17 3h1v1h-1zM19 3h1v1h-1zM22 3h1v1h-1zM24 3h3v1h-3zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM11 4h6v1h-6zM19 4h2v1h-2zM22 4h1v1h-1zM24 4h3v1h-3zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM12 5h2v1h-2zM17 5h3v1h-3zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h7v1h-7zM8 7h3v1h-3zM12 7h1v1h-1zM16 7h5v1h-5zM0 8h1v1h-1zM2 8h2v1h-2zM5 8h3v1h-3zM9 8h3v1h-3zM14 8h1v1h-1zM16 8h2v1h-2zM19 8h1v1h-1zM22 8h1v1h-1zM25 8h1v1h-1zM27 8h2v1h-2zM0 9h1v1h-1zM5 9h1v1h-1zM10 9h3v1h-3zM14 9h1v1h-1zM16 9h5v1h-5zM22 9h1v1h-1zM24 9h1v1h-1zM28 9h1v1h-1zM1 10h1v1h-1zM5 10h2v1h-2zM8 10h1v1h-1zM10 10h2v1h-2zM16 10h1v1h-1zM18 10h1v1h-1zM23 10h2v1h-2zM26 10h2v1h-2zM0 11h1v1h-1zM2 11h3v1h-3zM7 11h1v1h-1zM9 11h2v1h-2zM13 11h1v1h-1zM15 11h1v1h-1zM18 11h3v1h-3zM28 11h1v1h-1zM0 12h7v1h-7zM9 12h8v1h-8zM20 12h1v1h-1zM23 12h1v1h-1zM25 12h2v1h-2zM0 13h4v1h-4zM5 13h1v1h-1zM7 13h3v1h-3zM11 13h1v1h-1zM14 13h1v1h-1zM16 13h4v1h-4zM21 13h2v1h-2zM26 13h3v1h-3zM2 14h1v1h-1zM4 14h1v1h-1zM6 14h1v1h-1zM8 14h1v1h-1zM13 14h2v1h-2zM16 14h1v1h-1zM19 14h1v1h-1zM23 14h1v1h-1zM26 14h3v1h-3zM0 15h2v1h-2zM4 15h2v1h-2zM9 15h1v1h-1zM14 15h3v1h-3zM18 15h1v1h-1zM21 15h1v1h-1zM23 15h2v1h-2zM27 15h1v1h-1zM0 16h3v1h-3zM5 16h5v1h-5zM11 16h5v1h-5zM18 16h3v1h-3zM24 16h2v1h-2zM27 16h1v1h-1zM2 17h3v1h-3zM8 17h5v1h-5zM15 17h1v1h-1zM20 17h1v1h-1zM23 17h1v1h-1zM25 17h3v1h-3zM0 18h1v1h-1zM2 18h1v1h-1zM4 18h4v1h-4zM9 18h2v1h-2zM12 18h5v1h-5zM22 18h3v1h-3zM26 18h1v1h-1zM2 19h2v1h-2zM7 19h2v1h-2zM11 19h2v1h-2zM17 19h2v1h-2zM22 19h1v1h-1zM24 19h1v1h-1zM26 19h1v1h-1zM1 20h3v1h-3zM6 20h2v1h-2zM9 20h3v1h-3zM13 20h1v1h-1zM16 20h11v1h-11zM8 21h1v1h-1zM10 21h3v1h-3zM16 21h1v1h-1zM19 21h2v1h-2zM24 21h5v1h-5zM0 22h7v1h-7zM8 22h2v1h-2zM14 22h1v1h-1zM19 22h2v1h-2zM22 22h1v1h-1zM24 22h2v1h-2zM27 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h1v1h-1zM10 23h1v1h-1zM13 23h1v1h-1zM15 23h1v1h-1zM20 23h1v1h-1zM24 23h2v1h-2zM27 23h2v1h-2zM0 24h1v1h-1zM2 24h3v1h-3zM6 24h1v1h-1zM12 24h1v1h-1zM17 24h1v1h-1zM20 24h5v1h-5zM26 24h3v1h-3zM0 25h1v1h-1zM2 25h3v1h-3zM6 25h1v1h-1zM8 25h1v1h-1zM10 25h1v1h-1zM13 25h9v1h-9zM23 25h3v1h-3zM28 25h1v1h-1zM0 26h1v1h-1zM2 26h3v1h-3zM6 26h1v1h-1zM8 26h4v1h-4zM13 26h1v1h-1zM17 26h1v1h-1zM19 26h2v1h-2zM23 26h1v1h-1zM26 26h1v1h-1zM28 26h1v1h-1zM0 27h1v1h-1zM6 27h1v1h-1zM11 27h4v1h-4zM16 27h1v1h-1zM20 27h1v1h-1zM23 27h3v1h-3zM27 27h1v1h-1zM0 28h7v1h-7zM8 28h1v1h-1zM13 28h1v1h-1zM15 28h1v1h-1zM18 28h5v1h-5zM24 28h1v1h-1zM27 28h1v1h-1z"/></svg>
+              <span class="mono">Scan me. It opens this site.</span>
+            </div>
+          </figure>
+        </div>
+      </div>
+
+      <div class="show__panels">
+        <article class="pp is-on" id="pp-0" role="tabpanel" aria-labelledby="tab-0">
+          <h3>Homework Tracker Extension</h3>
+          <p class="pp__when mono">Sep 2026 to present</p>
+          <p>A Chrome extension that brings Canvas assignments to life. It syncs the moment you submit work, so there’s no manual refresh, and lays every due date, exam and deadline out on an interactive calendar.</p>
+          <ul class="points points--tight">
+            <li>Built on Manifest V3 with a background service worker that detects Canvas activity in real time.</li>
+            <li>Color-codes each day by urgency and tracks completion across every enrolled class with a progress ring.</li>
+            <li>Light and dark themes, plus a side-panel mode so it stays open while you work.</li>
+          </ul>
+          <ul class="stack"><li>JavaScript</li><li>Chrome MV3</li><li>Service Workers</li><li>Canvas API</li></ul>
+          <div class="screens" data-for="0"><button class="iconbtn" type="button" data-step="-1" aria-label="Previous screenshot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><span class="screens__dots"></span><button class="iconbtn iconbtn--ink" type="button" data-step="1" aria-label="Next screenshot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button><p class="screens__cap" aria-live="polite"></p></div>
+        </article>
+        <article class="pp" id="pp-1" role="tabpanel" aria-labelledby="tab-1" hidden>
+          <h3>Cryptocurrency Investment App</h3>
+          <p class="pp__when mono">Jun to Dec 2025</p>
+          <p>A multi-tab mobile app built in Flutter with five working screens: Dashboard, Invest, News, Learn and Settings.</p>
+          <ul class="points points--tight">
+            <li>Persistent Settings tab using SharedPreferences, so choices survive app restarts.</li>
+            <li>Custom login screen with a frosted-glass UI and animated slide-up transitions.</li>
+            <li>Tracked down and fixed navigation bugs so all five tabs render correctly.</li>
+          </ul>
+          <ul class="stack"><li>Dart</li><li>Flutter</li><li>Mobile</li><li>SharedPreferences</li></ul>
+          <div class="screens" data-for="1"><button class="iconbtn" type="button" data-step="-1" aria-label="Previous screenshot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><span class="screens__dots"></span><button class="iconbtn iconbtn--ink" type="button" data-step="1" aria-label="Next screenshot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button><p class="screens__cap" aria-live="polite"></p></div>
+          <p class="fine">Sample screens. Some values shown are placeholders.</p>
+        </article>
+        <article class="pp" id="pp-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+          <h3>This Portfolio</h3>
+          <p class="pp__when mono">Summer 2025, rebuilt in 3D in 2026</p>
+          <p>The site you’re on. Plain HTML, CSS and JavaScript with no framework and no build step, deployed on GitHub Pages.</p>
+          <ul class="points points--tight">
+            <li>The glass sculpture is hand-written WebGL: one morphing mesh that refracts the page behind it, with no 3D library.</li>
+            <li>Resolution adapts to the device, and the scene pauses when the tab is hidden.</li>
+            <li>Every color is a token, so the pearl and midnight themes share one stylesheet.</li>
+          </ul>
+          <ul class="stack"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>WebGL</li><li>GitHub Pages</li></ul>
+          <a class="key key--sm" href="https://github.com/MMur2x/PersonalWebsite" target="_blank" rel="noopener">View the source</a>
+        </article>
+        <article class="pp" id="pp-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+          <h3>QR Code Generator</h3>
+          <p class="pp__when mono">Fall 2024</p>
+          <p>A Python tool that turns links and images into custom QR codes, built to make sharing resources easier for individuals and small businesses.</p>
+          <ul class="points points--tight">
+            <li>Takes a link or an image and produces a QR code you can download and share.</li>
+            <li>Made for people who need a quick way to hand out a resource across platforms.</li>
+          </ul>
+          <ul class="stack"><li>Python</li><li>PyCharm</li></ul>
+        </article>
+      </div>
+
+      <div class="show__nav">
+        <button class="key key--sm" type="button" id="showPrev" aria-label="Previous project"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Prev</button>
+        <span class="mono" id="showCount">1 / 4</span>
+        <button class="key key--sm key--ink" type="button" id="showNext" aria-label="Next project">Next<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ Skills -->
+<section class="section" id="skills" aria-labelledby="skills-h">
+  <div class="wrap">
+    <header class="head head--center">
+      <div class="head__text" data-reveal>
+        <p class="eyebrow"><span class="eyebrow__dot"></span>Skills</p>
+        <h2 id="skills-h">Languages, frameworks, <em>infrastructure</em></h2>
+        <p class="lede">Drag the cloud to turn it. Press a skill to see where I’ve used it.</p>
+      </div>
+    </header>
+
+    <div class="skills" data-reveal>
+      <div class="filters" role="group" aria-label="Filter skills">
+        <button class="seg__btn is-on" type="button" aria-pressed="true" data-filter="all">All</button>
+        <button class="seg__btn" type="button" aria-pressed="false" data-filter="lang">Languages</button>
+        <button class="seg__btn" type="button" aria-pressed="false" data-filter="frame">Frameworks</button>
+        <button class="seg__btn" type="button" aria-pressed="false" data-filter="cloud">Cloud</button>
+      </div>
+
+      <div class="orbit" id="orbit">
+        <button class="tag" type="button" data-g="lang" data-where="Coursework" data-note="Systems programming and memory management in class projects.">C</button>
+        <button class="tag" type="button" data-g="lang" data-where="Coursework" data-note="Object-oriented and data-structures coursework.">C++</button>
+        <button class="tag" type="button" data-g="lang" data-where="QR Code Generator" data-link="#projects" data-proj="3" data-note="Scripting and the QR Code Generator.">Python</button>
+        <button class="tag" type="button" data-g="lang" data-where="Homework Tracker, this site" data-link="#projects" data-proj="0" data-note="The Homework Tracker extension and this portfolio, WebGL included.">JavaScript</button>
+        <button class="tag" type="button" data-g="lang" data-where="Fidelity Investments" data-link="#exp-fidelity" data-note="The Kubernetes observability front end at Fidelity.">TypeScript</button>
+        <button class="tag" type="button" data-g="lang" data-where="UMass Lowell" data-link="#exp-uml" data-note="Querying and cleaning records during the data management internship.">SQL</button>
+        <button class="tag" type="button" data-g="frame" data-where="Fidelity Investments" data-link="#exp-fidelity" data-note="Component-driven UI for the observability experience.">React</button>
+        <button class="tag" type="button" data-g="frame" data-where="Fidelity Investments" data-link="#exp-fidelity" data-note="16 telemetry dashboards built as Grafana Scenes apps.">Grafana Scenes</button>
+        <button class="tag" type="button" data-g="frame" data-where="Crypto Investment App" data-link="#projects" data-proj="1" data-note="A five-screen mobile app with persistent settings.">Flutter</button>
+        <button class="tag" type="button" data-g="frame" data-where="Coursework" data-note="Data wrangling for analysis coursework.">Pandas</button>
+        <button class="tag" type="button" data-g="frame" data-where="Coursework" data-note="Charts for analysis coursework.">Matplotlib</button>
+        <button class="tag" type="button" data-g="cloud" data-where="Fidelity Investments" data-link="#exp-fidelity" data-note="9 resource types surfaced in one observability view.">Kubernetes</button>
+        <button class="tag" type="button" data-g="cloud" data-where="Fidelity Investments" data-link="#exp-fidelity" data-note="Container health and restart metrics.">Docker</button>
+        <button class="tag" type="button" data-g="cloud" data-where="Fidelity Investments" data-link="#exp-fidelity" data-note="The clusters the observability tooling ran against.">AWS EKS</button>
+        <button class="tag" type="button" data-g="cloud" data-where="Fidelity Investments" data-link="#exp-fidelity" data-note="Telemetry feeding the pod-level dashboards.">OpenTelemetry</button>
+      </div>
+
+      <aside class="readout panel" id="readout" aria-live="polite">
+        <span class="mono" id="roGroup">Pick a skill</span>
+        <b id="roName">15 tools across three layers</b>
+        <p id="roNote">Languages I write in, frameworks I build with, and the infrastructure it all runs on.</p>
+        <a class="key key--sm key--ink" id="roLink" href="#work" hidden>See where</a>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ About -->
+<section class="section" id="about" aria-labelledby="about-h">
+  <div class="wrap">
+    <header class="head">
+      <div class="head__text" data-reveal>
+        <p class="eyebrow"><span class="eyebrow__dot"></span>About &amp; leadership</p>
+        <h2 id="about-h">The person, and the <em>communities</em></h2>
+      </div>
+    </header>
+
+    <div class="about">
+      <div class="about__me panel" data-reveal data-tilt="4">
+        <div class="portrait"><img src="assets/images/headshot.jpg" alt="Portrait of Mayne Murray" width="400" height="400" loading="lazy"></div>
+        <p>I’m pursuing a B.S. in Computer Science at the University of Massachusetts Lowell, graduating May 2027 as part of the Honors College. My interests sit where backend development meets infrastructure: automation, systems integration, and building tools that make complicated systems easier to understand.</p>
+        <dl class="dl">
+          <div><dt class="mono">Based in</dt><dd>Framingham, MA</dd></div>
+          <div><dt class="mono">Previous role</dt><dd>Software Engineer Intern, Fidelity Investments</dd></div>
+          <div><dt class="mono">Honors</dt><dd>Honors College · RSM Excellence Academy Scholar</dd></div>
+        </dl>
+      </div>
+
+      <div class="deck-wrap" data-reveal>
+        <div class="deck" id="deck" aria-roledescription="carousel" aria-label="Leadership and programs">
+          <article class="deck__card panel"><span class="mono">Oct 2023 to present</span><h3>National Society of Black Engineers</h3><p class="card__org">Executive Board Senator</p><ul class="points points--tight"><li>Lead general body meetings and information sessions with companies including Red Hat, Liberty Mutual and Teradyne.</li><li>Organize regional and national conference involvement for chapter members.</li><li>Support peers with résumé review and interview preparation.</li></ul></article>
+          <article class="deck__card panel"><span class="mono">Aug 2025 to present</span><h3>MLT Career Prep ’27 Fellow</h3><p class="card__org">Management Leadership for Tomorrow</p><p>Leadership development, career navigation and personal branding through one-on-one coaching, workshops and corporate partner events, plus case studies and mock interviews with top-tier firms.</p></article>
+          <article class="deck__card panel"><span class="mono">Sep 2024 to present</span><h3>Juniper Scholars Fellow</h3><p class="card__org">Juniper Networks</p><p>A competitive fellowship focused on academic and professional development for underrepresented students in tech, with mentoring from Juniper engineers and workshops on technical and leadership skills.</p></article>
+          <article class="deck__card panel"><span class="mono">Jul 2024 to Jun 2025</span><h3>SEO Career, Technology Track</h3><p class="card__org">Sponsors for Educational Opportunity</p><p>Industry-specific training in technical skills and business fundamentals, one-on-one coaching, and webinars and panels on corporate technology roles.</p></article>
+          <article class="deck__card panel"><span class="mono">Jul 2025</span><h3>Grow with Google Scholar</h3><p class="card__org">Google · Coursera</p><p>Training in data analytics, résumé building, interview preparation and personal branding, with a project portfolio demonstrating proficiency in digital tools.</p></article>
+          <article class="deck__card panel"><span class="mono">UMass Lowell</span><h3>Campus communities</h3><p class="card__org">Member and mentor</p><ul class="points points--tight"><li>Black Student Union</li><li>Society of Caribbean Ancestry</li><li>Association of Students of African Origin</li><li>Competitive Programming Club</li></ul></article>
+        </div>
+        <div class="deck__nav">
+          <button class="key key--sm" type="button" id="deckPrev" aria-label="Previous card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Back</button>
+          <span class="mono" id="deckCount">1 / 6</span>
+          <button class="key key--sm key--ink" type="button" id="deckNext" aria-label="Next card">Next card<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ Contact -->
+<section class="section section--end" id="contact" aria-labelledby="contact-h">
+  <div class="wrap">
+    <div class="end">
+      <div class="end__text" data-reveal>
+        <p class="eyebrow"><span class="eyebrow__dot"></span>Contact</p>
+        <h2 id="contact-h">Let’s make something <em>clear.</em></h2>
+        <p class="lede">Recruiting, collaborating, or comparing notes on observability tooling. I’d like to hear from you.</p>
+        <ul class="reach">
+          <li><a class="reach__main" href="mailto:maynemurray@gmail.com"><span class="mono">Email</span><b>maynemurray@gmail.com</b></a><button class="key key--sm" type="button" data-copy="maynemurray@gmail.com" data-done="Email copied">Copy</button></li>
+          <li><a class="reach__main" href="tel:+16177497436"><span class="mono">Phone</span><b>(617) 749-7436</b></a><button class="key key--sm" type="button" data-copy="(617) 749-7436" data-done="Phone number copied">Copy</button></li>
+          <li><a class="reach__main" href="https://www.linkedin.com/in/mayne-murray/" target="_blank" rel="noopener"><span class="mono">LinkedIn</span><b>Mayne Murray</b></a><span class="reach__go" aria-hidden="true">↗</span></li>
+          <li><a class="reach__main" href="https://github.com/MMur2x" target="_blank" rel="noopener"><span class="mono">GitHub</span><b>MMur2x</b></a><span class="reach__go" aria-hidden="true">↗</span></li>
+        </ul>
+        <div class="hero__cta">
+          <button class="key key--ink" type="button" data-resume>Read the résumé</button>
+          <a class="key" href="assets/docs/mayne-murray-resume.pdf" download>Download PDF</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="foot wrap">
+    <span>© 2026 Mayne Murray</span>
+    <span>Mayne’s Room. Hand-built with HTML, CSS, JavaScript and WebGL. No frameworks.</span>
+    <a href="#top">Back to the doorway ↑</a>
+  </footer>
+</section>
+</div>
+</main>
+
+<dialog class="sheet" id="resume" aria-labelledby="resume-h">
+  <div class="sheet__bar">
+    <h2 id="resume-h">Résumé</h2>
+    <a class="key key--sm" href="assets/docs/mayne-murray-resume.pdf" download>Download</a>
+    <a class="key key--sm" href="assets/docs/mayne-murray-resume.pdf" target="_blank" rel="noopener">Open in a tab</a>
+    <button class="iconbtn" type="button" data-close aria-label="Close the résumé"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <iframe title="Mayne Murray résumé (PDF)" data-src="assets/docs/mayne-murray-resume.pdf#view=FitH"></iframe>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+
+<script src="assets/js/room.js?v=70" defer></script>
+<script src="assets/js/site.js?v=70" defer></script>
+</body>
+</html>
