@@ -35,7 +35,7 @@
   var stepBtns = $$('#steps button'), stopLinks = $$('.nav__links a[data-stop]'), curStop = -1, ticking = false, inAfter = false;
   function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
   function filmMax() { return Math.max(1, film.offsetHeight - window.innerHeight); }
-  function goStop(n) { closeDrawer(); window.scrollTo({ top: STOPS[n] * filmMax(), behavior: calm ? 'auto' : 'smooth' }); }
+  function goStop(n) { if (window.Room && window.Room.exploring && window.Room.exploring()) window.Room.explore(false); closeDrawer(); window.scrollTo({ top: STOPS[n] * filmMax(), behavior: calm ? 'auto' : 'smooth' }); }
   function onScroll() {
     ticking = false; if (!film || !film.offsetHeight) return;
     var y = window.pageYOffset, p = clamp01(y / filmMax()), i, f, o;
@@ -46,6 +46,7 @@
     var stop = 0, best = 9; for (i = 0; i < STOPS.length; i++) if (Math.abs(p - STOPS[i]) < best) { best = Math.abs(p - STOPS[i]); stop = i; }
     var dim = after.getBoundingClientRect().top < window.innerHeight * .62;
     if (dim !== inAfter) { inAfter = dim; document.body.classList.toggle('dim', dim); chev.classList.toggle('is-end', dim); chev.setAttribute('aria-label', dim ? 'Back to the doorway' : 'Go to the next part of the room'); if (dim) closeDrawer(); }
+    if (focusStop >= 0 && stop !== focusStop && Date.now() - focusAt > 1600) closeDrawer(true);   // you walked away from what you were looking at
     if (stop !== curStop) {
       curStop = stop;
       stepBtns.forEach(function (b, n) { b.setAttribute('aria-current', n === stop ? 'true' : 'false'); });
@@ -150,12 +151,64 @@
     }
   }
   function closeDrawer(quiet) {
+    if (window.Room && window.Room.blur) window.Room.blur(); focusStop = -1;
     if (!drawer || drawer.hidden) return; drawer.classList.remove('is-open');
     hideT = setTimeout(function () { drawer.hidden = true; }, calm ? 0 : 420);
     if (!quiet && lastSpot && lastSpot.classList.contains('is-on')) lastSpot.focus({ preventScroll: true }); lastSpot = null;
   }
-  $$('.spot').forEach(function (s) { s.addEventListener('click', function () { openDrawer(s.getAttribute('data-spot'), s); }); });
+  // clicking an object walks you over to it, then tells you about it
+  var focusStop = -1, focusAt = 0;
+  $$('.spot').forEach(function (s) { s.addEventListener('click', function () {
+    var key = s.getAttribute('data-spot');
+    if (window.Room && window.Room.focus && DETAIL[key] && !DETAIL[key].skip) {
+      focusStop = exploring ? -1 : window.Room.home(key); focusAt = Date.now();
+      if (!exploring && focusStop !== curStop) window.scrollTo({ top: STOPS[focusStop] * filmMax(), behavior: calm ? 'auto' : 'smooth' });
+      window.Room.focus(key);
+    }
+    openDrawer(key, s);
+  }); });
   if (drawer) { $('#drawerClose').addEventListener('click', function () { closeDrawer(); }); document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !drawer.hidden) closeDrawer(); }); }
+
+  /* ------------------------------------------------------------ free walking: the Walk button, the heads-up bar, drag-to-look and the touch stick */
+  var hud = $('#hud'), stick = $('#stick'), knob = $('#stickKnob'), pad = $('#lookpad'), exploring = false, exploreY = 0;
+  var LOOK_MOUSE = .0042, LOOK_TOUCH = .0058;   // radians turned per pixel dragged
+  function paintExplore(on) {
+    exploring = on; root.classList.toggle('exploring', on); exploreY = window.pageYOffset;
+    if (hud) hud.hidden = !on; if (stick) stick.hidden = !on;
+    $$('.dock__walk').forEach(function (b) { b.setAttribute('aria-pressed', on ? 'true' : 'false'); var t = $('span', b); if (t) t.textContent = on ? 'Walking' : 'Walk around'; });
+    if (!on) closeDrawer(true);
+  }
+  function setExplore(on) {
+    if (!window.Room || !window.Room.explore || root.classList.contains('no-webgl')) return;
+    if (on && inAfter) window.scrollTo({ top: STOPS[STOPS.length - 1] * filmMax(), behavior: 'auto' });
+    if (on) closeDrawer(true); window.Room.explore(on);
+  }
+  document.addEventListener('room:explore', function (e) { paintExplore(!!e.detail.on); });
+  $$('[data-explore]').forEach(function (b) { b.addEventListener('click', function () { setExplore(!exploring); }); });
+  if ($('#exploreExit')) $('#exploreExit').addEventListener('click', function () { setExplore(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && exploring && (!drawer || drawer.hidden)) setExplore(false); });
+  window.addEventListener('scroll', function () { if (exploring && Math.abs(window.pageYOffset - exploreY) > 60) setExplore(false); }, { passive: true });   // scrolling picks the tour back up
+  if (pad) {
+    var lastX = 0, lastY = 0, dragId = null;
+    pad.addEventListener('pointerdown', function (e) { dragId = e.pointerId; lastX = e.clientX; lastY = e.clientY; pad.classList.add('is-drag'); try { pad.setPointerCapture(e.pointerId); } catch (err) {} });
+    pad.addEventListener('pointermove', function (e) {
+      if (e.pointerId !== dragId) return; var k = e.pointerType === 'touch' ? LOOK_TOUCH : LOOK_MOUSE;
+      window.Room.look((e.clientX - lastX) * -k, (e.clientY - lastY) * -k); lastX = e.clientX; lastY = e.clientY;   // drag the world: pull left to look right
+    });
+    var endDrag = function (e) { if (e.pointerId === dragId) { dragId = null; pad.classList.remove('is-drag'); } };
+    pad.addEventListener('pointerup', endDrag); pad.addEventListener('pointercancel', endDrag);
+  }
+  if (stick && knob) {
+    var sid = null, R0 = 38;
+    var steer = function (e) {
+      var r = stick.getBoundingClientRect(), x = e.clientX - (r.left + r.width / 2), y = e.clientY - (r.top + r.height / 2), l = Math.hypot(x, y) || 1, m = Math.min(l, R0);
+      x = x / l * m; y = y / l * m; knob.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0)'; window.Room.move(x / R0, -y / R0);
+    };
+    stick.addEventListener('pointerdown', function (e) { sid = e.pointerId; try { stick.setPointerCapture(e.pointerId); } catch (err) {} steer(e); e.preventDefault(); });
+    stick.addEventListener('pointermove', function (e) { if (e.pointerId === sid) steer(e); });
+    var letGo = function (e) { if (e.pointerId !== sid) return; sid = null; knob.style.transform = ''; window.Room.move(0, 0); };
+    stick.addEventListener('pointerup', letGo); stick.addEventListener('pointercancel', letGo);
+  }
   queue();
 
   /* ------------------------------------------------------------ smooth anchors (and remembering where a link landed) */
