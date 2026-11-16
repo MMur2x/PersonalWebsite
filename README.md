@@ -35,6 +35,7 @@ Plain HTML, CSS and JavaScript. No framework, no build step, no dependencies. Th
 - **Fade speed of the overlays:** `FADE` in `site.js`.
 - **Intro length:** `introT / 2.6` in `room.js` (seconds).
 - **Colours and type:** the tokens at the top of `assets/css/site.css`, and the "MAYNE'S ROOM" and "LAMPLIGHT" blocks at the bottom. Headings are Bricolage Grotesque, everything else is Hanken Grotesk (both self-hosted in `assets/fonts/`). Notes and the drawer are styled as paper cards.
+- **The view outside:** the window is a real opening. The street, houses, trees, street lamps and car are built in the "what you see through the window" block of `buildRoom()`; the night sky and moon are drawn by the shader (search for "the night sky"). `sheer(...)` makes the see-through curtains.
 - **Softer furniture:** `rbox(name, box, colour, opts, radius)` in `room.js` is a box with rounded edges.
 - **Résumé:** replace `assets/docs/mayne-murray-resume.pdf`.
 
