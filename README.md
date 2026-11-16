@@ -30,11 +30,12 @@ Plain HTML, CSS and JavaScript. No framework, no build step, no dependencies. Th
 - **Furniture:** `buildRoom()` in `room.js`. `box(name, [x0,y0,z0,x1,y1,z1], colour, {mat})`, `cyl(...)` and `ball(...)`. The room is 6 m wide, 5 m deep, 2.9 m tall. Lighting is re-baked automatically on load.
 - **Lights:** the `point(...)` lines in the fragment shader in `room.js` (desk lamp, floor lamp, monitor, LED strip, moonlight).
 - **Photo textures (optional):** add `data-window="assets/images/room/window.jpg"` and/or `data-rug="assets/images/room/rug.jpg"` to `<canvas id="stage">` to replace the drawn window view and rug with photographs.
-- **Pictures in the room:** `paintAtlas()` in `room.js`.
+- **Pictures in the room:** `paintAtlas()` in `room.js` (monitor, calendar, frames, rug) and `paintPosters()` (the basketball, anime-style and game posters and the cork board). All of it is original artwork drawn in code; swap in your own by drawing an image into the same cell.
 - **Where a hotspot sits, when it shows, and how close the camera walks up:** `SPOT` in `room.js`.
 - **Fade speed of the overlays:** `FADE` in `site.js`.
 - **Intro length:** `introT / 2.6` in `room.js` (seconds).
-- **Colours and type:** the tokens at the top of `assets/css/site.css`, and the "MAYNE'S ROOM" block at the bottom.
+- **Colours and type:** the tokens at the top of `assets/css/site.css`, and the "MAYNE'S ROOM" and "LAMPLIGHT" blocks at the bottom. Headings are Bricolage Grotesque, everything else is Hanken Grotesk (both self-hosted in `assets/fonts/`). Notes and the drawer are styled as paper cards.
+- **Softer furniture:** `rbox(name, box, colour, opts, radius)` in `room.js` is a box with rounded edges.
 - **Résumé:** replace `assets/docs/mayne-murray-resume.pdf`.
 
 ## Fallbacks
