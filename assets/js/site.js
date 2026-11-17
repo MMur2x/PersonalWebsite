@@ -29,7 +29,7 @@
 
   /* ------------------------------------------------------------ ONE TIMELINE: p is scroll progress through #film.
      Every .fx fades in at data-in and out at data-out; FADE is how long (in p) each fade takes. */
-  var FADE = .035, film = $('#film'), after = $('#after'), chev = $('#chev');
+  var FADE = .024, film = $('#film'), after = $('#after'), chev = $('#chev');
   var fx = $$('.fx').map(function (el) { return { el: el, a: parseFloat(el.getAttribute('data-in')), b: parseFloat(el.getAttribute('data-out')), o: -1 }; });
   var STOPS = (window.Room && window.Room.stops) || [0, .25, .47, .69, .93];
   var stepBtns = $$('#steps button'), stopLinks = $$('.nav__links a[data-stop]'), curStop = -1, ticking = false, inAfter = false;
@@ -55,6 +55,7 @@
   }
   function queue() { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }
   window.addEventListener('scroll', queue, { passive: true }); window.addEventListener('resize', queue);
+  window.addEventListener('load', queue); window.addEventListener('pageshow', queue);   // the browser may restore a scroll position after this script has run
   // the chevron steps to the next stop, then into the details, then turns round and takes you back to the top
   if (chev) chev.addEventListener('click', function () {
     if (inAfter) { window.scrollTo({ top: 0, behavior: calm ? 'auto' : 'smooth' }); return; }
@@ -232,8 +233,8 @@
   });
   if ('IntersectionObserver' in window && !calm) {
     var rio = new IntersectionObserver(function (es) {
-      es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-in'); rio.unobserve(en.target); } });
-    }, { rootMargin: '0px 0px -10% 0px', threshold: .08 });
+      es.forEach(function (en) { if (en.isIntersecting || en.boundingClientRect.top < window.innerHeight) { en.target.classList.add('is-in'); rio.unobserve(en.target); } });
+    }, { rootMargin: '0px 0px -4% 0px', threshold: 0 });
     $$('[data-reveal]').forEach(function (el) { rio.observe(el); });
   } else $$('[data-reveal]').forEach(function (el) { el.classList.add('is-in'); });
 
@@ -244,7 +245,7 @@
     requestAnimationFrame(tick);
   }
   if ('IntersectionObserver' in window && !calm) {
-    var cio = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { cio.unobserve(en.target); count(en.target); } }); }, { threshold: .6 });
+    var cio = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting || en.boundingClientRect.top < 0) { cio.unobserve(en.target); count(en.target); } }); }, { threshold: .2 });
     $$('[data-count]').forEach(function (el) { el.textContent = '0' + (el.getAttribute('data-suffix') || ''); cio.observe(el); });
   }
 

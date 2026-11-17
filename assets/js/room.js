@@ -622,7 +622,7 @@
   });
 
   /* ------------------------------------------------------------ state + frame */
-  var film = $('#film'), p = 0, pShown = 0, time = 0, last = 0, raf = null, visible = true, dpr = 1, tier = 0, slow = 0;
+  var film = $('#film'), p = 0, pShown = 0, time = 0, last = 0, raf = null, visible = true, dpr = 1, tier = 0, slow = 0, retier = false, idle = true;
   var intro = calm ? 1 : 0, introT = 0, settled = false, lampOn = true, on = [0, 0, 0, 0, 0], px = 0, py = 0, sx = 0, sy = 0;
   var cur = null, tgt = null, focus = null, fAmt = 0, walk = 0, FOLLOW = 3.4;   // FOLLOW: how quickly the camera catches up (higher = snappier)
   // free walking: WALK_SPEED in metres a second, TURN_SPEED in radians a second (keys), BODY is how close you can get to furniture
@@ -652,9 +652,11 @@
   function progress() { var max = film ? film.offsetHeight - window.innerHeight : 1; return clamp(window.pageYOffset / Math.max(1, max), 0, 1); }
   function settle() { if (settled) return; settled = true; document.dispatchEvent(new CustomEvent('room:settled')); }
   function frame(now) {
-    raf = null; var dt = Math.min(.05, (now - last) / 1000 || .016), i; last = now; if (!calm) time += dt;
+    raf = null; var dt = idle ? .016 : Math.min(.12, (now - last) / 1000 || .016), i; last = now; idle = false;   // real elapsed time, so a slow machine keeps up with the scroll instead of playing in slow motion
+    if (retier) { retier = false; resize(); }   // resize before drawing, never after: a resized canvas is blank until it is drawn again
+    if (!calm) time += dt;
     p = progress(); pShown += (p - pShown) * (calm ? 1 : 1 - Math.pow(.0008, dt));
-    if (intro < 1) { introT += dt; intro = Math.min(1, introT / 2.6); if (intro > .8) settle(); } else settle();
+    if (intro < 1) { introT += dt * (p > .015 ? 4 : 1); intro = Math.min(1, introT / 2.6); if (intro > .8) settle(); } else settle();
     // the lights come on one after another: moon, monitor, desk lamp, floor lamp, LED strip
     var want = [intro > .02 ? 1 : 0, intro > .3 ? 1 : 0, (intro > .5 && lampOn) ? 1 : 0, intro > .82 ? 1 : 0, intro > .66 ? 1 : 0], k = 1 - Math.pow(.004, dt);
     for (i = 0; i < 5; i++) on[i] += (want[i] - on[i]) * (calm ? 1 : k);
@@ -696,7 +698,7 @@
 
     // hotspots follow their objects
     var stop = 0, best = 9; STOPS.forEach(function (s, n) { var dd = Math.abs(pShown - s); if (dd < best) { best = dd; stop = n; } });
-    var moving = !free && (best > .07 || moved > .004), dim = document.body.classList.contains('dim');
+    var moving = !free && moved > dt * 1.8, dim = document.body.classList.contains('dim');
     for (i = 0; i < spots.length; i++) {
       var s = spots[i], q = project(s.p), near = false;
       if (free && q && s.key !== 'frames') { var ox = s.p[0] - eye[0], oy = s.p[1] - eye[1], oz = s.p[2] - eye[2], od = Math.hypot(ox, oy, oz); near = od < 3.6 && (od < .5 || hit(eye[0], eye[1], eye[2], ox / od, oy / od, oz / od, od - .4, -1) < 0); }   // walking: offer what you can actually see nearby
@@ -704,13 +706,14 @@
       if (q) s.el.style.transform = 'translate3d(' + q[0].toFixed(1) + 'px,' + q[1].toFixed(1) + 'px,0)';
       if (s.shown !== show) { s.shown = show; s.el.classList.toggle('is-on', !!show); s.el.tabIndex = show ? 0 : -1; }
     }
-    if (!calm && intro >= 1) { slow = dt > .028 ? slow + 1 : Math.max(0, slow - 1); if (slow > 45 && tier < 2) { tier++; slow = 0; resize(); } }   // struggling? draw fewer pixels
+    if (!calm && intro >= 1) { slow = dt > .028 ? slow + 1 : Math.max(0, slow - 1); if (slow > 45 && tier < 2) { tier++; slow = 0; retier = true; dirty = true; } }   // struggling? draw fewer pixels
     var busy = (walking && (Math.abs(vel[0]) + Math.abs(vel[1]) > .002 || mx || mz || keys.q || keys.e)) || Math.abs(par - (free ? 0 : 1)) > .003 || intro < 1 || Math.abs(p - pShown) > .0004 || moved > .0006 || Math.abs(fAmt - (focus ? 1 : 0)) > .002 || Math.abs(px - sx) + Math.abs(py - sy) > .002 || hi || on.some(function (v, n) { return Math.abs(v - want[n]) > .004; });
-    if (busy || dirty) { dirty = false; kick(); }
+    if (busy || dirty) { dirty = false; kick(); } else idle = true;
   }
   function kick() { if (!raf && visible) raf = requestAnimationFrame(frame); }
   window.addEventListener('scroll', function () { dirty = true; kick(); }, { passive: true });
-  window.addEventListener('resize', function () { resize(); kick(); });
+  window.addEventListener('resize', function () { var w0 = canvas.width, h0 = canvas.height; resize(); if (canvas.width !== w0 || canvas.height !== h0) { if (raf) cancelAnimationFrame(raf); raf = null; frame(performance.now()); } else kick(); });
+  window.addEventListener('pageshow', function () { dirty = true; kick(); });
   window.addEventListener('pointermove', function (e) { if (calm || e.pointerType === 'touch') return; px = e.clientX / window.innerWidth - .5; py = e.clientY / window.innerHeight - .5; kick(); }, { passive: true });
   // keyboard: W A S D (or the arrow keys once you are walking) to move, Q and E to turn
   var KEYMAP = { w: 'w', a: 'a', s: 's', d: 'd', q: 'q', e: 'e', arrowup: 'w', arrowdown: 's', arrowleft: 'q', arrowright: 'e' };
