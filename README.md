@@ -52,3 +52,11 @@ python3 -m http.server 8000
 ```
 
 Then open http://localhost:8000. Old page addresses (`experience.html`, `projects.html` and so on) redirect into the single page.
+
+### The time outside
+
+The sky, the light through the window and the street all follow a clock. It starts at the visitor's own local time and a whole day passes every `DAY_LEN` seconds (six minutes) — change that number near the top of the "state + frame" section of `room.js`. From the browser console, `Room.time(18.5)` pins it to an hour and `Room.time(null)` lets it run again.
+
+### Room size and colours
+
+`W` and `D` at the top of `buildRoom` are the width and depth in metres (6.7 × 5.8). `wall` is the main wall colour and `wallA` the darker accent wall behind the desk.

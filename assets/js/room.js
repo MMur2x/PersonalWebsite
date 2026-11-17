@@ -245,19 +245,19 @@
     sheerMode = false;
   }
 
-  /* ------------------------------------------------------------ the room. 6 m wide (x), 5 m deep (z), 2.9 m tall. Back wall z=0, left wall x=0. */
-  var W = 6, D = 5, Hh = 2.9;
-  var LAMP = [.92, 1.3, .34], FLAMP = [5.5, 1.56, 3.55], MON = [1.5, 1.31, .56];   // where the light sources are
+  /* ------------------------------------------------------------ the room. 6.7 m wide (x), 5.8 m deep (z), 2.9 m tall. Back wall z=0, left wall x=0. */
+  var W = 6.7, D = 5.8, Hh = 2.9;
+  var LAMP = [.92, 1.3, .34], FLAMP = [6.2, 1.56, 3.55], MON = [1.5, 1.31, .56];   // where the light sources are
   // materials: 0 plain · 1 wood (grain along x) · 2 wood (grain along z) · 3 floorboards · 4 painted wall · 5 fabric · 6 glossy · 7 wood (grain along y)
   (function buildRoom() {
-    var wall = hx('#d8d0c2'), ceil = hx('#e6e1d7'), floor = hx('#a87447'), wood = hx('#b07c4c'), woodD = hx('#6a4a33'), white = hx('#f0ede6'), dark = hx('#26252b'), metal = hx('#8f8d8a'), duvet = hx('#3f4d6b'), sheet = hx('#e9e5dc'), trim = hx('#ebe7de');
+    var wall = hx('#93aeb0'), wallA = hx('#4f6f78'), ceil = hx('#e6e1d7'), floor = hx('#a87447'), wood = hx('#b07c4c'), woodD = hx('#6a4a33'), white = hx('#f0ede6'), dark = hx('#26252b'), metal = hx('#8f8d8a'), duvet = hx('#3f4d6b'), sheet = hx('#e9e5dc'), trim = hx('#ebe7de');
     // shell
     box('floor', [-.15, -.2, -.15, W + .15, 0, D + .15], floor, { mat: 3, skip: '-y' });
-    box('wallB', [-.15, 0, -.15, 3.78, Hh, 0], wall, { mat: 4, skip: '-z,-y,+y' }); box('wallB', [5.32, 0, -.15, W + .15, Hh, 0], wall, { mat: 4, skip: '-z,-y,+y' }); box('wallB', [3.78, 0, -.15, 5.32, 1.28, 0], wall, { mat: 4, skip: '-z,-y,+x,-x' }); box('wallB', [3.78, 2.57, -.15, 5.32, Hh, 0], wall, { mat: 4, skip: '-z,+y,+x,-x' }); box('wallL', [-.15, 0, 0, 0, Hh, D], wall, { mat: 4, skip: '-x,-y,+y' });
+    box('wallB', [-.15, 0, -.15, 3.78, Hh, 0], wallA, { mat: 4, skip: '-z,-y,+y' }); box('wallB', [5.32, 0, -.15, W + .15, Hh, 0], wallA, { mat: 4, skip: '-z,-y,+y' }); box('wallB', [3.78, 0, -.15, 5.32, 1.28, 0], wallA, { mat: 4, skip: '-z,-y,+x,-x' }); box('wallB', [3.78, 2.57, -.15, 5.32, Hh, 0], wallA, { mat: 4, skip: '-z,+y,+x,-x' }); box('wallL', [-.15, 0, 0, 0, Hh, D], wall, { mat: 4, skip: '-x,-y,+y' });
     box('wallR', [W, 0, 0, W + .15, Hh, D], wall, { mat: 4, skip: '+x,-y,+y' }); box('wallF', [-.15, 0, D, W + .15, Hh, D + .15], wall, { mat: 4, skip: '+z,-y,+y' });
     box('ceiling', [-.15, Hh, -.15, W + .15, Hh + .15, D + .15], ceil, { mat: 4, skip: '+y' });
     box('trim', [0, 0, 0, W, .1, .025], trim, { noOcc: 1 }); box('trim', [0, 0, 0, .025, .1, D], trim, { noOcc: 1 }); box('trim', [W - .025, 0, 0, W, .1, D], trim, { noOcc: 1 }); box('trim', [0, 0, D - .025, W, .1, D], trim, { noOcc: 1 });
-    cyl('ceilLight', [3, Hh - .07, 2.5], .24, .2, .07, white, { seg: 20, noOcc: 1 });
+    cyl('ceilLight', [W / 2, Hh - .07, D / 2], .24, .2, .07, white, { seg: 20, noOcc: 1 });
     box('rug', [1.5, 0, 1.75, 4.5, .018, 3.95], white, { tex: 'rug', face: '+y', mat: 5, sideMat: 5, side: hx('#2f3a52') });
     // door (front wall) and wardrobe (right wall)
     box('door', [4.55, 0, D - .05, 5.45, 2.05, D], hx('#d9d5e2'), { mat: 6, noOcc: 1 }); box('door', [4.47, 0, D - .03, 4.55, 2.13, D], trim, { noOcc: 1 }); box('door', [5.45, 0, D - .03, 5.53, 2.13, D], trim, { noOcc: 1 }); box('door', [4.47, 2.05, D - .03, 5.53, 2.13, D], trim, { noOcc: 1 });
@@ -266,8 +266,8 @@
     rbox('wardrobe', [W - .6, 0, 3.75, W, 2.1, 4.95], hx('#8a6244'), { mat: 7 }, 0.015); box('wardrobe', [W - .615, .06, 3.79, W - .6, 2.04, 4.34], hx('#96694a'), { mat: 7, noOcc: 1 }); box('wardrobe', [W - .615, .06, 4.36, W - .6, 2.04, 4.91], hx('#96694a'), { mat: 7, noOcc: 1 });
     cyl('wardrobe', [W - .64, .95, 4.31], .01, .01, .22, metal, { mat: 6, seg: 6, noOcc: 1 }); cyl('wardrobe', [W - .64, .95, 4.39], .01, .01, .22, metal, { mat: 6, seg: 6, noOcc: 1 });
     // floor lamp in the corner by the wardrobe
-    cyl('flamp', [5.5, 0, 3.55], .15, .15, .025, dark, { mat: 6, seg: 18, noOcc: 1 }); cyl('flamp', [5.5, .02, 3.55], .014, .014, 1.42, dark, { mat: 6, seg: 8, noOcc: 1 });
-    cyl('flamp', [5.5, 1.42, 3.55], .2, .13, .3, hx('#f3e3c2'), { seg: 22, open: 1, em: .45, grp: 4, inside: 1.5, mat: 5, noOcc: 1 });
+    cyl('flamp', [6.2, 0, 3.55], .15, .15, .025, dark, { mat: 6, seg: 18, noOcc: 1 }); cyl('flamp', [6.2, .02, 3.55], .014, .014, 1.42, dark, { mat: 6, seg: 8, noOcc: 1 });
+    cyl('flamp', [6.2, 1.42, 3.55], .2, .13, .3, hx('#f3e3c2'), { seg: 22, open: 1, em: .45, grp: 4, inside: 1.5, mat: 5, noOcc: 1 });
     // desk and everything on it
     rbox('desk', [.45, .75, .12, 2.95, .8, 1.06], wood, { mat: 1 }, 0.012); rbox('desk', [.5, 0, .16, .56, .75, 1.0], woodD, { mat: 7 }, 0.012); rbox('desk', [2.84, 0, .16, 2.9, .75, 1.0], woodD, { mat: 7 }, 0.012);
     rbox('desk', [2.24, .22, .16, 2.84, .75, 1.0], woodD, { mat: 7 }, 0.01); box('desk', [2.26, .5, 1.0, 2.82, .73, 1.012], wood, { mat: 1, noOcc: 1 }); box('desk', [2.26, .25, 1.0, 2.82, .48, 1.012], wood, { mat: 1, noOcc: 1 });
@@ -330,7 +330,7 @@
     [.03, .4, .77].forEach(function (y, row) { for (zz = 4.1; zz < 4.82; ) { var th = .028 + (m * 7 % 6) * .008, hg = .2 + (m * 11 % 8) * .014, dp = .17 + (m * 5 % 4) * .02; if (zz + th > 4.84) break; if (row === 1 && m % 11 === 10) { box('library', [.03, y, zz, .03 + .24, y + .09, zz + .17], hx(sp2[(m + 2) % 10]), { mat: 6, noOcc: 1 }); box('library', [.04, y + .09, zz + .01, .04 + .22, y + .15, zz + .16], hx(sp2[(m + 5) % 10]), { mat: 6, noOcc: 1 }); zz += .19; } else { box('library', [.03, y, zz, .03 + dp, y + hg, zz + th], hx(sp2[(m * 3 + row) % 10]), { mat: 6, noOcc: 1 }); zz += th + .003; } m++; } });
     box('library', [.04, 1.12, 4.2, .25, 1.17, 4.5], hx('#2f4a7a'), { mat: 6, noOcc: 1 }); box('library', [.05, 1.17, 4.22, .24, 1.215, 4.48], hx('#c98f3c'), { mat: 6, noOcc: 1 }); box('library', [.06, 1.215, 4.25, .23, 1.25, 4.46], hx('#e0d6c2'), { mat: 6, noOcc: 1 });
     // a basketball by the wardrobe, and a controller on the bed
-    ball('ball', [5.1, .12, 3.45], [.12, .12, .12], hx('#d9661f'), { seg: 18, mat: 5 });
+    ball('ball', [5.8, .12, 3.45], [.12, .12, .12], hx('#d9661f'), { seg: 18, mat: 5 });
     rbox('pad', [4.7, .625, 1.5, 4.86, .655, 1.6], hx('#e9e6df'), { mat: 6, noOcc: 1 }, .012); ball('pad', [4.74, .66, 1.55], [.014, .008, .014], dark, { seg: 6, noOcc: 1 }); ball('pad', [4.82, .66, 1.55], [.014, .008, .014], dark, { seg: 6, noOcc: 1 });
     // ---------------------------------------------------------------- what you see through the window: a street at night, one floor down
     var grass = hx('#1c2a1f'), road = hx('#22232a'), siding = [hx('#5a5f6b'), hx('#6b5a4c'), hx('#4c5a56')], roofc = hx('#24242a'), GY = -3.0;
@@ -380,18 +380,59 @@
     cyl('bottle', [.8, .8, .62], .034, .034, .19, hx('#3e8ed0'), { mat: 6, seg: 14, noOcc: 1 }); cyl('bottle', [.8, .99, .62], .034, .018, .03, hx('#3e8ed0'), { mat: 6, seg: 14, noOcc: 1 }); cyl('bottle', [.8, 1.02, .62], .02, .02, .025, hx('#f4f1ea'), { seg: 12, noOcc: 1 });
     rbox('hoodie', [1.3, .86, 2.055, 1.8, 1.185, 2.085], hx('#8d8f96'), { mat: 5, noOcc: 1 }, .014); rbox('hoodie', [1.3, 1.15, 1.93, 1.8, 1.19, 2.085], hx('#8d8f96'), { mat: 5, noOcc: 1 }, .016);
     cyl('chair', [1.2, .68, 1.5], .022, .022, .42, dark, { axis: 'z', mat: 6, seg: 8, noOcc: 1 }); cyl('chair', [1.9, .68, 1.5], .022, .022, .42, dark, { axis: 'z', mat: 6, seg: 8, noOcc: 1 }); cyl('chair', [1.2, .5, 1.72], .014, .014, .18, dark, { seg: 6, noOcc: 1 }); cyl('chair', [1.9, .5, 1.72], .014, .014, .18, dark, { seg: 6, noOcc: 1 });
-    [[4.62, 4.62], [4.76, 4.6]].forEach(function (sh2) { rbox('shoes', [sh2[0], 0, sh2[1], sh2[0] + .1, .09, sh2[1] + .28], hx('#e9e6df'), { mat: 5, noOcc: 1 }, .03); box('shoes', [sh2[0], 0, sh2[1], sh2[0] + .1, .02, sh2[1] + .28], hx('#2a2a2e'), { noOcc: 1 }); });
-    cyl('hamper', [5.25, 0, .5 + 2.35], .2, .23, .5, hx('#b9a78c'), { seg: 18, mat: 5 }); ball('hamper', [5.25, .5, 2.85], [.2, .07, .2], hx('#59627a'), { mat: 5, seg: 12, noOcc: 1 });
+    [[4.62, 5.42], [4.76, 5.4]].forEach(function (sh2) { rbox('shoes', [sh2[0], 0, sh2[1], sh2[0] + .1, .09, sh2[1] + .28], hx('#e9e6df'), { mat: 5, noOcc: 1 }, .03); box('shoes', [sh2[0], 0, sh2[1], sh2[0] + .1, .02, sh2[1] + .28], hx('#2a2a2e'), { noOcc: 1 }); });
+    cyl('hamper', [6.35, 0, .5 + 2.35], .2, .23, .5, hx('#b9a78c'), { seg: 18, mat: 5 }); ball('hamper', [6.35, .5, 2.85], [.2, .07, .2], hx('#59627a'), { mat: 5, seg: 12, noOcc: 1 });
     cyl('clock', [3.15, 2.3, .004], .16, .16, .03, hx('#1b1b1f'), { axis: 'z', seg: 28, noOcc: 1 }); cyl('clock', [3.15, 2.3, .034], .145, .145, .003, hx('#f0ede6'), { axis: 'z', seg: 28, noOcc: 1 }); box('clock', [3.145, 2.3, .037, 3.155, 2.41, .04], dark, { noOcc: 1 }); box('clock', [3.15, 2.295, .037, 3.23, 2.305, .04], dark, { noOcc: 1 });
     rbox('throw', [4.2, .56, 1.9, 5.84, .6, 2.5], hx('#b98a58'), { mat: 5, noOcc: 1 }, .02); ball('pillow', [4.67, .66, .62], [.26, .1, .2], hx('#b4692a'), { mat: 5, seg: 14, noOcc: 1 });
     box('outlet', [.2, .28, .0, .28, .4, .008], white, { mat: 6, noOcc: 1 }); rbox('console', [1.2, .8, .22, 1.48, .85, .4], hx('#101014'), { mat: 6, noOcc: 1 }, .008);
+
+    // ---------------------------------------------------------------- the bigger room: more of a life in it
+    // ceiling fan under the light
+    var fcx = W / 2, fcz = D / 2;
+    cyl('fan', [fcx, Hh - .3, fcz], .085, .1, .23, hx('#2a2a2e'), { mat: 6, seg: 16, noOcc: 1 }); ball('fan', [fcx, Hh - .33, fcz], [.11, .07, .11], hx('#f6efdc'), { seg: 12, noOcc: 1 });
+    rbox('fan', [fcx + .1, Hh - .215, fcz - .075, fcx + .78, Hh - .2, fcz + .075], woodD, { mat: 1, noOcc: 1 }, .006); rbox('fan', [fcx - .78, Hh - .215, fcz - .075, fcx - .1, Hh - .2, fcz + .075], woodD, { mat: 1, noOcc: 1 }, .006);
+    rbox('fan', [fcx - .075, Hh - .215, fcz + .1, fcx + .075, Hh - .2, fcz + .78], woodD, { mat: 2, noOcc: 1 }, .006); rbox('fan', [fcx - .075, Hh - .215, fcz - .78, fcx + .075, Hh - .2, fcz - .1], woodD, { mat: 2, noOcc: 1 }, .006);
+    // side table with a record player, between the bed and the right wall
+    rbox('side', [6.0, 0, .15, 6.55, .48, .65], wood, { mat: 7 }, .014); box('side', [6.03, .2, .65, 6.52, .44, .66], woodD, { mat: 1, noOcc: 1 }); ball('side', [6.275, .32, .665], [.018, .018, .012], metal, { mat: 6, seg: 8, noOcc: 1 });
+    rbox('deck', [6.05, .48, .2, 6.5, .545, .6], hx('#2b2622'), { mat: 6, noOcc: 1 }, .012); cyl('deck', [6.23, .545, .4], .15, .15, .01, hx('#121214'), { mat: 6, seg: 26, noOcc: 1 }); cyl('deck', [6.23, .555, .4], .05, .05, .002, hx('#d8474c'), { seg: 16, noOcc: 1 });
+    cyl('deck', [6.44, .545, .26], .018, .018, .03, metal, { mat: 6, seg: 8, noOcc: 1 }); box('deck', [6.31, .568, .255, 6.45, .576, .267], metal, { mat: 6, noOcc: 1 });
+    [['#2f4a7a', 0], ['#c98f3c', .03], ['#8a2f3a', .06], ['#1f1f24', .09], ['#e0d6c2', .12]].forEach(function (rc2) { box('records', [6.04 + rc2[1], .0, .7, 6.065 + rc2[1], .32, 1.02], hx(rc2[0]), { mat: 6, noOcc: 1 }); });
+    // tall corner plant
+    cyl('palm', [6.34, 0, 1.08], .15, .2, .38, hx('#e8e2d4'), { seg: 16, mat: 6 }); cyl('palm', [6.34, .37, 1.08], .18, .18, .012, hx('#3a2a1e'), { seg: 16, noOcc: 1 }); cyl('palm', [6.34, .38, 1.08], .022, .016, .75, hx('#3d5a34'), { seg: 6, noOcc: 1 });
+    [[0, 1.2, 0, .1, .3, .1], [.16, 1.02, .08, .22, .1, .12], [-.17, 1.08, .1, .2, .09, .13], [.06, 1.3, -.16, .12, .1, .22], [-.08, 1.42, .1, .13, .09, .2], [.14, 1.5, -.04, .2, .08, .1], [-.16, 1.34, -.12, .18, .08, .12], [0, 1.62, .02, .1, .16, .1], [.1, .8, .14, .16, .07, .1], [-.12, .86, -.1, .15, .07, .1]].forEach(function (l, k) {
+      ball('palm', [6.34 + l[0], l[1], 1.08 + l[2]], [l[3], l[4], l[5]], hx(['#2f7d3e', '#3b9450', '#256b36', '#4ea862'][k % 4]), { seg: 8, noOcc: 1 });
+    });
+    // guitar leaning on the right wall
+    ball('guitar', [W - .13, .36, 1.76], [.06, .25, .2], hx('#c98a4b'), { mat: 6, seg: 16, noOcc: 1 }); ball('guitar', [W - .12, .66, 1.76], [.055, .18, .15], hx('#c98a4b'), { mat: 6, seg: 16, noOcc: 1 });
+    cyl('guitar', [W - .2, .5, 1.76], .05, .05, .012, hx('#1a1410'), { axis: 'x', seg: 14, noOcc: 1 }); box('guitar', [W - .19, .26, 1.7, W - .17, .28, 1.82], hx('#2a1c14'), { noOcc: 1 });
+    box('guitar', [W - .135, .78, 1.735, W - .105, 1.42, 1.785], hx('#3a2a1e'), { mat: 7, noOcc: 1 }); rbox('guitar', [W - .13, 1.42, 1.72, W - .09, 1.6, 1.8], hx('#2a1c14'), { mat: 6, noOcc: 1 }, .01);
+    [1.735, 1.75, 1.77, 1.785].forEach(function (gz) { box('guitar', [W - .137, .3, gz - .001, W - .135, 1.42, gz + .001], hx('#d9d4c8'), { noOcc: 1 }); });
+    // beanbag in the corner by the bookcase
+    ball('beanbag', [.64, .25, 5.28], [.54, .3, .46], hx('#c98a5a'), { mat: 5, seg: 22 }); ball('beanbag', [.52, .4, 5.38], [.4, .24, .34], hx('#c98a5a'), { mat: 5, seg: 18, noOcc: 1 }); ball('beanbag', [.74, .5, 5.2], [.2, .05, .18], hx('#b57a4e'), { mat: 5, seg: 12, noOcc: 1 });
+    cyl('roundrug', [1.15, .001, 4.9], .95, .95, .012, hx('#e3d9c6'), { seg: 36, mat: 5, noOcc: 1 }); cyl('roundrug', [1.15, .002, 4.9], .7, .7, .0125, hx('#7fa19c'), { seg: 36, mat: 5, noOcc: 1 }); cyl('roundrug', [1.15, .003, 4.9], .42, .42, .013, hx('#e3d9c6'), { seg: 30, mat: 5, noOcc: 1 });
+    // coat hooks, a jacket, a cap and a skateboard by the door
+    box('hooks', [5.72, 1.72, D - .028, 6.5, 1.79, D], woodD, { mat: 1, noOcc: 1 }); [5.85, 6.11, 6.37].forEach(function (hk) { cyl('hooks', [hk, 1.755, D - .09], .012, .016, .07, metal, { axis: 'z', mat: 6, seg: 8, noOcc: 1 }); });
+    rbox('jacket', [5.68, .98, D - .14, 6.02, 1.74, D - .03], hx('#33415c'), { mat: 5, noOcc: 1 }, .05); rbox('jacket', [5.62, 1.2, D - .12, 5.7, 1.7, D - .04], hx('#33415c'), { mat: 5, noOcc: 1 }, .035); rbox('jacket', [6.0, 1.2, D - .12, 6.08, 1.7, D - .04], hx('#33415c'), { mat: 5, noOcc: 1 }, .035);
+    box('jacket', [5.845, 1.0, D - .143, 5.855, 1.72, D - .14], hx('#c9c4b8'), { noOcc: 1 }); ball('capb', [6.37, 1.73, D - .1], [.1, .065, .085], hx('#b4692a'), { mat: 5, seg: 12, noOcc: 1 }); box('capb', [6.3, 1.675, D - .2, 6.44, 1.69, D - .1], hx('#b4692a'), { mat: 5, noOcc: 1 });
+    rbox('board2', [6.24, .06, D - .1, 6.46, .9, D - .075], hx('#27272c'), { mat: 6, noOcc: 1 }, .012); rbox('board2', [6.25, .07, D - .075, 6.45, .89, D - .07], hx('#d8474c'), { noOcc: 1 }, .002);
+    [[6.27, .2], [6.43, .2], [6.27, .74], [6.43, .74]].forEach(function (wh) { cyl('board2', [wh[0], wh[1], D - .15], .028, .028, .04, hx('#e9e6df'), { axis: 'z', seg: 10, noOcc: 1 }); });
+    // sneaker boxes stacked in the corner
+    rbox('boxes', [6.08, 0, 5.22, 6.58, .17, 5.56], hx('#d9661f'), { noOcc: 1 }, .006); rbox('boxes', [6.1, .17, 5.24, 6.58, .33, 5.56], hx('#1f1f24'), { noOcc: 1 }, .006); rbox('boxes', [6.12, .33, 5.2, 6.56, .48, 5.52], hx('#e9e6df'), { noOcc: 1 }, .006);
+    box('boxes', [6.08, .15, 5.22, 6.58, .171, 5.56], hx('#b3541a'), { noOcc: 1, skip: '-y' }); box('boxes', [6.12, .46, 5.2, 6.56, .481, 5.52], hx('#cfcbc2'), { noOcc: 1, skip: '-y' });
+    // floating shelf over the nightstand
+    rbox('ledge', [2.99, 1.36, 0, 3.6, 1.39, .2], wood, { mat: 1, noOcc: 1 }, .006);
+    cyl('ledge', [3.08, 1.39, .1], .04, .05, .07, hx('#e8e2d4'), { seg: 12, mat: 6, noOcc: 1 }); ball('ledge', [3.08, 1.5, .1], [.05, .06, .05], hx('#3b9450'), { seg: 8, noOcc: 1 }); ball('ledge', [3.1, 1.47, .12], [.03, .05, .03], hx('#4ea862'), { seg: 6, noOcc: 1 });
+    [['#8a2f3a', .2], ['#e0d6c2', .19], ['#3d6b55', .22], ['#c98f3c', .18]].forEach(function (bk, k) { box('ledge', [3.2 + k * .034, 1.39, .04, 3.23 + k * .034, 1.39 + bk[1], .18], hx(bk[0]), { mat: 6, noOcc: 1 }); });
+    cyl('ledge', [3.48, 1.39, .1], .035, .03, .012, hx('#3a2a1e'), { seg: 10, noOcc: 1 }); cyl('ledge', [3.48, 1.4, .1], .008, .014, .07, hx('#e2b23c'), { mat: 6, seg: 8, noOcc: 1 }); ball('ledge', [3.48, 1.5, .1], [.032, .035, .032], hx('#e2b23c'), { mat: 6, seg: 10, noOcc: 1 });
+    // a strip of instant photos on the wall beside the frames
+    [0, 1, 2, 3].forEach(function (k) { box('snaps', [.002, 1.3 + (k % 2) * .03, 5.02 + k * .17, .006, 1.46 + (k % 2) * .03, 5.15 + k * .17], hx('#f4f1ea'), { noOcc: 1 }); box('snaps', [.006, 1.335 + (k % 2) * .03, 5.03 + k * .17, .008, 1.45 + (k % 2) * .03, 5.14 + k * .17], hx(['#3e8ed0', '#e9a85e', '#2f9c68', '#8d62e6'][k]), { noOcc: 1 }); });
 
     // five frames on the left wall
     ['f0', 'f1', 'f2', 'f3', 'f4'].forEach(function (f, k) { var z0 = 3.5 + (k % 3) * .5 + (k > 2 ? .25 : 0), y0 = k > 2 ? 2.14 : 1.46; box('frames', [0, y0, z0, .028, y0 + .56, z0 + .44], dark, { noOcc: 1, skip: '+x' }); box('frames', [.028, y0, z0, .032, y0 + .56, z0 + .44], white, { tex: f, face: '+x', noOcc: 1, mat: 6, side: dark }); });
   })();
   var GLY = 1.0, NSOLID = data.length / STR, NSHEER = sdata.length / STR; for (var si = 0; si < sdata.length; si++) data.push(sdata[si]); for (si = 0; si < NSHEER; si++) vpart.push(0);
   // soft glows (drawn last, added on top): [x, y, z, size, r, g, b, light group]
-  [[.92, 1.3, .3, .55, 1, .72, .36, 2], [5.5, 1.56, 3.55, .75, 1, .74, .42, 4], [1.5, 1.31, .5, 1.25, .2, .26, .6, 1], [4.55, 1.95, .05, 1.7, .12, .16, .42, 0], [1.7, .7, .14, 1.3, .3, .22, .62, 3], [2.45, 1.02, .56, .6, .14, .18, .4, 1], [2.84, 1.03, .27, .55, .9, .26, .45, 3], [1.1, 2.56, .05, .5, .5, .36, .16, 3], [1.9, 2.56, .05, .5, .5, .36, .16, 3], [2.7, 2.56, .05, .5, .5, .36, .16, 3], [3.4, GLY, -6.7, 2.6, .55, .4, .2, 0]].forEach(function (g) {
+  [[.92, 1.3, .3, .55, 1, .72, .36, 2], [6.2, 1.56, 3.55, .75, 1, .74, .42, 4], [1.5, 1.31, .5, 1.25, .2, .26, .6, 1], [4.55, 1.95, .05, 1.7, .12, .16, .42, 0], [1.7, .7, .14, 1.3, .3, .22, .62, 3], [2.45, 1.02, .56, .6, .14, .18, .4, 1], [2.84, 1.03, .27, .55, .9, .26, .45, 3], [1.1, 2.56, .05, .5, .5, .36, .16, 3], [1.9, 2.56, .05, .5, .5, .36, .16, 3], [2.7, 2.56, .05, .5, .5, .36, .16, 3], [3.4, GLY, -6.7, 2.6, .55, .4, .2, 0]].forEach(function (g) {
     [[-1, -1], [1, -1], [1, 1], [-1, -1], [1, 1], [-1, 1]].forEach(function (q) { data.push(g[0], g[1], g[2], 0, 0, 1, g[4], g[5], g[6], g[3], g[7], q[0], q[1], 0, 9, 1, 1, 1, 1); vpart.push(0); });
   });
   var VCOUNT = data.length / STR;
@@ -458,7 +499,7 @@
   var FS = [
     'precision highp float;',
     'varying vec3 vP; varying vec3 vN; varying vec3 vC; varying vec2 vE; varying vec2 vUV; varying float vId; varying float vM; varying vec4 vB;',
-    'uniform sampler2D uAtlas; uniform sampler2D uAtlas2; uniform vec4 uOn; uniform float uFl; uniform vec3 uEye; uniform float uHi; uniform float uTime;',
+    'uniform sampler2D uAtlas; uniform sampler2D uAtlas2; uniform vec4 uOn; uniform float uFl; uniform vec3 uEye; uniform float uHi; uniform float uTime; uniform vec2 uDay; uniform vec3 uSunD; uniform vec3 uLD; uniform vec3 uLC;',
     'float h21(vec2 p){ p = fract(p*vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x*p.y); }',
     'float vn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3. - 2.*f); return mix(mix(h21(i), h21(i + vec2(1., 0.)), f.x), mix(h21(i + vec2(0., 1.)), h21(i + vec2(1., 1.)), f.x), f.y); }',
     'float lit(float g){ return g < .5 ? max(uOn.x, .3) : g < 1.5 ? uOn.y : g < 2.5 ? uOn.z : g < 3.5 ? uOn.w : uFl; }',
@@ -475,6 +516,11 @@
     '    vec3 sky = mix(vec3(.16, .13, .2), vec3(.02, .035, .09), pow(up, .45)) + vec3(.22, .13, .06)*pow(1. - up, 9.);',
     '    vec2 sp = rd.xy/(abs(rd.z) + .25)*110.; float st = step(.9955, h21(floor(sp)))*smoothstep(.02, .25, rd.y); sky += vec3(.9, .92, 1.)*st*(.4 + .6*h21(floor(sp) + 7.));',
     '    vec3 mo = normalize(vec3(.22, .19, -.955)); float mdot = dot(rd, mo); sky += vec3(1., .97, .88)*smoothstep(.99955, .9997, mdot)*1.6 + vec3(.3, .34, .5)*pow(max(mdot, 0.), 600.)*.9 + vec3(.1, .12, .2)*pow(max(mdot, 0.), 40.);',
+    '    vec3 skyD = mix(vec3(.68, .81, .95), vec3(.2, .43, .84), pow(up, .55));',                      // daytime: blue overhead, pale at the horizon, a few slow clouds
+    '    float cl = smoothstep(.5, .78, vn(rd.xy/(abs(rd.z) + .3)*vec2(3., 7.) + vec2(uTime*.012, 0.)))*smoothstep(.02, .22, rd.y); skyD = mix(skyD, vec3(1., .99, .97), cl*.7);',
+    '    skyD = mix(skyD, vec3(1., .56, .3), uDay.y*pow(1. - up, 2.2)*.9); float sd = max(dot(rd, uSunD), 0.);',
+    '    skyD += vec3(1., .93, .78)*(smoothstep(.9991, .9996, sd)*3. + pow(sd, 160.)*.55 + pow(sd, 10.)*.16);',
+    '    sky += vec3(.55, .24, .14)*uDay.y*pow(1. - up, 3.); sky = mix(sky, skyD, uDay.x);',
     '    sky *= max(uOn.x, .2); gl_FragColor = vec4(pow(sky, vec3(.82)) + (h21(gl_FragCoord.xy) - .5)/160., 1.); return;',
     '  }',
     '  if (vM > 8.5 && vM < 9.5) { float a = exp(-dot(vUV, vUV)*3.2) - .04; gl_FragColor = vec4(vC*max(a, 0.)*lit(vE.y)*.55, 1.); return; }',
@@ -499,31 +545,32 @@
     '  float ao = vB.x; float aod = mix(.55, 1., ao);',
     '  vec3 L = vec3(.056, .060, .092)*(.6 + .4*N.y)*ao*ao + vec3(.03, .026, .036)*ao + vec3(.07, .052, .034)*ao*uFl + vec3(.03, .022, .014)*ao*uOn.z;',          // night ambient
     // moonlight: only where a ray towards the moon passes through the window
-    '  vec3 md = normalize(vec3(.34, .62, -.71)); float tt = vP.z/-md.z; vec3 hp = vP + md*tt;',
+    '  L += uDay.x*vec3(.17, .185, .2)*(.55 + .45*N.y)*ao;',
+    '  vec3 md = uLD; float tt = vP.z/-md.z; vec3 hp = vP + md*tt;',
     '  float win = smoothstep(3.74, 3.86, hp.x)*smoothstep(5.36, 5.24, hp.x)*smoothstep(1.24, 1.36, hp.y)*smoothstep(2.61, 2.49, hp.y);',
     '  win *= 1. - .85*(1. - smoothstep(.02, .07, abs(hp.x - 4.55)))*1. ; win *= 1. - .85*(1. - smoothstep(.02, .07, abs(hp.y - 1.925)));',
-    '  win = mix(win, 1., outs); L *= ins; L += outs*(vec3(.022, .028, .05)*(.6 + .4*N.y)*ao + vec3(.05, .042, .03)/(1. + .02*dot(vP.xz - vec2(3.4, -6.7), vP.xz - vec2(3.4, -6.7))));',
-    '  L += vec3(.36, .46, .85)*max(dot(N, md), 0.)*win*uOn.x*aod*mix(1.15, .34, outs);',
+    '  win = mix(win, 1., outs); L *= ins; L += outs*(vec3(.022, .028, .05)*(.6 + .4*N.y)*ao + vec3(.05, .042, .03)*(1. - uDay.x)/(1. + .02*dot(vP.xz - vec2(3.4, -6.7), vP.xz - vec2(3.4, -6.7))) + uDay.x*vec3(.4, .45, .52)*(.6 + .4*N.y));',
+    '  L += uLC*max(dot(N, md), 0.)*win*uOn.x*aod*mix(1.15, .34, outs);',
     '  vec3 C = alb*L;',
     // desk lamp: a warm cone pointing down out of the shade
     '  vec3 dl = normalize(vP - vec3(.92, 1.3, .3)); float cone = .1 + .9*smoothstep(-.15, .55, -dl.y);',
     '  C += point(vec3(.92, 1.27, .3), vec3(1., .66, .34)*3.2, 1.0, vB.y*cone*aod*ins)*uOn.z;',
     // floor lamp: light out of the top and the bottom of the shade, a soft glow through its sides
-    '  vec3 fl = normalize(vP - vec3(5.5, 1.56, 3.55)); float fc = .28 + .72*smoothstep(.1, .75, abs(fl.y));',
-    '  C += point(vec3(5.5, 1.56, 3.55), vec3(1., .72, .44)*4.6, .42, vB.z*fc*aod*ins)*uFl;',
+    '  vec3 fl = normalize(vP - vec3(6.2, 1.56, 3.55)); float fc = .28 + .72*smoothstep(.1, .75, abs(fl.y));',
+    '  C += point(vec3(6.2, 1.56, 3.55), vec3(1., .72, .44)*4.6, .42, vB.z*fc*aod*ins)*uFl;',
     // the monitor is a soft blue panel facing into the room
     '  vec3 ml = vec3(1.5, 1.31, .5) - vP; float mface = clamp(-normalize(ml).z*1.6 + .15, 0., 1.);',
     '  C += point(vec3(1.5, 1.31, .62), vec3(.36, .46, 1.)*1.7, .8, vB.w*mface*aod*ins)*uOn.y;',
     // LED strip behind the desk washes the wall purple
     '  vec3 lq = vec3(clamp(vP.x, .6, 2.8), .72, .11); C += point(lq, vec3(1., .78, .52)*.4, 7., ao*ins)*uOn.w;',
     '  vec3 fq = vec3(clamp(vP.x, .3, 3.5), 2.56, .05); C += point(fq, vec3(1., .74, .44)*.5, 4.5, aod*ins)*uOn.w;',                // fairy lights
-    '  C += point(vec3(3.4, 1.0, -6.7), vec3(1., .78, .5)*9., .12, outs)*uOn.x;',                                               // street lamp
-    '  C += point(vec3(4.55, 1.9, .5), vec3(.3, .38, .8)*.5, 1., aod*ins)*uOn.x;',
+    '  C += point(vec3(3.4, 1.0, -6.7), vec3(1., .78, .5)*9., .12, outs)*uOn.x*(1. - uDay.x);',                                               // street lamp
+    '  C += point(vec3(4.55, 1.9, .5), mix(vec3(.3, .38, .8)*.5, vec3(.86, .93, 1.)*2.4, uDay.x), mix(1., .3, uDay.x), aod*ins)*uOn.x;',
     '  C += point(vec3(2.84, 1.05, .32), vec3(1., .3, .5)*.55, 4., aod*ins)*uOn.w;',                         // lava lamp                    // sky glow spilling in at the window
-    '  C += alb*vE.x*lit(vE.y);',                                                                  // screens, shades, the LED itself
+    '  C += alb*vE.x*lit(vE.y)*(1. - .85*outs*uDay.x);',                                                                  // screens, shades, the LED itself
     '  if (abs(vId - uHi) < .5) C += vec3(.2, .17, .42)*(.6 + .4*sin(uTime*5.));',                // the object you are pointing at
-    '  if (outs > .5) C = mix(C, vec3(.05, .05, .09), smoothstep(10., 70., distance(uEye, vP))*.75);',   // haze with distance
-    '  float A = 1.; if (vM > 10.5) { C += vec3(.07, .09, .16)*uOn.x + alb*vec3(.05, .04, .03)*uFl; A = .46; }',                // sheer curtain: light comes through
+    '  if (outs > .5) C = mix(C, mix(vec3(.05, .05, .09), vec3(.6, .71, .84), uDay.x), smoothstep(10., 70., distance(uEye, vP))*.75);',   // haze with distance
+    '  float A = 1.; if (vM > 10.5) { C += mix(vec3(.07, .09, .16), vec3(.5, .5, .46), uDay.x)*uOn.x + alb*vec3(.05, .04, .03)*uFl; A = .46; }',                // sheer curtain: light comes through
     '  C = (C*(2.51*C + .03))/(C*(2.43*C + .59) + .14);',                                           // filmic tone curve
     '  C = pow(C, vec3(.82)) + (h21(gl_FragCoord.xy + fract(uTime)) - .5)/160.;',                   // a little grain hides banding in the dark
     '  gl_FragColor = vec4(C, A);',
@@ -534,7 +581,7 @@
   try { gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS)); gl.linkProgram(prog); if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog)); }
   catch (e) { root.classList.remove('has-webgl'); root.classList.add('no-webgl'); if (window.console) console.warn(e.message); document.dispatchEvent(new CustomEvent('room:settled')); return; }
   gl.useProgram(prog);
-  var U = {}; ['uVP', 'uAtlas', 'uAtlas2', 'uOn', 'uFl', 'uEye', 'uHi', 'uTime', 'uRight', 'uUp'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
+  var U = {}; ['uVP', 'uAtlas', 'uAtlas2', 'uOn', 'uFl', 'uEye', 'uHi', 'uTime', 'uRight', 'uUp', 'uDay', 'uSunD', 'uLD', 'uLC'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
   [['aP', 3, 0], ['aN', 3, 3], ['aC', 3, 6], ['aE', 2, 9], ['aUV', 2, 11], ['aId', 1, 13], ['aM', 1, 14], ['aB', 4, 15]].forEach(function (a) {
     var l = gl.getAttribLocation(prog, a[0]); if (l < 0) return; gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l, a[1], gl.FLOAT, false, STR * 4, a[2] * 4);
   });
@@ -562,8 +609,8 @@
   /* ------------------------------------------------------------ camera: first person. ONE TIMELINE (p is scroll progress through #film).
      Each row is [p, where you stand, what you look at]. Eye height is about 1.6 m and every position is inside the room. */
   var CAM = [
-    [0.00, [5.05, 1.62, 4.5], [1.9, 1.05, .9]],      // the doorway
-    [0.06, [4.95, 1.62, 4.4], [1.9, 1.05, .9]],
+    [0.00, [5.0, 1.62, 5.3], [1.9, 1.05, .9]],      // the doorway
+    [0.06, [4.9, 1.62, 5.15], [1.9, 1.05, .9]],
     [0.20, [2.4, 1.52, 3.25], [1.45, 1.12, .3]],     // the desk
     [0.30, [2.3, 1.52, 3.1], [1.45, 1.12, .3]],
     [0.42, [2.35, 1.5, 2.75], [.1, 1.05, 2.25]],      // the shelf
@@ -624,10 +671,23 @@
   /* ------------------------------------------------------------ state + frame */
   var film = $('#film'), p = 0, pShown = 0, time = 0, last = 0, raf = null, visible = true, dpr = 1, tier = 0, slow = 0, retier = false, idle = true;
   var intro = calm ? 1 : 0, introT = 0, settled = false, lampOn = true, on = [0, 0, 0, 0, 0], px = 0, py = 0, sx = 0, sy = 0;
+  /* the time outside: it starts at your own clock and a whole day passes every DAY_LEN seconds. Room.time(15.5) pins it, Room.time(null) lets it run again. */
+  var DAY_LEN = 360, todStart = (function () { var d = new Date(); return d.getHours() + d.getMinutes() / 60; })(), todT0 = performance.now(), todFixed = null;
+  function hourNow() { if (todFixed !== null) return todFixed; var h = todStart + (calm ? 0 : (performance.now() - todT0) / 1000 * 24 / DAY_LEN); return ((h % 24) + 24) % 24; }
+  function sstep(a, b, x) { var t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); }
+  function setDay() {
+    var h = hourNow(), day = sstep(5.4, 7.4, h) * (1 - sstep(17.6, 19.6, h)), dusk = Math.exp(-Math.pow((h - 6.4) / 1.1, 2)) + Math.exp(-Math.pow((h - 18.6) / 1.1, 2));
+    var a = clamp((h - 6) / 12, -.04, 1.04) * Math.PI, sd = [Math.cos(a) * .8, .1 + Math.sin(a) * .95, -.6], sl = Math.hypot(sd[0], sd[1], sd[2]); sd = [sd[0] / sl, sd[1] / sl, sd[2] / sl];
+    var hiSun = clamp(Math.sin(a) * 2.2, 0, 1), k;
+    gl.uniform2f(U.uDay, day, Math.min(1, dusk)); gl.uniform3f(U.uSunD, sd[0], sd[1], sd[2]);
+    if (day > .5) { k = (day - .5) * 2 * 2.5; gl.uniform3f(U.uLD, sd[0], sd[1], sd[2]); gl.uniform3f(U.uLC, k, k * lerp(.5, .93, hiSun), k * lerp(.25, .8, hiSun)); }   // sunlight, warmer when the sun is low
+    else { k = (.5 - day) * 2; gl.uniform3f(U.uLD, .3338, .6087, -.6971); gl.uniform3f(U.uLC, .36 * k, .46 * k, .85 * k); }                                   // moonlight
+  }
+  setInterval(function () { if (!calm && todFixed === null && visible && !document.body.classList.contains('dim')) { dirty = true; kick(); } }, 250);   // the sky keeps moving while you stand still
   var cur = null, tgt = null, focus = null, fAmt = 0, walk = 0, FOLLOW = 3.4;   // FOLLOW: how quickly the camera catches up (higher = snappier)
   // free walking: WALK_SPEED in metres a second, TURN_SPEED in radians a second (keys), BODY is how close you can get to furniture
   var free = false, fpos = [0, 0, 0], yaw = 0, pitch = 0, keys = {}, joy = [0, 0], vel = [0, 0], par = 1, WALK_SPEED = 1.9, TURN_SPEED = 1.9, BODY = .28, EYE = 1.6;
-  var SOLID = [[.45, .12, 2.95, 1.06], [3.5, .06, 5.85, 2.5], [0, 2.0, .34, 3.3], [5.4, 3.75, 6, 4.95], [2.99, .12, 3.43, .6], [1.24, 1.42, 1.86, 2.04], [.11, 3.61, .45, 3.95], [5.35, 3.4, 5.65, 3.7], [0, 4.04, .3, 4.9], [4.98, 3.33, 5.22, 3.57], [5.03, 2.63, 5.47, 3.07]];   // furniture footprints [x0, z0, x1, z1]
+  var SOLID = [[.45, .12, 2.95, 1.06], [3.5, .06, 5.85, 2.5], [0, 2.0, .34, 3.3], [6.1, 3.75, 6.7, 4.95], [2.99, .12, 3.43, .6], [1.24, 1.42, 1.86, 2.04], [.11, 3.61, .45, 3.95], [6.05, 3.4, 6.35, 3.7], [0, 4.04, .3, 4.9], [5.68, 3.33, 5.92, 3.57], [6.13, 2.63, 6.57, 3.07], [6.0, .15, 6.55, .65], [6.12, .86, 6.56, 1.3], [6.42, 1.5, 6.7, 2.0], [.14, 4.98, 1.1, 5.66], [6.05, 5.2, 6.6, 5.62], [6.2, 5.6, 6.5, 5.8]];   // furniture footprints [x0, z0, x1, z1]
   function collide(q) { // keep the walker inside the walls and out of the furniture
     q[0] = clamp(q[0], BODY + .05, W - BODY - .05); q[2] = clamp(q[2], BODY + .05, D - BODY - .05);
     for (var i = 0; i < SOLID.length; i++) {
@@ -673,6 +733,7 @@
       fpos[0] += (cy2 * vel[0] + sy2 * vel[1]) * dt; fpos[2] += (sy2 * vel[0] - cy2 * vel[1]) * dt; fpos[1] += (EYE - fpos[1]) * ease * .5; collide(fpos);
       e = fpos; t = [fpos[0] + sy2 * cp * 2, fpos[1] + Math.sin(pitch) * 2, fpos[2] - cy2 * cp * 2];
     }
+    if (window.__cam) { e = window.__cam[0]; t = window.__cam[1]; }   // debugging: look from anywhere
     if (aspect < .9 && !focus && !free) { var back = 1 + (1 - aspect) * .55 * (pShown > .12 ? 1 : .2); e = inRoom([t[0] + (e[0] - t[0]) * back, e[1], t[2] + (e[2] - t[2]) * back]); }   // phones step back, but never through a wall
     if (!cur) { cur = [e[0], e[1], e[2]]; tgt = [t[0], t[1], t[2]]; if (!calm && intro < 1) { cur[0] += .35; cur[2] += .3; } }
     var f = calm ? 1 : 1 - Math.exp(-dt * (walking ? 16 : FOLLOW)), moved = 0, d;
@@ -687,7 +748,7 @@
     viewProj(eye, T, aspect, aspect > 1.15 ? -.24 * fAmt : 0, aspect < .9 ? .3 * (pShown > .12 || focus ? 1 : .5) * Math.max(par, fAmt) : 0);
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    gl.uniformMatrix4fv(U.uVP, false, VP); gl.uniform3fv(U.uEye, eye); gl.uniform1f(U.uTime, time); gl.uniform1f(U.uHi, hi); gl.uniform3fv(U.uRight, RT); gl.uniform3fv(U.uUp, UPV);
+    gl.uniformMatrix4fv(U.uVP, false, VP); gl.uniform3fv(U.uEye, eye); gl.uniform1f(U.uTime, time); setDay(); gl.uniform1f(U.uHi, hi); gl.uniform3fv(U.uRight, RT); gl.uniform3fv(U.uUp, UPV);
     gl.uniform4f(U.uOn, on[0], on[1] * flick, on[2], on[3]); gl.uniform1f(U.uFl, on[4]);
     gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, tex2); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex);
     gl.drawArrays(gl.TRIANGLES, 0, NSOLID);
@@ -746,6 +807,7 @@
     move: function (x, y) { joy[0] = clamp(x, -1, 1); joy[1] = clamp(y, -1, 1); kick(); },                         // on-screen stick: x strafes, y walks
     look: function (dx, dy) { if (!free || focus) return; yaw += dx; pitch = clamp(pitch - dy, -.9, .9); kick(); },
     home: function (key) { var s = SPOT[key]; return s ? s[4][s[4].length - 1] : 0; },
+    time: function (h) { todFixed = (h === null || h === undefined) ? null : ((+h % 24) + 24) % 24; dirty = true; kick(); return hourNow(); },
     stops: STOPS, progress: function () { return p; }
   };
 })();
