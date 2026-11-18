@@ -684,7 +684,7 @@
     else { k = (.5 - day) * 2; gl.uniform3f(U.uLD, .3338, .6087, -.6971); gl.uniform3f(U.uLC, .36 * k, .46 * k, .85 * k); }                                   // moonlight
   }
   setInterval(function () { if (!calm && todFixed === null && visible && !document.body.classList.contains('dim')) { dirty = true; kick(); } }, 250);   // the sky keeps moving while you stand still
-  var cur = null, tgt = null, focus = null, fAmt = 0, walk = 0, FOLLOW = 3.4;   // FOLLOW: how quickly the camera catches up (higher = snappier)
+  var cur = null, tgt = null, focus = null, fAmt = 0, walk = 0, FOLLOW = 4.6;   // FOLLOW: how quickly the camera catches up (higher = snappier)
   // free walking: WALK_SPEED in metres a second, TURN_SPEED in radians a second (keys), BODY is how close you can get to furniture
   var free = false, fpos = [0, 0, 0], yaw = 0, pitch = 0, keys = {}, joy = [0, 0], vel = [0, 0], par = 1, WALK_SPEED = 1.9, TURN_SPEED = 1.9, BODY = .28, EYE = 1.6;
   var SOLID = [[.45, .12, 2.95, 1.06], [3.5, .06, 5.85, 2.5], [0, 2.0, .34, 3.3], [6.1, 3.75, 6.7, 4.95], [2.99, .12, 3.43, .6], [1.24, 1.42, 1.86, 2.04], [.11, 3.61, .45, 3.95], [6.05, 3.4, 6.35, 3.7], [0, 4.04, .3, 4.9], [5.68, 3.33, 5.92, 3.57], [6.13, 2.63, 6.57, 3.07], [6.0, .15, 6.55, .65], [6.12, .86, 6.56, 1.3], [6.42, 1.5, 6.7, 2.0], [.14, 4.98, 1.1, 5.66], [6.05, 5.2, 6.6, 5.62], [6.2, 5.6, 6.5, 5.8]];   // furniture footprints [x0, z0, x1, z1]
@@ -760,11 +760,18 @@
     // hotspots follow their objects
     var stop = 0, best = 9; STOPS.forEach(function (s, n) { var dd = Math.abs(pShown - s); if (dd < best) { best = dd; stop = n; } });
     var moving = !free && moved > dt * 1.8, dim = document.body.classList.contains('dim');
+    var cover = [];   // the paper notes and hero cards on screen: dots never sit on top of them
+    Array.prototype.forEach.call(document.querySelectorAll('.fx.is-live .note__card, .fx.is-live.note, .fx.is-live.cards, .fx.is-live.layer__copy'), function (el) { var b = el.getBoundingClientRect(); if (b.width && b.height) cover.push(b); });
     for (i = 0; i < spots.length; i++) {
-      var s = spots[i], q = project(s.p), near = false;
-      if (free && q && s.key !== 'frames') { var ox = s.p[0] - eye[0], oy = s.p[1] - eye[1], oz = s.p[2] - eye[2], od = Math.hypot(ox, oy, oz); near = od < 3.6 && (od < .5 || hit(eye[0], eye[1], eye[2], ox / od, oy / od, oz / od, od - .4, -1) < 0); }   // walking: offer what you can actually see nearby
-      var show = settled && !dim && !moving && q && (free ? near : s.stops.indexOf(stop) >= 0) && q[0] > 24 && q[0] < window.innerWidth - 24 && q[1] > 76 && q[1] < window.innerHeight * (aspect < .9 && stop > 0 && !focus && !free ? .6 : 1) - 44;
+      var s = spots[i], q = project(s.p), ox = s.p[0] - eye[0], oy = s.p[1] - eye[1], oz = s.p[2] - eye[2], od = Math.hypot(ox, oy, oz);
+      // every dot you could see is offered, wherever you are: near ones big, far ones small. Only furniture in the way hides one.
+      var seen = q && od < 7 && (od < .5 || hit(eye[0], eye[1], eye[2], ox / od, oy / od, oz / od, od - .4, -1) < 0);
+      if (s.key === 'frames') seen = seen && od > 2.8; else if (/^f\d$/.test(s.key)) seen = seen && od <= 2.8;   // the wall: one dot from afar, one per frame up close
+      var show = settled && !dim && !moving && seen && q[0] > 24 && q[0] < window.innerWidth - 24 && q[1] > 76 && q[1] < window.innerHeight * (aspect < .9 && stop > 0 && !focus && !free ? .6 : 1) - 44;
+      for (var c = 0; show && c < cover.length; c++) { var cb = cover[c]; if (q[0] > cb.left - 16 && q[0] < cb.right + 16 && q[1] > cb.top - 16 && q[1] < cb.bottom + 16) show = false; }
       if (q) s.el.style.transform = 'translate3d(' + q[0].toFixed(1) + 'px,' + q[1].toFixed(1) + 'px,0)';
+      var k = Math.round(clamp(1.95 - od * .2, .72, 1.6) * 20) / 20;   // dot size: about 10 px across the room, about 22 px up close
+      if (s.k !== k) { s.k = k; s.el.style.setProperty('--k', k); }
       if (s.shown !== show) { s.shown = show; s.el.classList.toggle('is-on', !!show); s.el.tabIndex = show ? 0 : -1; }
     }
     if (!calm && intro >= 1) { slow = dt > .028 ? slow + 1 : Math.max(0, slow - 1); if (slow > 45 && tier < 2) { tier++; slow = 0; retier = true; dirty = true; } }   // struggling? draw fewer pixels

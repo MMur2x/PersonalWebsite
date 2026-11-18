@@ -35,7 +35,22 @@
   var stepBtns = $$('#steps button'), stopLinks = $$('.nav__links a[data-stop]'), curStop = -1, ticking = false, inAfter = false;
   function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
   function filmMax() { return Math.max(1, film.offsetHeight - window.innerHeight); }
-  function goStop(n) { if (window.Room && window.Room.exploring && window.Room.exploring()) window.Room.explore(false); closeDrawer(); window.scrollTo({ top: STOPS[n] * filmMax(), behavior: calm ? 'auto' : 'smooth' }); }
+  // glide: a short, even scroll to a point (the browser's own smooth scroll is slow over long distances). Any wheel, touch or key stops it.
+  var glideRaf = null;
+  function stopGlide() { if (glideRaf) { cancelAnimationFrame(glideRaf); glideRaf = null; root.style.scrollBehavior = ''; } }
+  function glide(top) {
+    stopGlide(); var from = window.pageYOffset, dist = top - from;
+    root.style.scrollBehavior = 'auto';   // let each step land exactly where it is put
+    if (calm || Math.abs(dist) < 2) { window.scrollTo(0, top); root.style.scrollBehavior = ''; return; }
+    var ms = Math.min(900, 420 + Math.abs(dist) / window.innerHeight * 120), t0 = performance.now();
+    (function step(now) {
+      var t = Math.min(1, (now - t0) / ms), e = t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      window.scrollTo(0, from + dist * e);
+      glideRaf = t < 1 ? requestAnimationFrame(step) : null; if (!glideRaf) root.style.scrollBehavior = '';
+    })(t0);
+  }
+  ['wheel', 'touchstart', 'keydown'].forEach(function (ev) { window.addEventListener(ev, stopGlide, { passive: true }); });
+  function goStop(n) { if (window.Room && window.Room.exploring && window.Room.exploring()) window.Room.explore(false); closeDrawer(); glide(STOPS[n] * filmMax()); }
   function onScroll() {
     ticking = false; if (!film || !film.offsetHeight) return;
     var y = window.pageYOffset, p = clamp01(y / filmMax()), i, f, o;
@@ -58,10 +73,10 @@
   window.addEventListener('load', queue); window.addEventListener('pageshow', queue);   // the browser may restore a scroll position after this script has run
   // the chevron steps to the next stop, then into the details, then turns round and takes you back to the top
   if (chev) chev.addEventListener('click', function () {
-    if (inAfter) { window.scrollTo({ top: 0, behavior: calm ? 'auto' : 'smooth' }); return; }
+    if (inAfter) { glide(0); return; }
     var p = clamp01(window.pageYOffset / filmMax()), n = -1;
     for (var i = 0; i < STOPS.length; i++) if (STOPS[i] > p + .03) { n = i; break; }
-    if (n < 0) $('#work').scrollIntoView({ behavior: calm ? 'auto' : 'smooth' }); else goStop(n);
+    if (n < 0) glide($('#work').getBoundingClientRect().top + window.pageYOffset - 70); else goStop(n);
   });
   document.addEventListener('click', function (e) {
     var g = e.target.closest && e.target.closest('[data-go], [data-stop]'); if (!g) return;
@@ -163,7 +178,7 @@
     var key = s.getAttribute('data-spot');
     if (window.Room && window.Room.focus && DETAIL[key] && !DETAIL[key].skip) {
       focusStop = exploring ? -1 : window.Room.home(key); focusAt = Date.now();
-      if (!exploring && focusStop !== curStop) window.scrollTo({ top: STOPS[focusStop] * filmMax(), behavior: calm ? 'auto' : 'smooth' });
+      if (!exploring && focusStop !== curStop) glide(STOPS[focusStop] * filmMax());
       window.Room.focus(key);
     }
     openDrawer(key, s);
