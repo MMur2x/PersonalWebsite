@@ -5,3 +5,6 @@ Claude outputs/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Blender source files (only exported web files go in the repo)
+art-source/
