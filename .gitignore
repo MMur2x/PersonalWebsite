@@ -8,3 +8,7 @@ desktop.ini
 
 # Blender source files (only exported web files go in the repo)
 art-source/
+
+# Blender backups saved next to the project (source files stay out of the repo)
+*.blend
+*.blend1

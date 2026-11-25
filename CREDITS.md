@@ -17,6 +17,9 @@ Third-party assets used in the 3D room (`assets/models/room.glb`). Everything el
 | Potted Plant 01 | tall corner plant by the record player (simplified, scaled up) | Rico Cilliers | CC0 | https://polyhaven.com/a/potted_plant_01 |
 | Potted Plant 02 | plant by the left-wall bookshelf (simplified) | Rico Cilliers | CC0 | https://polyhaven.com/a/potted_plant_02 |
 | Potted Plant 04 | succulent on the floating shelf | James Ray Cock | CC0 | https://polyhaven.com/a/potted_plant_04 |
+| Decorative Book Set 01 | books on both bookcases (rearranged, simplified, baked into one texture per bookcase) | James Ray Cock | CC0 | https://polyhaven.com/a/decorative_book_set_01 |
+| Wool Boucle | round rug weave (recoloured) | Rico Cilliers, colormass | CC0 | https://polyhaven.com/a/wool_boucle |
+| Poly Wool Herringbone | area rug weave, chair mesh, speaker grilles, desk mat (recoloured) | Rico Cilliers, colormass | CC0 | https://polyhaven.com/a/poly_wool_herringbone |
 
 ## Fonts
 
