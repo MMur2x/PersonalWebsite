@@ -1,0 +1,12 @@
+{
+  "name": "mayne-room-site",
+  "private": true,
+  "description": "Bundles the three.js room (room.src.js) into assets/js/room.js",
+  "scripts": {
+    "build": "esbuild room.src.js --bundle --minify --format=iife --target=es2019 --legal-comments=none --outfile=../../assets/js/room.js && node copy-basis.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "three": "0.170.0"
+  }
+}

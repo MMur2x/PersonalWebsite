@@ -721,3 +721,20 @@ h1 em, h2 em { font-family: inherit; font-style: normal; font-weight: inherit; l
 /* the page dots on the right: the one you are on gets a grey ring */
 .steps button::after { content: ""; position: absolute; left: 50%; top: 50%; width: 22px; height: 22px; margin: -11px; border-radius: 50%; border: 1.5px solid rgba(190, 190, 190, .85); opacity: 0; transform: scale(.6); transition: opacity .3s ease, transform .3s var(--ease); }
 .steps button[aria-current="true"]::after { opacity: 1; transform: none; }
+
+/* ============================================================ SMOOTHNESS: an endless CSS animation makes the browser recomposite the whole page,
+   the 3D room under it and every blurred panel, on every frame, even while nothing else moves (measured: 48 fps idle with them,
+   a steady 60 without). So they only run where they can be seen, and the attention cues pulse a few times instead of forever. */
+.is-revealed .loader__bulb, .no-webgl .loader__bulb { animation: none; }
+.spot:not(.is-on) i::after { animation: none; }
+.spot.is-on i::after { animation-iteration-count: 3; }
+.hint__dot { animation-iteration-count: 4; }
+.chev { animation-iteration-count: 4; }
+
+/* ============================================================ LOW-POWER GPUS (integrated laptop graphics, phones): set by room.js.
+   A frosted-glass panel over the moving room has to be re-blurred every frame; on Intel Iris Xe the panels cost ~8 fps.
+   Here they are solid tinted panels in the same colours instead: same layout, a little less see-through. */
+:root[data-theme="dark"].low-gpu { --panel: rgba(30, 26, 22, .94); --panel-2: rgba(30, 26, 22, .9); }
+.low-gpu .nav, .low-gpu .found, .low-gpu .chev, .low-gpu .hud, .low-gpu .glass, .low-gpu .float { -webkit-backdrop-filter: none; backdrop-filter: none; }
+.low-gpu .glass { background: rgba(26, 22, 18, .92); }
+.low-gpu .found, .low-gpu .chev, .low-gpu .hud { background: rgba(22, 19, 16, .93); }

@@ -19,7 +19,8 @@
   function reveal() { root.classList.add('is-revealed'); }
   document.addEventListener('room:settled', reveal);
   if (calm || !window.Room) reveal();
-  setTimeout(reveal, 4500); // never leave the page hidden if something stalls
+  // never leave the page hidden if something stalls; while the room is still downloading, wait a little longer (at most ~27 s)
+  var waits = 0; (function safety() { setTimeout(function () { if (root.classList.contains('room-loading') && ++waits < 6) return safety(); reveal(); }, 4500); })();
   var replay = $('#replay');
   if (replay) replay.addEventListener('click', function () {
     if (!window.Room) return;
@@ -131,7 +132,8 @@
   function paintFound(bump) {
     var n = Object.keys(found).length; if (foundN) foundN.textContent = n; if (foundT) foundT.textContent = total;
     if (foundArc) foundArc.style.strokeDashoffset = 100 - n / total * 100;
-    $$('.spot').forEach(function (s) { s.classList.toggle('is-found', !!found[s.getAttribute('data-spot')]); });
+    var wall = ['f0', 'f1', 'f2', 'f3', 'f4'].every(function (k) { return found[k]; });   // the wall's single far-off dot reads Viewed once all five frames are
+    $$('.spot').forEach(function (s) { var k = s.getAttribute('data-spot'); s.classList.toggle('is-found', !!found[k] || (k === 'frames' && wall)); });
     if (bump && foundBtn) { foundBtn.classList.remove('is-bump'); void foundBtn.offsetWidth; foundBtn.classList.add('is-bump'); }
   }
   paintFound();

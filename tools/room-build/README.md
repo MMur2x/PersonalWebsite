@@ -46,3 +46,32 @@ Source files live in `art-source/` (git-ignored). These scripts turn `art-source
    - Load the `practical`, `desklamp` and `day` lightmaps after the first frame.
 7. Cables have no lightmap. Give them a small constant ambient or emissive so they don't render pure black.
 8. Hidden collision boxes are `col_*`; hotspot anchors are `spot_<name>` empties.
+
+## The site renderer (Step 6)
+
+Source: `tools/room-site/room.src.js` (three.js 0.170). Build: `cd tools/room-site && npm install && npm run build`. That writes `assets/js/room.js` and copies the KTX2 transcoder into `assets/vendor/basis/`.
+
+What it does to run smoothly. Each item was measured on Intel Iris Xe:
+
+- **Unlit materials.** Every non-glowing material becomes `MeshBasicMaterial` (albedo × baked light). No reflections; the PBR shader doubled the per-pixel cost.
+- **Pre-mixed light.** The four lightmap layers are mixed once into a half-float texture per area, and only when the light weights change. Each pixel then reads one lightmap.
+- **Draw order.** The outdoor scenery and moon draw last, and the walls and floor after the furniture. The outdoor's 170 m bounds made three.js draw it first, which cost 3 ms a frame.
+- **Front faces only** for opaque materials.
+- **Low-power GPUs** (Intel, Mali, Adreno, PowerVR):
+  - no MSAA, and a pixel ratio of at most 1.0 on laptops or 1.5 on phones;
+  - adds `html.low-gpu`, which swaps frosted-glass panels for solid ones;
+  - dynamic resolution while moving only, so the frame you stop on is sharp.
+- **On-demand rendering.** Nothing draws while the view is still.
+
+Debug switches (URL query):
+
+| Switch | Effect |
+|---|---|
+| `?debug` | Exposes `window.__room` |
+| `?room=mobile\|desktop` | Picks the model profile |
+| `?gpu=low\|high` | Overrides the GPU detection |
+| `?aa=0\|1` | Turns MSAA off or on |
+| `?side=double` | Draws both faces of opaque materials |
+| `?combine=0` | Mixes light per pixel instead of pre-mixing |
+
+`Room.bench(seconds)` returns measured frame times.
