@@ -593,6 +593,12 @@ body.dim .dock { opacity: 0; pointer-events: none; }
 .no-webgl .cards, html:not(.js) .cards { position: static; margin-top: 24px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); width: auto; max-width: 620px; }
 .no-webgl .spots, .no-webgl .steps, .no-webgl .chev, .no-webgl .dock, .no-webgl #lampBtn, .no-webgl .hint, html:not(.js) .spots, html:not(.js) .steps, html:not(.js) .chev, html:not(.js) .dock, html:not(.js) #lampBtn, html:not(.js) .hint { display: none; }
 .no-webgl body { background: radial-gradient(90vw 70vh at 80% 0, #2a2018 0, transparent 60%), var(--room-bg); }
+/* ...with a still of the room behind it (rendered from the live room at night; only downloaded when this applies) */
+.no-webgl body::before, html:not(.js) body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(90deg, rgba(12,10,8,.9) 0, rgba(12,10,8,.66) 46%, rgba(12,10,8,.38) 100%), url("../images/room-still.webp") 60% center / cover no-repeat var(--room-bg); }
+@media (max-aspect-ratio: 4/5) {
+  .no-webgl body::before, html:not(.js) body::before { background: linear-gradient(180deg, rgba(12,10,8,.35) 0, rgba(12,10,8,.72) 40%, rgba(12,10,8,.9) 75%), url("../images/room-still-portrait.webp") center top / cover no-repeat var(--room-bg); }
+}
 
 @media (max-width: 980px) {
   .cards { display: none; }

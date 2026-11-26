@@ -101,54 +101,96 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
   var SOLID = [[.45, .12, 2.95, 1.06], [3.5, .06, 5.85, 2.5], [0, 2.0, .34, 3.3], [6.1, 3.75, 6.7, 4.95], [2.99, .12, 3.43, .6], [1.24, 1.42, 1.86, 2.04], [.11, 3.61, .45, 3.95], [6.05, 3.4, 6.35, 3.7], [0, 4.04, .3, 4.9], [5.68, 3.33, 5.92, 3.57], [6.13, 2.63, 6.57, 3.07], [6.0, .15, 6.55, .65], [6.12, .86, 6.56, 1.3], [6.42, 1.5, 6.7, 2.0], [.14, 4.98, 1.1, 5.66], [6.05, 5.2, 6.6, 5.62], [6.2, 5.6, 6.5, 5.8]];
   var OCC = [];   // the same boxes in 3D, used to hide dots that furniture is in front of
 
-  /* ------------------------------------------------------------ baked light: four layers blended in one shader patch.
-     Files store (irradiance / scale) ^ (1/2.2); manifest.json has each file's scale. */
+  /* ------------------------------------------------------------ baked light: four layers per area of the room.
+     Files store (irradiance / scale) ^ (1/2.2); manifest.json has each file's scale.
+     light = fill(night * room + lamps * a + desklamp * b) + day * daylight * room   (lamps still add a little by day) */
   var LAYERS = ['night', 'practical', 'desklamp', 'day'];
   var black = new DataTexture(new Uint8Array([0, 0, 0, 255]), 1, 1, RGBAFormat, UnsignedByteType); black.channel = 1; black.needsUpdate = true;
-  var uW = { value: new Vector4(0, 0, 0, 0) };          // layer weights: night, lamps, desk lamp, day
+  var uW = { value: new Vector4(0, 0, 0, 0) };          // room light (moon), lamps, desk lamp, daylight amount
   var uAmb = { value: new Color(0, 0, 0) };              // a little light for the few small things that have no baked light (cables, mug handle)
   var uVS = { value: new Vector4(0, 0, 0, 0) };          // plant vertex-light scales
-  var LM_PARS = 'uniform sampler2D lmP; uniform sampler2D lmL; uniform sampler2D lmD; uniform vec4 uS; uniform vec4 uW;\n' +
-    'vec3 mrDec(sampler2D t, vec2 uv) { return pow(texture2D(t, uv).rgb, vec3(2.2)); }\n' +
-    'vec3 mrLM(vec2 uv) { vec3 L = mrDec(lightMap, uv) * (uS.x * uW.x);\n' +
-    '  if (uW.y > 0.001) L += mrDec(lmP, uv) * (uS.y * uW.y);\n' +
-    '  if (uW.z > 0.001) L += mrDec(lmL, uv) * (uS.z * uW.z);\n' +
-    '  if (uW.w > 0.001) L += mrDec(lmD, uv) * (uS.w * uW.w);\n' +
-    '  return L * PI; }\n';
-  /* pre-mixed light: whenever the weights change, each area's four layers are mixed ONCE into a half-float texture, so every
-     pixel on screen reads one lightmap instead of four (measured: ~20% of GPU time). Without half-float render targets the
-     mixing happens per pixel instead (the LM_PARS path). */
+  /* night fill: the bake leaves the corners away from the lamps very dark. Night light below 'ref' is raised along a
+     curve (strength, ref, gamma); brighter light is untouched. ?lift=0,1,1 turns it off. */
+  var LIFT = (q.match(/[?&]lift=([\d.]+),([\d.]+),([\d.]+)/) || [0, 1, .9, .45]).slice(1).map(Number);
+  var uL = { value: new Vector3(LIFT[0], Math.max(.001, LIFT[1]), LIFT[2]) };
+  var LIFT_FN = 'uniform vec3 uL;\nvec3 mrLift(vec3 L) { if (uL.x < .001) return L; float y = max(dot(L, vec3(.2126, .7152, .0722)), 1e-5);\n' +
+    '  return L * mix(1., clamp(pow(y / uL.y, uL.z - 1.), 1., 4.), uL.x); }\n';
+  /* Night light is pre-mixed per area into a small half-float texture (one read per pixel instead of three), but only
+     once the lamps have stopped changing, two areas per frame. While lamps fade, or without half-float render targets,
+     pixels mix the layers themselves ("live"). Full day or full night is mixed in too (uDm); in between, at dawn and dusk,
+     the difference is read from the daylight layer directly, so a changing sky never needs a re-mix.
+     The two ways are two compiled versions of the shader (MR_LIVE), so the pre-mixed one carries none of the live work. */
+  var LM_PARS = LIFT_FN + 'uniform sampler2D lmN; uniform sampler2D lmP; uniform sampler2D lmL; uniform sampler2D lmD; uniform vec4 uS; uniform vec4 uW; uniform float uDm;\n' +
+    // explicit level 0 (the lightmaps have no mipmaps): reads inside the branches below can then really be skipped
+    'vec3 mrDec(sampler2D t, vec2 uv) { return pow(textureLod(t, uv, 0.).rgb, vec3(2.2)); }\n' +
+    'vec3 mrLM(vec2 uv) { vec3 n; float dd = uW.w;\n' +
+    '#ifdef MR_LIVE\n' +
+    '  n = mrDec(lmN, uv) * (uS.x * uW.x);\n' +
+    '  if (uW.y > .001) n += mrDec(lmP, uv) * (uS.y * uW.y);\n' +
+    '  if (uW.z > .001) n += mrDec(lmL, uv) * (uS.z * uW.z);\n' +
+    '  n = mrLift(n * PI);\n' +
+    '#else\n' +
+    '  n = textureLod(lightMap, uv, 0.).rgb; dd -= uDm;\n' +
+    '#endif\n' +
+    '  if (abs(dd) > .001) n += mrDec(lmD, uv) * (uS.w * uW.x * dd * PI);\n' +
+    '  return n; }\n';
+  function setLive(G, v) {   // switch an area between the live and the pre-mixed shader (both are compiled up front)
+    if (G.live.value === v) return; G.live.value = v;
+    for (var i = 0; i < G.mats.length; i++) { var m = G.mats[i]; m.defines = m.defines || {}; if (v) m.defines.MR_LIVE = ''; else delete m.defines.MR_LIVE; m.needsUpdate = true; }
+  }
   var COMBINE = !/[?&]combine=0/.test(q) && renderer.capabilities.isWebGL2 && (renderer.extensions.has('EXT_color_buffer_half_float') || renderer.extensions.has('EXT_color_buffer_float'));
-  var groups = {}, mixW = new Vector4(-1, -1, -1, -1), mixDirty = true;
+  var groups = {}, remixN = 0, wNow = new Vector3(), wPrev = new Vector3(-1, -1, -1), wStill = 0;
+  var MIX_BUDGET = 2 * 512 * 512;   // texels re-mixed per frame (two areas)
   var mixCam = new OrthographicCamera(-1, 1, 1, -1, 0, 1), mixScene = new Scene();
   var mixMat = new ShaderMaterial({
     depthTest: false, depthWrite: false,
-    uniforms: { t0: { value: black }, t1: { value: black }, t2: { value: black }, t3: { value: black }, uS: { value: new Vector4() }, uW: uW },
+    uniforms: { t0: { value: black }, t1: { value: black }, t2: { value: black }, t3: { value: black }, uDm: { value: 0 }, uS: { value: new Vector4() }, uW: uW, uL: uL, uB: { value: +((q.match(/[?&]lmblur=([\d.]+)/) || [0, 1])[1]) } },
     vertexShader: 'varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0., 1.); }',
-    fragmentShader: 'uniform sampler2D t0; uniform sampler2D t1; uniform sampler2D t2; uniform sampler2D t3; uniform vec4 uS; uniform vec4 uW; varying vec2 vUv;\n' +
-      'vec3 d(sampler2D t) { return pow(texture2D(t, vUv).rgb, vec3(2.2)); }\n' +
-      'void main() { gl_FragColor = vec4(3.14159265 * (d(t0) * uS.x * uW.x + d(t1) * uS.y * uW.y + d(t2) * uS.z * uW.z + d(t3) * uS.w * uW.w), 1.); }'
+    fragmentShader: LIFT_FN + 'uniform sampler2D t0; uniform sampler2D t1; uniform sampler2D t2; uniform sampler2D t3; uniform float uDm; uniform vec4 uS; uniform vec4 uW; varying vec2 vUv;\n' +
+      // 4 bilinear taps 1 texel off-centre = a 4x4 box: smooths the 4x4 compression blocks that the night fill would otherwise show
+      'uniform float uB; vec3 e(sampler2D t, vec2 p) { return pow(texture2D(t, p).rgb, vec3(2.2)); }\n' +
+      'vec3 d(sampler2D t) { vec2 o = uB / vec2(textureSize(t, 0));\n' +
+      '  return .25 * (e(t, vUv + vec2(-o.x, -o.y)) + e(t, vUv + vec2(o.x, -o.y)) + e(t, vUv + vec2(-o.x, o.y)) + e(t, vUv + o)); }\n' +
+      'void main() { vec3 n = d(t0) * uS.x * uW.x; if (uW.y > .001) n += d(t1) * uS.y * uW.y; if (uW.z > .001) n += d(t2) * uS.z * uW.z;\n' +
+      '  n = mrLift(3.14159265 * n); if (uDm > .001) n += d(t3) * (uS.w * uW.x * uDm * 3.14159265);\n' +
+      '  gl_FragColor = vec4(n, 1.); }'
   });
   var mixQuad = new Mesh(new PlaneGeometry(2, 2), mixMat); mixQuad.frustumCulled = false; mixScene.add(mixQuad);
-  function remix() {   // a few ms on an integrated GPU; only runs while the lights are changing
-    var keep = renderer.getRenderTarget(), u = mixMat.uniforms;
-    for (var g in groups) { var G = groups[g]; u.t0.value = G.u[0].value; u.t1.value = G.u[1].value; u.t2.value = G.u[2].value; u.t3.value = G.u[3].value; u.uS.value.copy(G.s); renderer.setRenderTarget(G.rt); renderer.render(mixScene, mixCam); }
-    renderer.setRenderTarget(keep); mixW.copy(uW.value); mixDirty = false;
+  function mixGroup(G, dm) {
+    var u = mixMat.uniforms; u.t0.value = G.u[0].value; u.t1.value = G.u[1].value; u.t2.value = G.u[2].value; u.t3.value = G.u[3].value; u.uS.value.copy(G.s); u.uDm.value = dm;
+    renderer.setRenderTarget(G.rt); renderer.render(mixScene, mixCam);
+    G.w.copy(wNow); G.dm.value = dm; G.stale = false; setLive(G, 0); remixN++;
   }
-  function needRemix() { var a = uW.value, b = mixW; return mixDirty || Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y), Math.abs(a.z - b.z), Math.abs(a.w - b.w)) > .003; }
+  // once a frame: areas whose texture is out of date draw live; once the lamps have held still for 0.3 s they are re-mixed,
+  // two a frame. Returns true while there is still work, so frames keep coming.
+  function updateMix(dt, all) {
+    wNow.set(uW.value.x, uW.value.y, uW.value.z);
+    if (Math.abs(wNow.x - wPrev.x) + Math.abs(wNow.y - wPrev.y) + Math.abs(wNow.z - wPrev.z) > 1e-4) { wPrev.copy(wNow); wStill = 0; } else wStill += dt;
+    var budget = all ? Infinity : MIX_BUDGET, keep = renderer.getRenderTarget(), mixed = false, pending = false;
+    var d = uW.value.w, dT = d < .001 ? 0 : d > .999 ? 1 : -1;   // daylight is only mixed in at full day or full night
+    for (var g in groups) {
+      var G = groups[g], lamps = G.stale || Math.abs(G.w.x - wNow.x) + Math.abs(G.w.y - wNow.y) + Math.abs(G.w.z - wNow.z) >= .002;
+      if (!lamps && (dT < 0 || dT === G.dm.value)) continue;
+      if (lamps) G.stale = true;
+      if (!COMBINE || (!all && ((lamps && wStill < .3) || budget <= 0))) { if (lamps) setLive(G, 1); pending = pending || COMBINE; continue; }
+      mixGroup(G, dT < 0 ? G.dm.value : dT); mixed = true; budget -= G.rt.width * G.rt.height;
+    }
+    if (mixed) renderer.setRenderTarget(keep);
+    return pending || mixed;
+  }
   var MAPS = ShaderChunk.lights_fragment_maps;
   var MAPS_LM = MAPS.replace('vec3 lightMapIrradiance = lightMapTexel.rgb * lightMapIntensity;', 'vec3 lightMapIrradiance = mrLM( vLightMapUv );');
   var HI = '#include <emissivemap_fragment>\n totalEmissiveRadiance += vec3(1.0, .8, .55) * uHi * .05;';
-  var VTX_PARS = 'attribute vec4 aLmN; attribute vec4 aLmP; attribute vec4 aLmL; attribute vec4 aLmD; uniform vec4 uW; uniform vec4 uVS; varying vec3 vLm;\n';
-  var VTX_MAIN = '#include <begin_vertex>\n vLm = PI * (pow(aLmN.rgb, vec3(2.2)) * uVS.x * uW.x + pow(aLmP.rgb, vec3(2.2)) * uVS.y * uW.y + pow(aLmL.rgb, vec3(2.2)) * uVS.z * uW.z + pow(aLmD.rgb, vec3(2.2)) * uVS.w * uW.w);';
+  var VTX_PARS = LIFT_FN + 'attribute vec4 aLmN; attribute vec4 aLmP; attribute vec4 aLmL; attribute vec4 aLmD; uniform vec4 uW; uniform vec4 uVS; varying vec3 vLm;\n';
+  var VTX_MAIN = '#include <begin_vertex>\n vLm = mrLift(PI * (pow(aLmN.rgb, vec3(2.2)) * uVS.x * uW.x + pow(aLmP.rgb, vec3(2.2)) * uVS.y * uW.y + pow(aLmL.rgb, vec3(2.2)) * uVS.z * uW.z))\n' +
+    '  + PI * pow(aLmD.rgb, vec3(2.2)) * uVS.w * uW.x * uW.w;';
   // MeshBasicMaterial: with no live lights and no reflections, colour = albedo x baked light. Same pixels as the PBR shader, far less work per pixel.
   var B_LM = 'vec4 lightMapTexel = texture2D( lightMap, vLightMapUv );', B_LMADD = 'reflectedLight.indirectDiffuse += lightMapTexel.rgb * lightMapIntensity * RECIPROCAL_PI;';
   var B_ONE = 'reflectedLight.indirectDiffuse += vec3( 1.0 );', B_OUT = 'vec3 outgoingLight = reflectedLight.indirectDiffuse;';
   function patchBasic(sh, u) {
     var f = 'uniform float uHi;\n' + sh.fragmentShader.replace(B_OUT, B_OUT + '\n outgoingLight += vec3(1.0, .8, .55) * uHi * .05;');
     if (u.kind === 'lm') {
-      if (COMBINE) { sh.fragmentShader = f; return; }   // the pre-mixed texture is a plain lightmap: three's own code reads it
-      sh.uniforms.lmP = u.lmP; sh.uniforms.lmL = u.lmL; sh.uniforms.lmD = u.lmD; sh.uniforms.uS = u.uS;
+      sh.uniforms.lmN = u.lmN; sh.uniforms.lmP = u.lmP; sh.uniforms.lmL = u.lmL; sh.uniforms.lmD = u.lmD; sh.uniforms.uS = u.uS; sh.uniforms.uDm = u.uDm;
       f = f.replace('#include <lightmap_pars_fragment>', '#include <lightmap_pars_fragment>\n' + LM_PARS).replace(B_LM, '').replace(B_LMADD, 'reflectedLight.indirectDiffuse += mrLM( vLightMapUv ) * RECIPROCAL_PI;');
     } else if (u.kind === 'vtx') {
       sh.uniforms.uVS = uVS;
@@ -165,12 +207,11 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
   function patch(m, kind) {   // kind: 'lm' (lightmap on UV1), 'vtx' (plants: light per vertex), 'amb' (nothing baked)
     m.userData.kind = kind; m.userData.uHi = { value: 0 };
     m.onBeforeCompile = function (sh) {
-      var u = this.userData; sh.uniforms.uW = uW; sh.uniforms.uHi = u.uHi;
+      var u = this.userData; sh.uniforms.uW = uW; sh.uniforms.uL = uL; sh.uniforms.uHi = u.uHi;
       if (this.isMeshBasicMaterial) return patchBasic(sh, u);
       sh.fragmentShader = sh.fragmentShader.replace('void main() {', 'uniform float uHi;\nvoid main() {').replace('#include <emissivemap_fragment>', HI);
       if (u.kind === 'lm') {
-        if (COMBINE) return;
-        sh.uniforms.lmP = u.lmP; sh.uniforms.lmL = u.lmL; sh.uniforms.lmD = u.lmD; sh.uniforms.uS = u.uS;
+        sh.uniforms.lmN = u.lmN; sh.uniforms.lmP = u.lmP; sh.uniforms.lmL = u.lmL; sh.uniforms.lmD = u.lmD; sh.uniforms.uS = u.uS; sh.uniforms.uDm = u.uDm;
         sh.fragmentShader = sh.fragmentShader.replace('#include <lightmap_pars_fragment>', '#include <lightmap_pars_fragment>\n' + LM_PARS).replace('#include <lights_fragment_maps>', MAPS_LM);
       } else if (u.kind === 'vtx') {
         sh.uniforms.uVS = uVS;
@@ -246,12 +287,13 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
     model = gltf.scene; uVS.value.set(vsc.night || 0, vsc.practical || 0, vsc.desklamp || 0, vsc.day || 0);
     var cache = {}, solids = [], nightJobs = [], laterJobs = [];
     function makeGroup(e) {   // one area of the room: its four lightmap layers and (when pre-mixing) the texture they are mixed into
-      var G = { s: new Vector4(), u: [{ value: black }, { value: black }, { value: black }, { value: black }], mats: [] }, size = 4;
+      var G = { s: new Vector4(), u: [{ value: black }, { value: black }, { value: black }, { value: black }], mats: [], live: { value: 1 }, dm: { value: 0 }, stale: true, w: new Vector3(-1, -1, -1) }, size = 4;
       LAYERS.forEach(function (L, i) {
         if (!e[L]) return; G.s.setComponent(i, e[L].scale); size = Math.max(size, e[L].size || 512);
-        var job = function () { return loadLM(e[L].file).then(function (t) { G.u[i].value = t; if (!COMBINE && i === 0) G.mats.forEach(function (m) { m.lightMap = t; }); mixDirty = true; }); };
+        var job = function () { return loadLM(e[L].file).then(function (t) { G.u[i].value = t; G.stale = true; }); };
         if (i === 0) nightJobs.push(job()); else laterJobs.push(job);
       });
+      size = Math.min(size, 512);   // desktop: half the lightmap size; the smoothing leaves no finer detail than that
       if (COMBINE) { G.rt = new WebGLRenderTarget(size, size, { type: HalfFloatType, format: RGBAFormat, minFilter: LinearFilter, magFilter: LinearFilter, generateMipmaps: false, depthBuffer: false }); G.rt.texture.channel = 1; }
       return G;
     }
@@ -277,7 +319,7 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
           if (!/[?&]side=double/.test(q) && !m.transparent && !m.alphaTest) m.side = FrontSide;   // backs of closed objects are never seen (measured: ~25% of GPU time)
           if (kind === 'lm') {
             var G = groups[g] || (groups[g] = makeGroup(man[g])), u = m.userData;
-            G.mats.push(m); u.uS = { value: G.s }; u.lmP = G.u[1]; u.lmL = G.u[2]; u.lmD = G.u[3];
+            G.mats.push(m); u.uS = { value: G.s }; u.lmN = G.u[0]; u.lmP = G.u[1]; u.lmL = G.u[2]; u.lmD = G.u[3]; u.uDm = G.dm; m.defines = Object.assign({}, m.defines, { MR_LIVE: "" });
             m.lightMap = COMBINE ? G.rt.texture : black; m.lightMapIntensity = 1;
           }
           if (src) GLOWS.push({ m: m, base: m.emissiveIntensity, src: src });
@@ -308,8 +350,10 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
     scene.add(model);
     return Promise.all(nightJobs).then(function () { return laterJobs; });
   }).then(function (laterJobs) {
-    progressText(1); setDay(); refreshLights(); if (COMBINE) remix();
-    renderer.compile(scene, camera); ready = true; kick();
+    progressText(1); setDay(); refreshLights();
+    renderer.compile(scene, camera);
+    if (COMBINE) { var g0; for (g0 in groups) setLive(groups[g0], 0); renderer.compile(scene, camera); for (g0 in groups) setLive(groups[g0], 1); }   // both shader versions now, not mid-tour
+    ready = true; kick();
     // the lamps and daylight layers arrive after the first frames, one at a time, so the first view is quick
     var i = 0; (function next() { if (i >= laterJobs.length) { later = true; dirty = true; kick(); return; } laterJobs[i++]().then(function () { dirty = true; kick(); next(); }, next); })();
   }).catch(function (e) { noWebGL(e && e.message ? e.message : String(e)); });
@@ -361,7 +405,7 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
   var flick = 1;
   function refreshLights() {
     var base = on[0], d = dayAmt;
-    uW.value.set(base * (1 - d), on[3] * .62 + on[4] * .38, on[2], base * d);
+    uW.value.set(base, on[3] * .62 + on[4] * .38, on[2], d);
     uAmb.value.setRGB(.004 + .3 * d, .004 + .3 * d, .006 + .3 * d).multiplyScalar(base);
     renderer.toneMappingExposure = lerp(2.07, 1.0, d);
     for (var i = 0; i < GLOWS.length; i++) {
@@ -395,7 +439,7 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
     for (i = 0; i < 5; i++) on[i] += (want[i] - on[i]) * (calm ? 1 : k);
     flick = (intro > .3 && intro < .42) ? (Math.sin(time * 70) > 0 ? 1 : .25) : 1;
     sx += (px - sx) * .07; sy += (py - sy) * .07;
-    setDay(); refreshLights(); if (COMBINE && needRemix()) remix();
+    setDay(); refreshLights(); if (updateMix(dt)) dirty = true;
 
     // where the camera wants to be: the scroll position, or right in front of the thing you clicked
     var aspect = window.innerWidth / Math.max(1, window.innerHeight), c = camAt(pShown), want2 = focus ? focusPose(focus) : c, e = want2[0], t = want2[1], walking = free && !focus && cur, mx = 0, mz = 0;
@@ -488,7 +532,8 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
   if (window.pageYOffset > 4) { intro = 1; }          // arriving mid-page: skip the intro
   last = performance.now(); kick();
 
-  if (/[?&]debug/.test(q)) window.__room = { SPOT: SPOT, OCC: OCC, blocked: blocked, uW: uW, renderer: renderer, scene: scene, camera: camera, sky: sky, kick: function () { dirty = true; kick(); } };
+  if (/[?&]debug/.test(q)) window.__room = { SPOT: SPOT, OCC: OCC, blocked: blocked, uW: uW, uL: uL, setClock: function (h) { todStart = h; todT0 = performance.now(); todFixed = null; }, stats: function () { var l = 0; for (var g in groups) l += groups[g].live.value; return { remixes: remixN, live: l }; }, groups: groups,
+    remixAll: function () { for (var g in groups) groups[g].stale = true; updateMix(0, true); }, renderer: renderer, scene: scene, camera: camera, sky: sky, kick: function () { dirty = true; kick(); } };
   window.Room = {
     replay: function () { if (calm) return; setFree(false); settled = false; intro = 0; introT = 0; on = [0, 0, 0, 0, 0]; focus = null; kick(); },
     lamp: function () { lampOn = !lampOn; kick(); return lampOn; },

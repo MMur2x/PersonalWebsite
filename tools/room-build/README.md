@@ -54,7 +54,12 @@ Source: `tools/room-site/room.src.js` (three.js 0.170). Build: `cd tools/room-si
 What it does to run smoothly. Each item was measured on Intel Iris Xe:
 
 - **Unlit materials.** Every non-glowing material becomes `MeshBasicMaterial` (albedo × baked light). No reflections; the PBR shader doubled the per-pixel cost.
-- **Pre-mixed light.** The four lightmap layers are mixed once into a half-float texture per area, and only when the light weights change. Each pixel then reads one lightmap.
+- **Pre-mixed light.** Each area's night layers (night + lamps + desk lamp) are mixed into a 512 px half-float texture, so each pixel reads one lightmap.
+  - It is re-mixed only after the lamps stop changing (0.3 s), two areas per frame. While lamps fade, those areas mix the layers per pixel instead (a second compiled shader, `MR_LIVE`).
+  - Full day or full night is mixed in too. At dawn and dusk the difference is read straight from the daylight layer, so a moving sky never re-mixes.
+  - Before Step 7 every light change re-mixed all 13 areas at once (about 40 ms on Iris Xe), which dropped dawn and dusk to 16 fps.
+- **Night fill.** The bake leaves corners away from the lamps very dark. Night light below a reference level is raised along a curve (`?lift=strength,ref,gamma`, default `1,.9,.45`; `?lift=0,1,1` turns it off).
+  - The mix pass also smooths each layer with a 4×4 box (`?lmblur=0` turns it off). Without it the fill shows the 4×4 blocks of the ETC1S compression.
 - **Draw order.** The outdoor scenery and moon draw last, and the walls and floor after the furniture. The outdoor's 170 m bounds made three.js draw it first, which cost 3 ms a frame.
 - **Front faces only** for opaque materials.
 - **Low-power GPUs** (Intel, Mali, Adreno, PowerVR):
@@ -73,5 +78,9 @@ Debug switches (URL query):
 | `?aa=0\|1` | Turns MSAA off or on |
 | `?side=double` | Draws both faces of opaque materials |
 | `?combine=0` | Mixes light per pixel instead of pre-mixing |
+| `?lift=a,b,c` | Night fill curve |
+| `?lmblur=0` | No smoothing in the mix pass |
 
-`Room.bench(seconds)` returns measured frame times.
+`Room.bench(seconds)` returns measured frame times. With `?debug`, `__room.setClock(h)` runs the sky from hour `h` and `__room.stats()` counts re-mixes.
+
+No-WebGL / no-JavaScript fallback: `assets/images/room-still.webp` and `room-still-portrait.webp` are stills rendered from the live room at night (no interface). Re-render them if the room changes.
