@@ -1,0 +1,331 @@
+{
+ "encoding": "linear KTX2 (not sRGB-flagged): irradiance = pow(texel, 2.2) * scale",
+ "groups": {
+  "bed": {
+   "day": {
+    "file": "bed_lm_day.ktx2",
+    "scale": 5.461624,
+    "clipped": 0.00142,
+    "size": 1024
+   },
+   "desklamp": {
+    "file": "bed_lm_desklamp.ktx2",
+    "scale": 0.049402,
+    "clipped": 0.00117,
+    "size": 512
+   },
+   "night": {
+    "file": "bed_lm_night.ktx2",
+    "scale": 0.269909,
+    "clipped": 0.00116,
+    "size": 1024
+   },
+   "practical": {
+    "file": "bed_lm_practical.ktx2",
+    "scale": 0.635289,
+    "clipped": 0.00136,
+    "size": 1024
+   }
+  },
+  "books": {
+   "day": {
+    "file": "books_lm_day.ktx2",
+    "scale": 0.349442,
+    "clipped": 0.00162,
+    "size": 1024
+   },
+   "desklamp": {
+    "file": "books_lm_desklamp.ktx2",
+    "scale": 0.095069,
+    "clipped": 0.00124,
+    "size": 512
+   },
+   "night": {
+    "file": "books_lm_night.ktx2",
+    "scale": 0.090131,
+    "clipped": 0.00125,
+    "size": 1024
+   },
+   "practical": {
+    "file": "books_lm_practical.ktx2",
+    "scale": 0.055573,
+    "clipped": 0.0015,
+    "size": 1024
+   }
+  },
+  "center": {
+   "day": {
+    "file": "center_lm_day.ktx2",
+    "scale": 2.212008,
+    "clipped": 0.00121,
+    "size": 1024
+   },
+   "desklamp": {
+    "file": "center_lm_desklamp.ktx2",
+    "scale": 0.122815,
+    "clipped": 0.00116,
+    "size": 512
+   },
+   "night": {
+    "file": "center_lm_night.ktx2",
+    "scale": 0.179291,
+    "clipped": 0.00114,
+    "size": 1024
+   },
+   "practical": {
+    "file": "center_lm_practical.ktx2",
+    "scale": 0.261074,
+    "clipped": 0.00118,
+    "size": 1024
+   }
+  },
+  "desk": {
+   "day": {
+    "file": "desk_lm_day.ktx2",
+    "scale": 1.761539,
+    "clipped": 0.00147,
+    "size": 1024
+   },
+   "desklamp": {
+    "file": "desk_lm_desklamp.ktx2",
+    "scale": 168.864304,
+    "clipped": 0.00151,
+    "size": 512
+   },
+   "night": {
+    "file": "desk_lm_night.ktx2",
+    "scale": 0.834289,
+    "clipped": 0.00136,
+    "size": 1024
+   },
+   "practical": {
+    "file": "desk_lm_practical.ktx2",
+    "scale": 2.811699,
+    "clipped": 0.00143,
+    "size": 1024
+   }
+  },
+  "deskwall": {
+   "day": {
+    "file": "deskwall_lm_day.ktx2",
+    "scale": 0.376516,
+    "clipped": 0.0012,
+    "size": 1024
+   },
+   "desklamp": {
+    "file": "deskwall_lm_desklamp.ktx2",
+    "scale": 3.183441,
+    "clipped": 0.00093,
+    "size": 512
+   },
+   "night": {
+    "file": "deskwall_lm_night.ktx2",
+    "scale": 0.022304,
+    "clipped": 0.00112,
+    "size": 1024
+   },
+   "practical": {
+    "file": "deskwall_lm_practical.ktx2",
+    "scale": 3.065093,
+    "clipped": 0.00091,
+    "size": 1024
+   }
+  },
+  "floor": {
+   "day": {
+    "file": "floor_lm_day.ktx2",
+    "scale": 5.73087,
+    "clipped": 0.00129,
+    "size": 1024
+   },
+   "desklamp": {
+    "file": "floor_lm_desklamp.ktx2",
+    "scale": 0.153139,
+    "clipped": 0.00112,
+    "size": 512
+   },
+   "night": {
+    "file": "floor_lm_night.ktx2",
+    "scale": 0.1454,
+    "clipped": 0.00119,
+    "size": 1024
+   },
+   "practical": {
+    "file": "floor_lm_practical.ktx2",
+    "scale": 0.818097,
+    "clipped": 0.00115,
+    "size": 1024
+   }
+  },
+  "frontwall": {
+   "day": {
+    "file": "frontwall_lm_day.ktx2",
+    "scale": 6.296847,
+    "clipped": 0.00119,
+    "size": 1024
+   },
+   "desklamp": {
+    "file": "frontwall_lm_desklamp.ktx2",
+    "scale": 0.020692,
+    "clipped": 0.00082,
+    "size": 512
+   },
+   "night": {
+    "file": "frontwall_lm_night.ktx2",
+    "scale": 0.036771,
+    "clipped": 0.00106,
+    "size": 1024
+   },
+   "practical": {
+    "file": "frontwall_lm_practical.ktx2",
+    "scale": 0.105858,
+    "clipped": 0.0009,
+    "size": 1024
+   }
+  },
+  "leftwall": {
+   "day": {
+    "file": "leftwall_lm_day.ktx2",
+    "scale": 3.927553,
+    "clipped": 0.00136,
+    "size": 1024
+   },
+   "desklamp": {
+    "file": "leftwall_lm_desklamp.ktx2",
+    "scale": 0.204974,
+    "clipped": 0.00091,
+    "size": 512
+   },
+   "night": {
+    "file": "leftwall_lm_night.ktx2",
+    "scale": 0.098353,
+    "clipped": 0.00119,
+    "size": 1024
+   },
+   "practical": {
+    "file": "leftwall_lm_practical.ktx2",
+    "scale": 0.073145,
+    "clipped": 0.00112,
+    "size": 1024
+   }
+  },
+  "libbooks": {
+   "day": {
+    "file": "libbooks_lm_day.ktx2",
+    "scale": 0.424314,
+    "clipped": 0.00176,
+    "size": 1024
+   },
+   "desklamp": {
+    "file": "libbooks_lm_desklamp.ktx2",
+    "scale": 0.007056,
+    "clipped": 0.00096,
+    "size": 512
+   },
+   "night": {
+    "file": "libbooks_lm_night.ktx2",
+    "scale": 0.024469,
+    "clipped": 0.00129,
+    "size": 1024
+   },
+   "practical": {
+    "file": "libbooks_lm_practical.ktx2",
+    "scale": 0.028051,
+    "clipped": 0.00164,
+    "size": 1024
+   }
+  },
+  "outdoor": {
+   "day": {
+    "file": "outdoor_lm_day.ktx2",
+    "scale": 7.904856,
+    "clipped": 0.00174,
+    "size": 1024
+   },
+   "night": {
+    "file": "outdoor_lm_night.ktx2",
+    "scale": 1.066547,
+    "clipped": 0.00156,
+    "size": 1024
+   }
+  },
+  "rightwall": {
+   "day": {
+    "file": "rightwall_lm_day.ktx2",
+    "scale": 1.684768,
+    "clipped": 0.00132,
+    "size": 1024
+   },
+   "desklamp": {
+    "file": "rightwall_lm_desklamp.ktx2",
+    "scale": 0.016355,
+    "clipped": 0.00093,
+    "size": 512
+   },
+   "night": {
+    "file": "rightwall_lm_night.ktx2",
+    "scale": 0.02032,
+    "clipped": 0.00103,
+    "size": 1024
+   },
+   "practical": {
+    "file": "rightwall_lm_practical.ktx2",
+    "scale": 24.546947,
+    "clipped": 0.00109,
+    "size": 1024
+   }
+  },
+  "walls": {
+   "day": {
+    "file": "walls_lm_day.ktx2",
+    "scale": 3.483498,
+    "clipped": 0.00155,
+    "size": 1024
+   },
+   "desklamp": {
+    "file": "walls_lm_desklamp.ktx2",
+    "scale": 3.533313,
+    "clipped": 0.00132,
+    "size": 512
+   },
+   "night": {
+    "file": "walls_lm_night.ktx2",
+    "scale": 0.087579,
+    "clipped": 0.0014,
+    "size": 1024
+   },
+   "practical": {
+    "file": "walls_lm_practical.ktx2",
+    "scale": 3.265276,
+    "clipped": 0.00134,
+    "size": 1024
+   }
+  },
+  "window": {
+   "day": {
+    "file": "window_lm_day.ktx2",
+    "scale": 5.127118,
+    "clipped": 0.00116,
+    "size": 1024
+   },
+   "desklamp": {
+    "file": "window_lm_desklamp.ktx2",
+    "scale": 0.02433,
+    "clipped": 0.0009,
+    "size": 512
+   },
+   "night": {
+    "file": "window_lm_night.ktx2",
+    "scale": 0.355434,
+    "clipped": 0.00107,
+    "size": 1024
+   },
+   "practical": {
+    "file": "window_lm_practical.ktx2",
+    "scale": 0.524513,
+    "clipped": 0.001,
+    "size": 1024
+   }
+  }
+ }
+}
